@@ -72,7 +72,7 @@ function initContactForm() {
       return;
     }
     
-    const waMessage = `*PORTAL SMP PERSIAPAN NEGERI PULAU TIGA*\n\n👤 *Nama*: ${name}\n📧 *Email*: ${email}\n\n📝 *Pesan*:\n${message}\n\n_Dikirim melalui Website Resmi_`;
+    const waMessage = `*PORTAL SMP PERSIAPAN NEGERI PULAU TIGA*\n\n👤 *Nama*: ${name}\n📧 *Email*: ${email}\n\n📝 *Pesan*:\n${message}\n\n_Terima kasih sudah mengirim pesan. Pesan Anda akan segera di proses. ✋_`;
     const encoded = encodeURIComponent(waMessage);
     const waNumber = '6282254730476';
     
