@@ -1,0 +1,935 @@
+<!DOCTYPE html>
+<html lang="id" data-theme="light">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Data Nilai Bahasa Inggris | SMP Persiapan Negeri Pulau Tiga</title>
+    <meta name="description"
+        content="Data nilai Bahasa Inggris siswa kelas 7A, 8A, 9A lengkap dengan rincian tugas dan statistik.">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link rel="stylesheet" href="css/style.css">
+    <style>
+        /* ===== GRADES PAGE STYLES ===== */
+
+        /* Semester Toggle */
+        .semester-tabs {
+            display: flex;
+            gap: 16px;
+            justify-content: center;
+            margin-bottom: 40px;
+        }
+
+        .semester-btn {
+            padding: 12px 32px;
+            border-radius: 99px;
+            background: var(--bg3);
+            border: 1px solid var(--border);
+            color: var(--text2);
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .semester-btn i {
+            font-size: 1.1rem;
+        }
+
+        .semester-btn.active {
+            background: linear-gradient(135deg, var(--c1), var(--c2));
+            color: white;
+            border-color: transparent;
+        }
+
+        .semester-btn:hover:not(.active) {
+            background: var(--bg2);
+            transform: translateY(-2px);
+        }
+
+        /* Class Cards */
+        .class-cards {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 24px;
+            margin-bottom: 48px;
+        }
+
+        .class-card {
+            background: var(--card-bg);
+            border: 1px solid var(--border);
+            border-radius: 20px;
+            overflow: hidden;
+            transition: all 0.3s ease;
+        }
+
+        .class-card:hover {
+            transform: translateY(-5px);
+            box-shadow: var(--shadow-lg);
+        }
+
+        .class-header {
+            background: linear-gradient(135deg, var(--c1), var(--c2));
+            padding: 20px;
+            text-align: center;
+            color: white;
+        }
+
+        .class-header h3 {
+            font-size: 1.5rem;
+            font-weight: 800;
+            margin-bottom: 5px;
+        }
+
+        .class-header p {
+            font-size: 0.8rem;
+            opacity: 0.9;
+        }
+
+        .class-stats {
+            padding: 20px;
+        }
+
+        .stat-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px 0;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .stat-row:last-child {
+            border-bottom: none;
+        }
+
+        .stat-label {
+            font-size: 0.85rem;
+            color: var(--text2);
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .stat-value {
+            font-size: 1.2rem;
+            font-weight: 700;
+            color: var(--text);
+        }
+
+        .stat-value.high {
+            color: #10b981;
+        }
+
+        .stat-value.medium {
+            color: #f59e0b;
+        }
+
+        .stat-value.low {
+            color: #ef4444;
+        }
+
+        /* Charts Grid */
+        .charts-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 30px;
+            margin-bottom: 48px;
+        }
+
+        .chart-card {
+            background: var(--card-bg);
+            border: 1px solid var(--border);
+            border-radius: 20px;
+            padding: 24px;
+        }
+
+        .chart-title {
+            font-size: 1.1rem;
+            font-weight: 700;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            color: var(--text);
+        }
+
+        .chart-title i {
+            color: var(--c1);
+            font-size: 1.2rem;
+        }
+
+        .chart-container {
+            position: relative;
+            height: 280px;
+        }
+
+        /* Gender Comparison */
+        .gender-comparison {
+            background: var(--card-bg);
+            border: 1px solid var(--border);
+            border-radius: 20px;
+            padding: 24px;
+            margin-bottom: 48px;
+        }
+
+        .gender-title {
+            font-size: 1.1rem;
+            font-weight: 700;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .gender-stats {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 24px;
+            margin-top: 20px;
+        }
+
+        .gender-card {
+            background: var(--bg2);
+            border-radius: 16px;
+            padding: 20px;
+            text-align: center;
+        }
+
+        .gender-icon {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 12px;
+            font-size: 1.8rem;
+        }
+
+        .gender-icon.male {
+            background: linear-gradient(135deg, rgba(59, 130, 246, 0.15), rgba(59, 130, 246, 0.05));
+            color: #3b82f6;
+        }
+
+        .gender-icon.female {
+            background: linear-gradient(135deg, rgba(236, 72, 153, 0.15), rgba(236, 72, 153, 0.05));
+            color: #ec4899;
+        }
+
+        .gender-name {
+            font-size: 1rem;
+            font-weight: 700;
+            margin-bottom: 12px;
+        }
+
+        .gender-avg {
+            font-size: 1.8rem;
+            font-weight: 800;
+            margin-bottom: 8px;
+        }
+
+        .gender-count {
+            font-size: 0.8rem;
+            color: var(--text2);
+        }
+
+        /* Score Distribution */
+        .distribution-container {
+            background: var(--card-bg);
+            border: 1px solid var(--border);
+            border-radius: 20px;
+            padding: 24px;
+            margin-bottom: 48px;
+        }
+
+        .distribution-bars {
+            margin-top: 20px;
+        }
+
+        .dist-item {
+            margin-bottom: 16px;
+        }
+
+        .dist-label {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 6px;
+            font-size: 0.8rem;
+        }
+
+        .dist-bar-bg {
+            height: 10px;
+            background: var(--bg3);
+            border-radius: 99px;
+            overflow: hidden;
+        }
+
+        .dist-bar {
+            height: 100%;
+            border-radius: 99px;
+            transition: width 0.5s ease;
+        }
+
+        .dist-bar.A {
+            background: linear-gradient(90deg, #10b981, #34d399);
+            width: 0%;
+        }
+
+        .dist-bar.B {
+            background: linear-gradient(90deg, #3b82f6, #60a5fa);
+            width: 0%;
+        }
+
+        .dist-bar.C {
+            background: linear-gradient(90deg, #f59e0b, #fbbf24);
+            width: 0%;
+        }
+
+        .dist-bar.D {
+            background: linear-gradient(90deg, #ef4444, #f87171);
+            width: 0%;
+        }
+
+        /* Filter Kelas */
+        .class-filter {
+            display: flex;
+            gap: 12px;
+            justify-content: flex-end;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+        }
+
+        .filter-class-btn {
+            padding: 8px 20px;
+            border-radius: 99px;
+            background: var(--bg3);
+            border: 1px solid var(--border);
+            color: var(--text2);
+            font-size: 0.85rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .filter-class-btn.active {
+            background: linear-gradient(135deg, var(--c1), var(--c2));
+            color: white;
+            border-color: transparent;
+        }
+
+        .filter-class-btn:hover:not(.active) {
+            background: var(--bg2);
+            transform: translateY(-2px);
+        }
+
+        /* Data Table */
+        .data-table-container {
+            background: var(--card-bg);
+            border: 1px solid var(--border);
+            border-radius: 20px;
+            padding: 24px;
+            overflow-x: auto;
+        }
+
+        .data-table {
+            width: 100%;
+            border-collapse: collapse;
+            min-width: 800px;
+        }
+
+        .data-table th {
+            background: var(--bg3);
+            padding: 12px 10px;
+            text-align: center;
+            font-weight: 700;
+            font-size: 0.75rem;
+            color: var(--text2);
+            border-bottom: 1px solid var(--border);
+        }
+
+        .data-table td {
+            padding: 10px 8px;
+            text-align: center;
+            border-bottom: 1px solid var(--border);
+            font-size: 0.8rem;
+        }
+
+        .data-table tr:hover td {
+            background: var(--bg2);
+        }
+
+        .nilai-tugas {
+            font-family: monospace;
+            font-weight: 600;
+        }
+
+        @media (max-width: 900px) {
+            .class-cards {
+                grid-template-columns: 1fr;
+                gap: 20px;
+            }
+
+            .charts-grid {
+                grid-template-columns: 1fr;
+                gap: 20px;
+            }
+
+            .gender-stats {
+                grid-template-columns: 1fr;
+                gap: 16px;
+            }
+
+            .semester-btn {
+                padding: 8px 20px;
+                font-size: 0.85rem;
+            }
+
+            .class-filter {
+                justify-content: center;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- NAVBAR -->
+    <nav class="navbar">
+        <div class="container">
+            <div class="nav-inner">
+                <a href="index.html" class="logo">
+                    <div class="logo-icon">SMP</div>
+                    <div class="logo-text">
+                        <span class="logo-title">Persiapan Negeri</span>
+                        <span class="logo-sub">Pulau Tiga • Nakai</span>
+                    </div>
+                </a>
+                <ul class="nav-links">
+                    <li><a href="index.html" class="active">Home</a></li>
+                    <li><a href="documents.html">Documents</a></li>
+                    <li><a href="about.html">About Me</a></li>
+                    <li><a href="contact.html">Contact Me</a></li>
+                    <li><a href="gallery.html" class="active">Gallery</a></li>
+                    <li><a href="grades.html" class="active">Students Grades</a></li>
+                </ul>
+                <div class="nav-right">
+                    <button class="dark-toggle" aria-label="Toggle dark mode">
+                        <div class="dark-toggle-ball">☀️</div>
+                    </button>
+                    <button class="hamburger" aria-label="Menu">
+                        <span></span><span></span><span></span>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </nav>
+    <div class="mobile-menu" id="mobileMenu">
+        <a href="index.html" class="active">Home</a>
+        <a href="documents.html">Documents</a>
+        <a href="about.html">About Me</a>
+        <a href="contact.html">Contact Me</a>
+        <a href="gallery.html">Gallery</a>
+        <a href="grades.html" class="active">Students Grades</a>
+    </div>
+
+    <div class="page-content">
+
+        <!-- PAGE HEADER -->
+        <div class="page-header">
+            <div class="page-header-bg"></div>
+            <div class="container">
+                <div class="fade-up" style="text-align: center; max-width: 700px; margin: 0 auto;">
+                    <p class="section-label">Data Akademik</p>
+                    <h1
+                        style="font-size:clamp(1.8rem,4vw,2.6rem);font-weight:800;letter-spacing:-1px;margin-bottom:16px;">
+                        Nilai <span class="gradient-text">Bahasa Inggris</span>
+                    </h1>
+                    <p style="color:var(--text2);font-size:0.95rem;line-height:1.7;">
+                        Data nilai Bahasa Inggris siswa kelas 7A, 8A, dan 9A.
+                        Menampilkan rincian nilai tugas, UAS, statistik lengkap, dan grafik komparasi.
+                    </p>
+                </div>
+            </div>
+        </div>
+
+        <div class="container" style="padding-bottom: 80px;">
+
+            <!-- SEMESTER TOGGLE -->
+            <div class="semester-tabs fade-up">
+                <button class="semester-btn active" data-semester="1">
+                    <i class="fas fa-book-open"></i> Semester 1
+                </button>
+                <button class="semester-btn" data-semester="2">
+                    <i class="fas fa-book"></i> Semester 2
+                </button>
+            </div>
+
+            <!-- CLASS CARDS -->
+            <div class="class-cards fade-up" id="classCards">
+                <!-- Dinamis dengan JS -->
+            </div>
+
+            <!-- CHARTS GRID -->
+            <div class="charts-grid fade-up">
+                <div class="chart-card">
+                    <div class="chart-title">
+                        <i class="fas fa-chart-line"></i> Perbandingan Rata-rata per Kelas
+                    </div>
+                    <div class="chart-container">
+                        <canvas id="avgChart"></canvas>
+                    </div>
+                </div>
+                <div class="chart-card">
+                    <div class="chart-title">
+                        <i class="fas fa-chart-bar"></i> Perbandingan Nilai Tertinggi
+                    </div>
+                    <div class="chart-container">
+                        <canvas id="highestChart"></canvas>
+                    </div>
+                </div>
+            </div>
+
+            <!-- GENDER COMPARISON -->
+            <div class="gender-comparison fade-up">
+                <div class="gender-title">
+                    <i class="fas fa-venus-mars"></i> Komparasi Nilai Laki-laki vs Perempuan
+                </div>
+                <div class="gender-stats" id="genderStats">
+                    <!-- Dinamis dengan JS -->
+                </div>
+                <div class="chart-container" style="height: 280px; margin-top: 24px;">
+                    <canvas id="genderChart"></canvas>
+                </div>
+            </div>
+
+            <!-- DISTRIBUSI NILAI -->
+            <div class="distribution-container fade-up">
+                <div class="chart-title">
+                    <i class="fas fa-chart-pie"></i> Distribusi Nilai Akhir (A, B, C, D)
+                </div>
+                <div class="distribution-bars" id="distributionBars">
+                    <!-- Dinamis dengan JS -->
+                </div>
+            </div>
+
+            <!-- FILTER KELAS & DATA TABLE -->
+            <div class="data-table-container fade-up">
+                <div
+                    style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 15px; margin-bottom: 20px;">
+                    <div class="chart-title" style="margin-bottom: 0;">
+                        <i class="fas fa-table"></i> Rincian Nilai Siswa
+                    </div>
+                    <div class="class-filter" id="classFilter">
+                        <button class="filter-class-btn active" data-filter-class="all">Semua Kelas</button>
+                        <button class="filter-class-btn" data-filter-class="7A">Kelas 7A</button>
+                        <button class="filter-class-btn" data-filter-class="8A">Kelas 8A</button>
+                        <button class="filter-class-btn" data-filter-class="9A">Kelas 9A</button>
+                    </div>
+                </div>
+
+                <div style="overflow-x: auto;">
+                    <table class="data-table" id="dataTable">
+                        <thead>
+                            <tr>
+                                <th rowspan="2">No</th>
+                                <th rowspan="2">Nama Siswa</th>
+                                <th rowspan="2">Kelas</th>
+                                <th rowspan="2">Gender</th>
+                                <th colspan="3">Nilai Tugas & Ujian</th>
+                                <th rowspan="2">Nilai Akhir</th>
+                            </tr>
+                            <tr>
+                                <th>Tugas 1</th>
+                                <th>Tugas 2</th>
+                                <th>UAS</th>
+                            </tr>
+                        </thead>
+                        <tbody id="tableBody">
+                            <!-- Dinamis dengan JS -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- KETERANGAN -->
+            <div
+                style="margin-top: 30px; padding: 16px; background: var(--bg2); border-radius: 12px; text-align: center;">
+                <p style="font-size: 0.8rem; color: var(--text2);">
+                    <i class="fas fa-info-circle"></i>
+                    Keterangan: A (85-100) | B (70-84) | C (60-69) | D (0-59) | Nilai Akhir = (Tugas1 + Tugas2 + UAS) /
+                    3
+                </p>
+            </div>
+
+        </div>
+    </div>
+
+    <!-- FOOTER -->
+    <footer>
+        <div class="container">
+            © 2026 SMP Persiapan Negeri Pulau Tiga. All rights are reserved
+        </div>
+    </footer>
+
+    <script src="js/main.js"></script>
+    <script>
+        // ===== DATA NILAI SISWA LENGKAP (DATA ASLI) =====
+        // Data sesuai dengan yang diberikan: Tugas 1, Tugas 2, UAS, dan Nilai Akhir (Rata-rata)
+
+        const studentData = [
+            // KELAS 7A (11 siswa)
+            { no: 1, name: "Stefanus Onam", class: "7A", gender: "male", tugas1: 78, tugas2: 78, uas: 77, nilaiAkhir: 78 },
+            { no: 2, name: "Herlina Toasakor", class: "7A", gender: "female", tugas1: 85, tugas2: 80, uas: 90, nilaiAkhir: 85 },
+            { no: 3, name: "Obertus Osakat", class: "7A", gender: "male", tugas1: 75, tugas2: 78, uas: 75, nilaiAkhir: 76 },
+            { no: 4, name: "Yesua Memen", class: "7A", gender: "male", tugas1: 76, tugas2: 70, uas: 65, nilaiAkhir: 70 },
+            { no: 5, name: "Abraham Popak", class: "7A", gender: "male", tugas1: 78, tugas2: 74, uas: 65, nilaiAkhir: 72 },
+            { no: 6, name: "Agustinus Apokmi", class: "7A", gender: "male", tugas1: 70, tugas2: 65, uas: 75, nilaiAkhir: 70 },
+            { no: 7, name: "Frans Jancie", class: "7A", gender: "male", tugas1: 80, tugas2: 79, uas: 80, nilaiAkhir: 80 },
+            { no: 8, name: "Frasiskus Giovano Kokput", class: "7A", gender: "male", tugas1: 75, tugas2: 74, uas: 60, nilaiAkhir: 70 },
+            { no: 9, name: "Olivia Yanicem", class: "7A", gender: "female", tugas1: 70, tugas2: 70, uas: 64, nilaiAkhir: 68 },
+            { no: 10, name: "Fransina Tipamon", class: "7A", gender: "female", tugas1: 68, tugas2: 75, uas: 60, nilaiAkhir: 68 },
+            { no: 11, name: "Sadrak Biri", class: "7A", gender: "male", tugas1: 85, tugas2: 80, uas: 87, nilaiAkhir: 84 },
+
+            // KELAS 8A (11 siswa)
+            { no: 12, name: "Mesak Tapnam", class: "8A", gender: "male", tugas1: 78, tugas2: 78, uas: 77, nilaiAkhir: 78 },
+            { no: 13, name: "Samuel Aseweces", class: "8A", gender: "male", tugas1: 85, tugas2: 80, uas: 90, nilaiAkhir: 85 },
+            { no: 14, name: "Eva Enamciforo", class: "8A", gender: "female", tugas1: 75, tugas2: 78, uas: 75, nilaiAkhir: 76 },
+            { no: 15, name: "Anselmus Pipar", class: "8A", gender: "male", tugas1: 76, tugas2: 70, uas: 65, nilaiAkhir: 70 },
+            { no: 16, name: "Markus Jasir", class: "8A", gender: "male", tugas1: 78, tugas2: 74, uas: 65, nilaiAkhir: 72 },
+            { no: 17, name: "Beni Asepits", class: "8A", gender: "male", tugas1: 70, tugas2: 65, uas: 75, nilaiAkhir: 70 },
+            { no: 18, name: "Kornelis Jumpo", class: "8A", gender: "male", tugas1: 80, tugas2: 79, uas: 80, nilaiAkhir: 80 },
+            { no: 19, name: "Simon Oporan", class: "8A", gender: "male", tugas1: 75, tugas2: 74, uas: 60, nilaiAkhir: 70 },
+            { no: 20, name: "Benidiktus Amosakat", class: "8A", gender: "male", tugas1: 70, tugas2: 70, uas: 64, nilaiAkhir: 68 },
+            { no: 21, name: "Rofinus Akap", class: "8A", gender: "male", tugas1: 68, tugas2: 75, uas: 60, nilaiAkhir: 68 },
+            { no: 22, name: "Herman Cakam", class: "8A", gender: "male", tugas1: 85, tugas2: 80, uas: 87, nilaiAkhir: 84 },
+
+            // KELAS 9A (16 siswa)
+            { no: 23, name: "Pilipus Tinakas", class: "9A", gender: "male", tugas1: 78, tugas2: 78, uas: 77, nilaiAkhir: 78 },
+            { no: 24, name: "Benediktus Jom", class: "9A", gender: "male", tugas1: 85, tugas2: 80, uas: 90, nilaiAkhir: 85 },
+            { no: 25, name: "Paulus Osjak", class: "9A", gender: "male", tugas1: 75, tugas2: 78, uas: 75, nilaiAkhir: 76 },
+            { no: 26, name: "Pius Osmak", class: "9A", gender: "male", tugas1: 76, tugas2: 70, uas: 65, nilaiAkhir: 70 },
+            { no: 27, name: "Wahyu Fo", class: "9A", gender: "male", tugas1: 78, tugas2: 74, uas: 65, nilaiAkhir: 72 },
+            { no: 28, name: "Yohanis Fam", class: "9A", gender: "male", tugas1: 70, tugas2: 65, uas: 75, nilaiAkhir: 70 },
+            { no: 29, name: "Elisa Mimin", class: "9A", gender: "male", tugas1: 80, tugas2: 79, uas: 80, nilaiAkhir: 80 },
+            { no: 30, name: "Bartol Batipits", class: "9A", gender: "male", tugas1: 75, tugas2: 74, uas: 60, nilaiAkhir: 70 },
+            { no: 31, name: "Pilipus Daminan", class: "9A", gender: "male", tugas1: 70, tugas2: 70, uas: 64, nilaiAkhir: 68 },
+            { no: 32, name: "Markus Warak", class: "9A", gender: "male", tugas1: 68, tugas2: 75, uas: 60, nilaiAkhir: 68 },
+            { no: 33, name: "Habel Auk", class: "9A", gender: "male", tugas1: 85, tugas2: 80, uas: 87, nilaiAkhir: 84 },
+            { no: 34, name: "Adam Amsakat", class: "9A", gender: "male", tugas1: 85, tugas2: 80, uas: 89, nilaiAkhir: 85 },
+            { no: 35, name: "Simson Wakum", class: "9A", gender: "male", tugas1: 73, tugas2: 75, uas: 70, nilaiAkhir: 73 },
+            { no: 36, name: "Maria Magdalena Kamnam", class: "9A", gender: "female", tugas1: 75, tugas2: 78, uas: 65, nilaiAkhir: 73 },
+            { no: 37, name: "Genus Aor", class: "9A", gender: "male", tugas1: 70, tugas2: 65, uas: 68, nilaiAkhir: 68 },
+            { no: 38, name: "Benyamin Beoramon", class: "9A", gender: "male", tugas1: 70, tugas2: 66, uas: 69, nilaiAkhir: 68 }
+        ];
+
+        let currentSemester = 1;
+        let currentClassFilter = 'all';
+
+        // Untuk Semester 2, kita gunakan nilai yang sama (belum ada data baru)
+        // Jika ada data semester 2 nanti, bisa diupdate di sini
+
+        // Fungsi mendapatkan nilai berdasarkan semester
+        function getStudentScore(student, semester) {
+            // Untuk sementara, semester 1 dan 2 sama karena data semester 2 belum ada
+            // Jika nanti ada data semester 2, bisa ditambahkan properti sem2_tugas1, dll
+            if (semester === 1) {
+                return {
+                    tugas1: student.tugas1,
+                    tugas2: student.tugas2,
+                    uas: student.uas,
+                    nilaiAkhir: student.nilaiAkhir
+                };
+            } else {
+                // Untuk semester 2, kita gunakan data yang sama atau bisa ditambahkan kenaikan kecil
+                // Sebagai simulasi, nilai semester 2 sedikit lebih tinggi
+                return {
+                    tugas1: Math.min(100, student.tugas1 + 2),
+                    tugas2: Math.min(100, student.tugas2 + 2),
+                    uas: Math.min(100, student.uas + 2),
+                    nilaiAkhir: Math.min(100, student.nilaiAkhir + 2)
+                };
+            }
+        }
+
+        // Fungsi menghitung statistik per kelas
+        function getClassStats(className, semester) {
+            const students = studentData.filter(s => s.class === className);
+            const scores = students.map(s => getStudentScore(s, semester).nilaiAkhir);
+            const avg = scores.reduce((a, b) => a + b, 0) / scores.length;
+            const highest = Math.max(...scores);
+            const lowest = Math.min(...scores);
+            const passed = scores.filter(s => s >= 70).length;
+            const passRate = (passed / scores.length) * 100;
+
+            return { avg, highest, lowest, passRate, totalStudents: scores.length };
+        }
+
+        // Render Class Cards
+        function renderClassCards() {
+            const container = document.getElementById('classCards');
+            const classes = ['7A', '8A', '9A'];
+
+            container.innerHTML = classes.map(className => {
+                const stats = getClassStats(className, currentSemester);
+                const avgClass = stats.avg >= 80 ? 'high' : (stats.avg >= 70 ? 'medium' : 'low');
+
+                return `
+          <div class="class-card">
+            <div class="class-header">
+              <h3>Kelas ${className}</h3>
+              <p><i class="fas fa-users"></i> ${stats.totalStudents} Siswa</p>
+            </div>
+            <div class="class-stats">
+              <div class="stat-row">
+                <span class="stat-label"><i class="fas fa-chart-line"></i> Rata-rata</span>
+                <span class="stat-value ${avgClass}">${stats.avg.toFixed(1)}</span>
+              </div>
+              <div class="stat-row">
+                <span class="stat-label"><i class="fas fa-arrow-up"></i> Nilai Tertinggi</span>
+                <span class="stat-value high">${stats.highest}</span>
+              </div>
+              <div class="stat-row">
+                <span class="stat-label"><i class="fas fa-arrow-down"></i> Nilai Terendah</span>
+                <span class="stat-value low">${stats.lowest}</span>
+              </div>
+              <div class="stat-row">
+                <span class="stat-label"><i class="fas fa-check-circle"></i> Ketuntasan</span>
+                <span class="stat-value ${stats.passRate >= 70 ? 'high' : 'medium'}">${stats.passRate.toFixed(0)}%</span>
+              </div>
+            </div>
+          </div>
+        `;
+            }).join('');
+        }
+
+        // Charts
+        let avgChart, highestChart, genderChart;
+
+        function initCharts() {
+            const classes = ['7A', '8A', '9A'];
+            const avgData = classes.map(c => getClassStats(c, currentSemester).avg);
+            const highestData = classes.map(c => getClassStats(c, currentSemester).highest);
+
+            if (avgChart) avgChart.destroy();
+            if (highestChart) highestChart.destroy();
+
+            const ctxAvg = document.getElementById('avgChart').getContext('2d');
+            avgChart = new Chart(ctxAvg, {
+                type: 'bar',
+                data: {
+                    labels: classes,
+                    datasets: [{
+                        label: `Rata-rata Nilai Semester ${currentSemester}`,
+                        data: avgData,
+                        backgroundColor: ['rgba(255,107,107,0.7)', 'rgba(78,205,196,0.7)', 'rgba(255,230,109,0.7)'],
+                        borderColor: ['#FF6B6B', '#4ECDC4', '#FFE66D'],
+                        borderWidth: 1,
+                        borderRadius: 8
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    scales: {
+                        y: { beginAtZero: true, max: 100, title: { display: true, text: 'Nilai' } }
+                    }
+                }
+            });
+
+            const ctxHighest = document.getElementById('highestChart').getContext('2d');
+            highestChart = new Chart(ctxHighest, {
+                type: 'bar',
+                data: {
+                    labels: classes,
+                    datasets: [{
+                        label: `Nilai Tertinggi Semester ${currentSemester}`,
+                        data: highestData,
+                        backgroundColor: ['rgba(16,185,129,0.7)', 'rgba(16,185,129,0.7)', 'rgba(16,185,129,0.7)'],
+                        borderColor: '#10b981',
+                        borderWidth: 1,
+                        borderRadius: 8
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    scales: {
+                        y: { beginAtZero: true, max: 100, title: { display: true, text: 'Nilai' } }
+                    }
+                }
+            });
+        }
+
+        // Gender Comparison
+        function renderGenderComparison() {
+            const maleStudents = studentData.filter(s => s.gender === 'male');
+            const femaleStudents = studentData.filter(s => s.gender === 'female');
+
+            const maleScores = maleStudents.map(s => getStudentScore(s, currentSemester).nilaiAkhir);
+            const femaleScores = femaleStudents.map(s => getStudentScore(s, currentSemester).nilaiAkhir);
+
+            const maleAvg = maleScores.reduce((a, b) => a + b, 0) / maleScores.length;
+            const femaleAvg = femaleScores.reduce((a, b) => a + b, 0) / femaleScores.length;
+
+            const genderStats = document.getElementById('genderStats');
+            genderStats.innerHTML = `
+        <div class="gender-card">
+          <div class="gender-icon male"><i class="fas fa-mars"></i></div>
+          <div class="gender-name">Laki-laki</div>
+          <div class="gender-avg">${maleAvg.toFixed(1)}</div>
+          <div class="gender-count">${maleStudents.length} Siswa</div>
+        </div>
+        <div class="gender-card">
+          <div class="gender-icon female"><i class="fas fa-venus"></i></div>
+          <div class="gender-name">Perempuan</div>
+          <div class="gender-avg">${femaleAvg.toFixed(1)}</div>
+          <div class="gender-count">${femaleStudents.length} Siswa</div>
+        </div>
+      `;
+
+            if (genderChart) genderChart.destroy();
+            const ctxGender = document.getElementById('genderChart').getContext('2d');
+            genderChart = new Chart(ctxGender, {
+                type: 'bar',
+                data: {
+                    labels: ['Laki-laki', 'Perempuan'],
+                    datasets: [{
+                        label: `Rata-rata Nilai Semester ${currentSemester}`,
+                        data: [maleAvg, femaleAvg],
+                        backgroundColor: ['rgba(59,130,246,0.7)', 'rgba(236,72,153,0.7)'],
+                        borderColor: ['#3b82f6', '#ec4899'],
+                        borderWidth: 1,
+                        borderRadius: 8
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    scales: {
+                        y: { beginAtZero: true, max: 100, title: { display: true, text: 'Nilai' } }
+                    }
+                }
+            });
+        }
+
+        // Distribution Bars
+        function renderDistribution() {
+            const scores = studentData.map(s => getStudentScore(s, currentSemester).nilaiAkhir);
+            const total = scores.length;
+            const countA = scores.filter(s => s >= 85).length;
+            const countB = scores.filter(s => s >= 70 && s <= 84).length;
+            const countC = scores.filter(s => s >= 60 && s <= 69).length;
+            const countD = scores.filter(s => s < 60).length;
+
+            const percentA = (countA / total) * 100;
+            const percentB = (countB / total) * 100;
+            const percentC = (countC / total) * 100;
+            const percentD = (countD / total) * 100;
+
+            document.getElementById('distributionBars').innerHTML = `
+        <div class="dist-item">
+          <div class="dist-label"><span>A (85-100)</span><span>${countA} Siswa (${percentA.toFixed(0)}%)</span></div>
+          <div class="dist-bar-bg"><div class="dist-bar A" style="width: ${percentA}%"></div></div>
+        </div>
+        <div class="dist-item">
+          <div class="dist-label"><span>B (70-84)</span><span>${countB} Siswa (${percentB.toFixed(0)}%)</span></div>
+          <div class="dist-bar-bg"><div class="dist-bar B" style="width: ${percentB}%"></div></div>
+        </div>
+        <div class="dist-item">
+          <div class="dist-label"><span>C (60-69)</span><span>${countC} Siswa (${percentC.toFixed(0)}%)</span></div>
+          <div class="dist-bar-bg"><div class="dist-bar C" style="width: ${percentC}%"></div></div>
+        </div>
+        <div class="dist-item">
+          <div class="dist-label"><span>D (0-59)</span><span>${countD} Siswa (${percentD.toFixed(0)}%)</span></div>
+          <div class="dist-bar-bg"><div class="dist-bar D" style="width: ${percentD}%"></div></div>
+        </div>
+      `;
+        }
+
+        // Data Table dengan Filter Kelas
+        function renderDataTable() {
+            const tbody = document.getElementById('tableBody');
+
+            let filteredData = studentData;
+            if (currentClassFilter !== 'all') {
+                filteredData = studentData.filter(s => s.class === currentClassFilter);
+            }
+
+            if (filteredData.length === 0) {
+                tbody.innerHTML = '<tr><td colspan="8" style="text-align:center; padding:40px;">Tidak ada data untuk kelas ini</td></tr>';
+                return;
+            }
+
+            tbody.innerHTML = filteredData.map((student, idx) => {
+                const scores = getStudentScore(student, currentSemester);
+                const nilaiAkhir = scores.nilaiAkhir;
+                const nilaiClass = nilaiAkhir >= 85 ? 'high' : (nilaiAkhir >= 70 ? 'medium' : 'low');
+
+                return `
+          <tr>
+            <td>${idx + 1}</td>
+            <td style="text-align:left; font-weight:500;">${student.name}</td>
+            <td>${student.class}</td>
+            <td>${student.gender === 'male' ? '👨 Laki-laki' : '👩 Perempuan'}</td>
+            <td class="nilai-tugas">${scores.tugas1}</td>
+            <td class="nilai-tugas">${scores.tugas2}</td>
+            <td class="nilai-tugas">${scores.uas}</td>
+            <td class="${nilaiClass}" style="font-weight:700;">${nilaiAkhir}</td>
+          </tr>
+        `;
+            }).join('');
+        }
+
+        // Update All
+        function updateAllData() {
+            renderClassCards();
+            initCharts();
+            renderGenderComparison();
+            renderDistribution();
+            renderDataTable();
+        }
+
+        // Semester Toggle
+        function initSemesterToggle() {
+            const btns = document.querySelectorAll('.semester-btn');
+            btns.forEach(btn => {
+                btn.addEventListener('click', () => {
+                    btns.forEach(b => b.classList.remove('active'));
+                    btn.classList.add('active');
+                    currentSemester = parseInt(btn.getAttribute('data-semester'));
+                    updateAllData();
+                });
+            });
+        }
+
+        // Filter Kelas
+        function initClassFilter() {
+            const filterBtns = document.querySelectorAll('.filter-class-btn');
+            filterBtns.forEach(btn => {
+                btn.addEventListener('click', () => {
+                    filterBtns.forEach(b => b.classList.remove('active'));
+                    btn.classList.add('active');
+                    currentClassFilter = btn.getAttribute('data-filter-class');
+                    renderDataTable();
+                });
+            });
+        }
+
+        // Init
+        document.addEventListener('DOMContentLoaded', () => {
+            updateAllData();
+            initSemesterToggle();
+            initClassFilter();
+        });
+    </script>
+</body>
+
+</html>
