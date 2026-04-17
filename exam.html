@@ -1,0 +1,561 @@
+<!DOCTYPE html>
+<html lang="id" data-theme="light">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ujian Online | SMP Persiapan Negeri Pulau Tiga</title>
+    <meta name="description" content="Halaman ujian online dan manajemen nilai siswa SMP Persiapan Negeri Pulau Tiga.">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link rel="stylesheet" href="css/style.css">
+    <style>
+        /* Exam Page Styles */
+        .exam-container {
+            display: grid;
+            grid-template-columns: 1fr 1.5fr;
+            gap: 30px;
+            margin-bottom: 48px;
+        }
+
+        .exam-form-card,
+        .exam-stats-card {
+            background: var(--card-bg);
+            border: 1px solid var(--border);
+            border-radius: 20px;
+            padding: 28px;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            font-size: 0.85rem;
+            font-weight: 600;
+            margin-bottom: 8px;
+            color: var(--text);
+        }
+
+        .form-group input,
+        .form-group select {
+            width: 100%;
+            padding: 12px 16px;
+            border-radius: 12px;
+            border: 1.5px solid var(--border);
+            background: var(--bg);
+            color: var(--text);
+            font-family: var(--font);
+            font-size: 0.9rem;
+            transition: all 0.3s;
+        }
+
+        .form-group input:focus,
+        .form-group select:focus {
+            outline: none;
+            border-color: var(--c1);
+        }
+
+        .btn-submit {
+            width: 100%;
+            padding: 14px;
+            background: linear-gradient(135deg, var(--c1), var(--c2));
+            color: white;
+            border: none;
+            border-radius: 12px;
+            font-weight: 700;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .btn-submit:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 15px rgba(255, 107, 107, 0.4);
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 16px;
+            margin-bottom: 24px;
+        }
+
+        .stat-item {
+            text-align: center;
+            padding: 16px;
+            background: var(--bg2);
+            border-radius: 16px;
+        }
+
+        .stat-number {
+            font-size: 2rem;
+            font-weight: 800;
+            background: linear-gradient(135deg, var(--c1), var(--c2));
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            /* Fallback untuk browser yang tidak support */
+            color: var(--c1);
+            }
+
+        .stat-label {
+            font-size: 0.75rem;
+            color: var(--text2);
+            margin-top: 5px;
+        }
+
+        .filter-bar {
+            display: flex;
+            gap: 12px;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+        }
+
+        .filter-input {
+            padding: 8px 16px;
+            border-radius: 99px;
+            border: 1px solid var(--border);
+            background: var(--bg);
+            font-size: 0.85rem;
+        }
+
+        .history-table-container {
+            overflow-x: auto;
+        }
+
+        .history-table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        .history-table th,
+        .history-table td {
+            padding: 12px;
+            text-align: center;
+            border-bottom: 1px solid var(--border);
+            font-size: 0.8rem;
+        }
+
+        .history-table th {
+            background: var(--bg3);
+            font-weight: 700;
+        }
+
+        .badge-lulus {
+            background: #10b981;
+            color: white;
+            padding: 4px 8px;
+            border-radius: 99px;
+            font-size: 0.7rem;
+        }
+
+        .badge-tidak {
+            background: #ef4444;
+            color: white;
+            padding: 4px 8px;
+            border-radius: 99px;
+            font-size: 0.7rem;
+        }
+
+        .loading-spinner-small {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            border: 2px solid var(--border);
+            border-top-color: var(--c1);
+            border-radius: 50%;
+            animation: spin 0.8s linear infinite;
+        }
+
+        @keyframes spin {
+            to {
+                transform: rotate(360deg);
+            }
+        }
+
+        @media (max-width: 900px) {
+            .exam-container {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- NAVBAR -->
+    <nav class="navbar">
+        <div class="container">
+            <div class="nav-inner">
+                <a href="index.html" class="logo">
+                    <div class="logo-icon">SMP</div>
+                    <div class="logo-text">
+                        <span class="logo-title">Persiapan Negeri</span>
+                        <span class="logo-sub">Pulau Tiga • Nakai</span>
+                    </div>
+                </a>
+                <ul class="nav-links">
+                    <li><a href="index.html">Home</a></li>
+                    <li><a href="documents.html">Documents</a></li>
+                    <li><a href="gallery.html">Galeri</a></li>
+                    <li><a href="grades.html">Students Grades</a></li>
+                    <li><a href="exam.html" class="active">Ujian</a></li>
+                    <li><a href="about.html">About Me</a></li>
+                    <li><a href="contact.html">Contact Me</a></li>
+                </ul>
+                <div class="nav-right">
+                    <button class="dark-toggle" aria-label="Toggle dark mode">
+                        <div class="dark-toggle-ball">☀️</div>
+                    </button>
+                    <button class="hamburger" aria-label="Menu">
+                        <span></span><span></span><span></span>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </nav>
+    <div class="mobile-menu" id="mobileMenu">
+        <a href="index.html">Home</a>
+        <a href="documents.html">Documents</a>
+        <a href="gallery.html">Galeri</a>
+        <a href="grades.html">Students Grades</a>
+        <a href="exam.html" class="active">Ujian</a>
+        <a href="about.html">About Me</a>
+        <a href="contact.html">Contact Me</a>
+    </div>
+
+    <div class="page-content">
+        <div class="page-header">
+            <div class="page-header-bg"></div>
+            <div class="container">
+                <div class="fade-up" style="text-align: center; max-width: 700px; margin: 0 auto;">
+                    <p class="section-label">Manajemen Ujian</p>
+                    <h1
+                        style="font-size:clamp(1.8rem,4vw,2.6rem);font-weight:800;letter-spacing:-1px;margin-bottom:16px;">
+                        Input Nilai <span class="gradient-text">Ujian</span>
+                    </h1>
+                    <p style="color:var(--text2);font-size:0.95rem;line-height:1.7;">
+                        Input nilai ujian siswa. Data akan tersimpan otomatis ke Google Spreadsheet dan dapat dilihat di
+                        halaman ini.
+                    </p>
+                </div>
+            </div>
+        </div>
+
+        <div class="container" style="padding-bottom: 80px;">
+            <div class="exam-container">
+                <!-- Form Input Nilai -->
+                <div class="exam-form-card fade-up">
+                    <h3 style="margin-bottom: 20px;"><i class="fas fa-edit"></i> Form Input Nilai</h3>
+                    <form id="examForm">
+                        <div class="form-group">
+                            <label><i class="fas fa-user"></i> Nama Siswa</label>
+                            <input type="text" id="namaSiswa" required placeholder="Masukkan nama lengkap siswa">
+                        </div>
+                        <div class="form-group">
+                            <label><i class="fas fa-users"></i> Kelas</label>
+                            <select id="kelas" required>
+                                <option value="">Pilih Kelas</option>
+                                <option value="7A">7A</option>
+                                <option value="8A">8A</option>
+                                <option value="9A">9A</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label><i class="fas fa-book"></i> Mata Pelajaran</label>
+                            <select id="mapel" required>
+                                <option value="">Pilih Mata Pelajaran</option>
+                                <option value="Bahasa Inggris">Bahasa Inggris</option>
+                                <option value="Matematika">Matematika</option>
+                                <option value="IPA">IPA</option>
+                                <option value="IPS">IPS</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label><i class="fas fa-calendar"></i> Semester</label>
+                            <select id="semester" required>
+                                <option value="">Pilih Semester</option>
+                                <option value="1">Semester 1</option>
+                                <option value="2">Semester 2</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label><i class="fas fa-chart-line"></i> Nilai (0-100)</label>
+                            <input type="number" id="nilai" min="0" max="100" required placeholder="Masukkan nilai">
+                        </div>
+                        <div class="form-group">
+                            <label><i class="fas fa-sort-numeric-up"></i> Ujian ke-</label>
+                            <input type="number" id="ujianKe" min="1" value="1" placeholder="Ujian ke berapa">
+                        </div>
+                        <button type="submit" class="btn-submit">
+                            <i class="fas fa-save"></i> Simpan Nilai
+                        </button>
+                    </form>
+                    <div id="formMessage" style="margin-top: 16px; font-size: 0.85rem;"></div>
+                </div>
+
+                <!-- Statistik -->
+                <div class="exam-stats-card fade-up">
+                    <h3 style="margin-bottom: 20px;"><i class="fas fa-chart-pie"></i> Statistik Ujian</h3>
+                    <div class="stats-grid" id="statsGrid">
+                        <div class="stat-item">
+                            <div class="stat-number" id="totalUjian">0</div>
+                            <div class="stat-label">Total Ujian</div>
+                        </div>
+                        <div class="stat-item">
+                            <div class="stat-number" id="rataRata">0</div>
+                            <div class="stat-label">Rata-rata Nilai</div>
+                        </div>
+                        <div class="stat-item">
+                            <div class="stat-number" id="lulusCount">0</div>
+                            <div class="stat-label">Siswa Lulus</div>
+                        </div>
+                        <div class="stat-item">
+                            <div class="stat-number" id="tidakLulusCount">0</div>
+                            <div class="stat-label">Siswa Tidak Lulus</div>
+                        </div>
+                    </div>
+                    <div class="chart-container" style="height: 200px;">
+                        <canvas id="examChart"></canvas>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Filter dan History -->
+            <div class="exam-form-card fade-up" style="margin-top: 0;">
+                <h3 style="margin-bottom: 20px;"><i class="fas fa-history"></i> Riwayat Ujian</h3>
+                <div class="filter-bar">
+                    <select id="filterKelas" class="filter-input">
+                        <option value="">Semua Kelas</option>
+                        <option value="7A">7A</option>
+                        <option value="8A">8A</option>
+                        <option value="9A">9A</option>
+                    </select>
+                    <select id="filterMapel" class="filter-input">
+                        <option value="">Semua Mapel</option>
+                        <option value="Bahasa Inggris">Bahasa Inggris</option>
+                        <option value="Matematika">Matematika</option>
+                        <option value="IPA">IPA</option>
+                        <option value="IPS">IPS</option>
+                    </select>
+                    <button id="refreshBtn" class="filter-input"
+                        style="background: var(--c1); color: white; border: none;">
+                        <i class="fas fa-sync-alt"></i> Refresh
+                    </button>
+                </div>
+                <div class="history-table-container">
+                    <table class="history-table">
+                        <thead>
+                            <tr>
+                                <th>Tanggal</th>
+                                <th>Nama Siswa</th>
+                                <th>Kelas</th>
+                                <th>Mapel</th>
+                                <th>Semester</th>
+                                <th>Nilai</th>
+                                <th>Status</th>
+                            </tr>
+                        </thead>
+                        <tbody id="historyTableBody">
+                            <tr>
+                                <td colspan="7" style="text-align: center;">Loading data...</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <footer>
+        <div class="container">
+            © 2026 SMP Persiapan Negeri Pulau Tiga. All rights are reserved
+        </div>
+    </footer>
+
+    <script src="js/main.js"></script>
+    <script>
+        // ===== KONFIGURASI =====
+        // GANTI dengan Web App URL dari Apps Script Anda!
+        const APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbwuAcVjxPsVhk2qGI5ItR4Pk-bAJfjjZH6Ho8a--t6kTgaewsz0lcabcDLUt1vc4oQNaA/exec';
+
+        let examChart = null;
+
+        // ===== SAVE DATA TO APPS SCRIPT =====
+        async function saveExamData(formData) {
+            try {
+                const response = await fetch(APPS_SCRIPT_URL, {
+                    method: 'POST',
+                    mode: 'no-cors',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify(formData)
+                });
+
+                return { success: true, message: 'Data berhasil disimpan!' };
+            } catch (error) {
+                console.error('Error:', error);
+                return { success: false, message: 'Gagal menyimpan data: ' + error.message };
+            }
+        }
+
+        // ===== FETCH DATA FROM APPS SCRIPT =====
+        async function fetchExamData(filters = {}) {
+            try {
+                let url = APPS_SCRIPT_URL;
+                const params = new URLSearchParams(filters);
+                if (params.toString()) {
+                    url += '?' + params.toString();
+                }
+
+                const response = await fetch(url);
+                const data = await response.json();
+                return data;
+            } catch (error) {
+                console.error('Error fetching data:', error);
+                return { success: false, data: [] };
+            }
+        }
+
+        // ===== RENDER HISTORY TABLE =====
+        async function renderHistory() {
+            const kelas = document.getElementById('filterKelas').value;
+            const mapel = document.getElementById('filterMapel').value;
+
+            const filters = {};
+            if (kelas) filters.kelas = kelas;
+            if (mapel) filters.mapel = mapel;
+
+            const result = await fetchExamData(filters);
+            const tbody = document.getElementById('historyTableBody');
+
+            if (!result.success || !result.data || result.data.length === 0) {
+                tbody.innerHTML = '<tr><td colspan="7" style="text-align: center;">Belum ada data ujian</td></tr>';
+                updateStats([]);
+                return;
+            }
+
+            const data = result.data;
+            updateStats(data);
+
+            tbody.innerHTML = data.map(item => {
+                const tanggal = item.Timestamp ? new Date(item.Timestamp).toLocaleDateString('id-ID') : '-';
+                const status = item.Nilai >= 70;
+                return `
+          <tr>
+            <td>${tanggal}</td>
+            <td>${item['Nama Siswa'] || '-'}</td>
+            <td>${item.Kelas || '-'}</td>
+            <td>${item['Mata Pelajaran'] || '-'}</td>
+            <td>Semester ${item.Semester || '-'}</td>
+            <td style="font-weight:700;">${item.Nilai || '-'}</td>
+            <td><span class="${status ? 'badge-lulus' : 'badge-tidak'}">${status ? 'Lulus' : 'Tidak Lulus'}</span></td>
+          </tr>
+        `;
+            }).join('');
+        }
+
+        // ===== UPDATE STATISTICS =====
+        function updateStats(data) {
+            const total = data.length;
+            const totalNilai = data.reduce((sum, item) => sum + (item.Nilai || 0), 0);
+            const rataRata = total > 0 ? (totalNilai / total).toFixed(2) : 0;
+            const lulus = data.filter(item => (item.Nilai || 0) >= 70).length;
+            const tidakLulus = total - lulus;
+
+            document.getElementById('totalUjian').textContent = total;
+            document.getElementById('rataRata').textContent = rataRata;
+            document.getElementById('lulusCount').textContent = lulus;
+            document.getElementById('tidakLulusCount').textContent = tidakLulus;
+
+            updateChart(lulus, tidakLulus);
+        }
+
+        // ===== UPDATE CHART =====
+        function updateChart(lulus, tidakLulus) {
+            const ctx = document.getElementById('examChart').getContext('2d');
+
+            if (examChart) examChart.destroy();
+
+            examChart = new Chart(ctx, {
+                type: 'doughnut',
+                data: {
+                    labels: ['Lulus', 'Tidak Lulus'],
+                    datasets: [{
+                        data: [lulus, tidakLulus],
+                        backgroundColor: ['#10b981', '#ef4444'],
+                        borderWidth: 0
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: true,
+                    plugins: {
+                        legend: {
+                            position: 'bottom'
+                        }
+                    }
+                }
+            });
+        }
+
+        // ===== HANDLE FORM SUBMIT =====
+        document.getElementById('examForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+
+            const formData = {
+                namaSiswa: document.getElementById('namaSiswa').value,
+                kelas: document.getElementById('kelas').value,
+                mataPelajaran: document.getElementById('mapel').value,
+                semester: parseInt(document.getElementById('semester').value),
+                nilai: parseInt(document.getElementById('nilai').value),
+                ujianKe: parseInt(document.getElementById('ujianKe').value)
+            };
+
+            const submitBtn = document.querySelector('.btn-submit');
+            const originalText = submitBtn.innerHTML;
+            submitBtn.innerHTML = '<span class="loading-spinner-small"></span> Menyimpan...';
+            submitBtn.disabled = true;
+
+            const result = await saveExamData(formData);
+
+            submitBtn.innerHTML = originalText;
+            submitBtn.disabled = false;
+
+            const messageDiv = document.getElementById('formMessage');
+            if (result.success) {
+                messageDiv.innerHTML = '<span style="color: #10b981;">✅ Data berhasil disimpan!</span>';
+                document.getElementById('examForm').reset();
+                setTimeout(() => renderHistory(), 1000);
+            } else {
+                messageDiv.innerHTML = '<span style="color: #ef4444;">❌ Gagal menyimpan: ' + result.message + '</span>';
+            }
+
+            setTimeout(() => {
+                messageDiv.innerHTML = '';
+            }, 3000);
+        });
+
+        // ===== REFRESH BUTTON =====
+        document.getElementById('refreshBtn').addEventListener('click', () => {
+            renderHistory();
+        });
+
+        document.getElementById('filterKelas').addEventListener('change', () => renderHistory());
+        document.getElementById('filterMapel').addEventListener('change', () => renderHistory());
+
+        // ===== INIT =====
+        document.addEventListener('DOMContentLoaded', () => {
+            renderHistory();
+        });
+    </script>
+</body>
+
+</html>
