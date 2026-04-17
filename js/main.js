@@ -1,33 +1,33 @@
-  // ===== DARK MODE =====
-  const html = document.documentElement;
+// ===== DARK MODE =====
+const html = document.documentElement;
 
-  function setTheme(dark) {
+function setTheme(dark) {
   html.setAttribute('data-theme', dark ? 'dark' : 'light');
   localStorage.setItem('theme', dark ? 'dark' : 'light');
   const ball = document.querySelector('.dark-toggle-ball');
   if (ball) ball.innerHTML = dark ? '🌙' : '☀️';
-  }
+}
 
-  function initTheme() {
+function initTheme() {
   const saved = localStorage.getItem('theme');
   const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
   const isDark = saved ? saved === 'dark' : prefersDark;
   setTheme(isDark);
-  }
+}
 
-  function toggleTheme() {
+function toggleTheme() {
   const isDark = html.getAttribute('data-theme') === 'dark';
   setTheme(!isDark);
-  }
+}
 
-  // ===== MOBILE MENU =====
-  function toggleMobileMenu() {
+// ===== MOBILE MENU =====
+function toggleMobileMenu() {
   const menu = document.getElementById('mobileMenu');
   if (menu) menu.classList.toggle('open');
-  }
+}
 
-  // ===== ACTIVE NAV =====
-  function setActiveNav() {
+// ===== ACTIVE NAV =====
+function setActiveNav() {
   const path = window.location.pathname.split('/').pop() || 'index.html';
   document.querySelectorAll('.nav-links a, .mobile-menu a').forEach(a => {
     const href = a.getAttribute('href');
@@ -37,10 +37,10 @@
       a.classList.remove('active');
     }
   });
-  }
+}
 
-  // ===== FADE UP ON SCROLL =====
-  function initFadeUp() {
+// ===== FADE UP ON SCROLL =====
+function initFadeUp() {
   const els = document.querySelectorAll('.fade-up');
   if (!els.length) return;
 
@@ -53,13 +53,12 @@
   }, { threshold: 0.1, rootMargin: '0px 0px -40px 0px' });
 
   els.forEach(el => observer.observe(el));
-  }
+}
 
-  // ===== LOADING INDICATOR =====
-  let loadingOverlay = null;
+// ===== LOADING INDICATOR =====
+let loadingOverlay = null;
 
-  function showLoadingIndicator(fileName) {
-  // Hapus loading yang sudah ada
+function showLoadingIndicator(fileName) {
   if (loadingOverlay) hideLoadingIndicator();
 
   loadingOverlay = document.createElement('div');
@@ -80,15 +79,16 @@
   `;
   document.body.appendChild(loadingOverlay);
 
-  // Animasi fade in
   setTimeout(() => {
-    if (loadingOverlay) loadingOverlay.style.opacity = '1';
+    if (loadingOverlay) {
+      loadingOverlay.classList.add('active');
+    }
   }, 10);
-  }
+}
 
-  function hideLoadingIndicator() {
+function hideLoadingIndicator() {
   if (loadingOverlay) {
-    loadingOverlay.style.opacity = '0';
+    loadingOverlay.classList.remove('active');
     setTimeout(() => {
       if (loadingOverlay && loadingOverlay.remove) {
         loadingOverlay.remove();
@@ -96,72 +96,289 @@
       }
     }, 300);
   }
+}
+
+// ===== DATA DOKUMEN UNTUK TABEL =====
+const documentsData = [
+  { no: "01", name: "Ijazah Sarjana (S1)", type: "pdf", icon: "fa-file-pdf", desc: "Ijazah Sarjana Pendidikan Bahasa Inggris", size: "~2.5 MB", link: "https://drive.google.com/uc?export=download&id=1kQxhubOSgE9pZeAB9QtHHHojbgsGh0kB", available: true },
+  { no: "02", name: "Ijazah SMA", type: "pdf", icon: "fa-file-pdf", desc: "Ijazah Sekolah Menengah Atas", size: "~1.8 MB", link: "https://drive.google.com/uc?export=download&id=1irCfRd6JHdLPsjBxyOzjcqokTXgOGAtb", available: true },
+  { no: "03", name: "Ijazah SMP", type: "pdf", icon: "fa-file-pdf", desc: "Ijazah Sekolah Menengah Pertama", size: "~1.5 MB", link: "https://drive.google.com/uc?export=download&id=1m6bhWIYA3X7st0P-k4SoFKmagq0d98h7", available: true },
+  { no: "04", name: "Ijazah SD", type: "pdf", icon: "fa-file-pdf", desc: "Ijazah Sekolah Dasar", size: "~1.2 MB", link: "https://drive.google.com/uc?export=download&id=1lpWM0bd8CqH1utpGSHhE2GEEQtGNMNmd", available: true },
+  { no: "05", name: "SK Dinas & SK Pembagian Tugas", type: "pdf", icon: "fa-file-pdf", desc: "SK Dinas Pendidikan dan Pembagian Tugas Mengajar", size: "~3.2 MB", link: "https://drive.google.com/uc?export=download&id=1IVrOtRUw2TAWYRkyuuUAR2iAUw91JDBo", available: true },
+  { no: "06", name: "Rekap Nilai Siswa", type: "excel", icon: "fa-file-excel", desc: "Rekapitulasi nilai siswa semester ganjil 2025/2026", size: "~0.8 MB", link: "#", available: false },
+  { no: "07", name: "Proposal Program Kerja", type: "word", icon: "fa-file-word", desc: "Proposal program kerja tahun ajaran 2025/2026", size: "~1.1 MB", link: "#", available: false }
+];
+
+// ===== RENDER TABEL =====
+function renderTable() {
+  const tbody = document.getElementById('tableBody');
+  if (!tbody) return;
+  
+  tbody.innerHTML = '';
+  
+  documentsData.forEach(doc => {
+    const row = tbody.insertRow();
+    const typeColor = doc.type === 'pdf' ? '#d93025' : doc.type === 'excel' ? '#217346' : '#2b579a';
+    
+    let actionBtn;
+    if (doc.available) {
+      actionBtn = `<a href="${doc.link}" target="_blank" class="btn btn-download" style="padding:6px 14px;"><i class="fas fa-download"></i> Download</a>`;
+    } else {
+      actionBtn = `<button class="btn btn-disabled" style="padding:6px 14px;opacity:0.6;cursor:pointer;" data-file-name="${doc.name}" data-file-type="${doc.type}"><i class="fas fa-download"></i> Belum Tersedia</button>`;
+    }
+    
+    row.innerHTML = `
+      <td><span style="font-weight:600;color:var(--text2);">${doc.no}</span></td>
+      <td><div style="display:flex;align-items:center;gap:10px;"><i class="fas ${doc.icon}" style="color:${typeColor};font-size:1.1rem;"></i><span style="font-weight:600;">${doc.name}</span></div></td>
+      <td><span class="file-badge ${doc.type}">${doc.type.toUpperCase()}</span></td>
+      <td style="color:var(--text2);">${doc.desc}</td>
+      <td style="color:var(--text3);font-size:0.75rem;">${doc.size}</td>
+      <td>${actionBtn}</td>
+    `;
+  });
+  
+  // Tambahkan event listener untuk tombol disabled di tabel
+  document.querySelectorAll('#tableBody .btn-disabled').forEach(btn => {
+    btn.removeEventListener('click', handleDisabledClick);
+    btn.addEventListener('click', handleDisabledClick);
+  });
+}
+
+// ===== HANDLER UNTUK TOMBOL DISABLED =====
+function handleDisabledClick(e) {
+  e.preventDefault();
+  e.stopPropagation();
+  const fileName = e.currentTarget.getAttribute('data-file-name') || 'file';
+  const fileType = e.currentTarget.getAttribute('data-file-type') || '';
+  showUnavailableModal(fileName, fileType);
+}
+
+// ===== MODAL UNTUK FILE BELUM TERSEDIA =====
+function showUnavailableModal(fileName, fileType) {
+  // Cek apakah modal sudah ada
+  let modal = document.getElementById('errorModal');
+  
+  // Jika belum ada, buat modal
+  if (!modal) {
+    modal = document.createElement('div');
+    modal.id = 'errorModal';
+    modal.className = 'modal';
+    modal.innerHTML = `
+      <div class="modal-card">
+        <div class="modal-icon">
+          <i class="fas fa-exclamation-triangle"></i>
+        </div>
+        <h3>File Belum Tersedia</h3>
+        <p id="modalMessage">Maaf, file yang Anda cari belum tersedia saat ini. File sedang dalam proses persiapan dan akan segera diunggah.</p>
+        <div class="modal-buttons">
+          <a href="contact.html" class="modal-btn modal-btn-primary">
+            <i class="fab fa-whatsapp"></i> Hubungi Pengelola
+          </a>
+          <button class="modal-btn modal-btn-secondary" id="closeModalBtn">
+            <i class="fas fa-times"></i> Tutup
+          </button>
+        </div>
+      </div>
+    `;
+    document.body.appendChild(modal);
+    
+    // Event klik pada overlay (background) untuk menutup
+    modal.addEventListener('click', function(e) {
+      if (e.target === modal) {
+        closeModal();
+      }
+    });
   }
+  
+  // Update pesan modal sesuai file
+  const modalMessage = document.getElementById('modalMessage');
+  if (modalMessage) {
+    const typeText = fileType === 'excel' ? 'Excel' : (fileType === 'word' ? 'Word' : 'file');
+    modalMessage.innerHTML = `Maaf, file <strong>${fileName}</strong> (${typeText}) belum tersedia saat ini. File sedang dalam proses persiapan dan akan segera diunggah.`;
+  }
+  
+  // Event listener untuk tombol close (dipasang ulang setiap kali modal ditampilkan)
+  const closeBtn = document.getElementById('closeModalBtn');
+  if (closeBtn) {
+    // Hapus event listener lama untuk menghindari duplikasi
+    const newCloseBtn = closeBtn.cloneNode(true);
+    closeBtn.parentNode.replaceChild(newCloseBtn, closeBtn);
+    newCloseBtn.addEventListener('click', function(e) {
+      e.preventDefault();
+      e.stopPropagation();
+      closeModal();
+    });
+  }
+  
+  // Tampilkan modal
+  modal.classList.add('show');
+  document.body.style.overflow = 'hidden';
+}
 
-  // ===== DOWNLOAD HANDLER =====
-  function initDownloadButtons() {
-  // Tunggu sebentar agar tabel sudah ter-load
+function closeModal() {
+  const modal = document.getElementById('errorModal');
+  if (modal) {
+    modal.classList.remove('show');
+    document.body.style.overflow = '';
+  }
+}
+
+// Event listener untuk tombol ESC di level document (hanya sekali)
+document.addEventListener('keydown', function(e) {
+  if (e.key === 'Escape') {
+    const modal = document.getElementById('errorModal');
+    if (modal && modal.classList.contains('show')) {
+      closeModal();
+    }
+  }
+});
+
+// ===== DOWNLOAD HANDLER (HANYA UNTUK FILE AKTIF) =====
+function initDownloadButtons() {
   setTimeout(() => {
-    const downloadBtns = document.querySelectorAll('.btn-download');
-
+    // Hanya ambil tombol dengan class btn-download (bukan btn-disabled)
+    const downloadBtns = document.querySelectorAll('.btn-download:not(.btn-disabled)');
+    
     downloadBtns.forEach(btn => {
-      // Hapus event listener lama (hindari duplikasi)
       const newBtn = btn.cloneNode(true);
       btn.parentNode.replaceChild(newBtn, btn);
-
-      newBtn.addEventListener('click', function (e) {
+      
+      newBtn.addEventListener('click', function(e) {
         e.preventDefault();
-
-        // Ambil nama file dari baris tabel
+        
+        const url = this.getAttribute('href');
+        
+        // Validasi link - jika # atau kosong, jangan download
+        if (!url || url === '#') {
+          showNotif('⚠️ File belum tersedia', 'error');
+          return;
+        }
+        
+        // Ambil nama file
         let fileName = '';
-        const row = this.closest('tr');
-        if (row) {
-          const nameCell = row.querySelector('td:nth-child(2)');
-          if (nameCell) {
-            const nameSpan = nameCell.querySelector('span');
-            fileName = nameSpan ? nameSpan.innerText : 'dokumen.pdf';
+        
+        // Coba dari card grid
+        const card = this.closest('.doc-card');
+        if (card) {
+          const nameDiv = card.querySelector('.doc-name');
+          fileName = nameDiv ? nameDiv.innerText : '';
+        }
+        
+        // Jika tidak ketemu, coba dari baris tabel
+        if (!fileName) {
+          const row = this.closest('tr');
+          if (row) {
+            const nameCell = row.querySelector('td:nth-child(2)');
+            if (nameCell) {
+              const nameSpan = nameCell.querySelector('span');
+              fileName = nameSpan ? nameSpan.innerText : '';
+            }
           }
         }
-
+        
+        // Fallback
+        if (!fileName) fileName = 'dokumen';
+        
         // Bersihkan nama file
         fileName = fileName.replace(/[\\/*?:"<>|]/g, '').trim();
-        if (!fileName.endsWith('.pdf')) fileName += '.pdf';
-
-        const url = this.getAttribute('href');
-
-        if (url) {
-          // Tampilkan loading
-          showLoadingIndicator(fileName);
-
-          // Simulasikan proses download (beri waktu untuk loading)
+        if (!fileName.match(/\.(pdf|docx?|xlsx?)$/i)) {
+          fileName += '.pdf';
+        }
+        
+        // Tampilkan loading
+        showLoadingIndicator(fileName);
+        
+        // Proses download
+        setTimeout(() => {
+          const link = document.createElement('a');
+          link.href = url;
+          link.download = fileName;
+          link.target = '_blank';
+          document.body.appendChild(link);
+          link.click();
+          document.body.removeChild(link);
+          
           setTimeout(() => {
-            // Buat link download
-            const link = document.createElement('a');
-            link.href = url;
-            link.download = fileName;
-            link.target = '_blank';
-            document.body.appendChild(link);
-            link.click();
-            document.body.removeChild(link);
+            hideLoadingIndicator();
+            showNotif(`📥 ${fileName} mulai diunduh`, 'success');
+          }, 3000);
+        }, 500);
+      });
+    });
+  }, 1500);
+}
 
-            // Sembunyikan loading setelah download dimulai
-            setTimeout(() => {
-              hideLoadingIndicator();
-              showNotif(`📥 ${fileName} mulai diunduh`, 'success');
-            }, 6000);
-          }, 600);
+// ===== FILTER DOKUMEN =====
+function initFilter() {
+  const filterBtns = document.querySelectorAll('.filter-btn');
+  const docCards = document.querySelectorAll('.doc-card');
+  
+  if (!filterBtns.length) return;
+  
+  // Update jumlah dokumen di badge filter
+  const pdfCount = document.querySelectorAll('.doc-card[data-file-type="pdf"]').length;
+  const excelCount = document.querySelectorAll('.doc-card[data-file-type="excel"]').length;
+  const wordCount = document.querySelectorAll('.doc-card[data-file-type="word"]').length;
+  const totalCount = pdfCount + excelCount + wordCount;
+  
+  filterBtns.forEach(btn => {
+    const filter = btn.getAttribute('data-filter');
+    if (filter === 'all') btn.innerHTML = `<i class="fas fa-folder-open"></i> Semua (${totalCount})`;
+    if (filter === 'pdf') btn.innerHTML = `<i class="fas fa-file-pdf"></i> PDF (${pdfCount})`;
+    if (filter === 'excel') btn.innerHTML = `<i class="fas fa-file-excel"></i> Excel (${excelCount})`;
+    if (filter === 'word') btn.innerHTML = `<i class="fas fa-file-word"></i> Word (${wordCount})`;
+  });
+  
+  filterBtns.forEach(btn => {
+    btn.addEventListener('click', () => {
+      filterBtns.forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      
+      const filter = btn.getAttribute('data-filter');
+      
+      docCards.forEach(card => {
+        if (filter === 'all' || card.getAttribute('data-file-type') === filter) {
+          card.style.display = 'block';
+        } else {
+          card.style.display = 'none';
         }
       });
     });
-  }, 2000);
-  }
+  });
+}
 
-  // ===== WHATSAPP FORM =====
-  function initContactForm() {
+// ===== HANDLE TOMBOL DISABLED DI GRID =====
+function initDisabledGridButtons() {
+  const disabledBtns = document.querySelectorAll('.doc-card .btn-disabled');
+  
+  disabledBtns.forEach(btn => {
+    btn.removeEventListener('click', handleGridDisabledClick);
+    btn.addEventListener('click', handleGridDisabledClick);
+  });
+}
+
+function handleGridDisabledClick(e) {
+  e.preventDefault();
+  e.stopPropagation();
+  const card = this.closest('.doc-card');
+  let fileName = '';
+  let fileType = '';
+  
+  if (card) {
+    const nameDiv = card.querySelector('.doc-name');
+    fileName = nameDiv ? nameDiv.innerText : 'file';
+    fileType = card.getAttribute('data-file-type') || '';
+  }
+  
+  showUnavailableModal(fileName, fileType);
+}
+
+// ===== WHATSAPP FORM =====
+function initContactForm() {
   const form = document.getElementById('contactForm');
   if (!form) return;
 
-  form.addEventListener('submit', function (e) {
+  form.addEventListener('submit', function(e) {
     e.preventDefault();
 
     const name = document.getElementById('name').value.trim();
@@ -181,10 +398,10 @@
     showNotif('Membuka WhatsApp...', 'success');
     form.reset();
   });
-  }
+}
 
-  // ===== NOTIFICATION =====
-  function showNotif(text, type = 'success') {
+// ===== NOTIFICATION =====
+function showNotif(text, type = 'success') {
   const existing = document.querySelector('.notif');
   if (existing) existing.remove();
 
@@ -207,10 +424,10 @@
     notif.style.animation = 'slideOutRight 0.3s ease';
     setTimeout(() => notif.remove(), 300);
   }, 3000);
-  }
+}
 
-  // ===== VIEW TOGGLE (documents page) =====
-  function initViewToggle() {
+// ===== VIEW TOGGLE (documents page) =====
+function initViewToggle() {
   const gridBtn = document.getElementById('gridBtn');
   const tableBtn = document.getElementById('tableBtn');
   const gridView = document.getElementById('gridView');
@@ -231,36 +448,48 @@
     gridBtn.classList.remove('active');
     tableBtn.classList.add('active');
   });
-  }
+}
 
-  // ===== INIT =====
-  document.addEventListener('DOMContentLoaded', () => {
+// ===== CEK HALAMAN DOKUMEN =====
+function isDocumentsPage() {
+  return window.location.pathname.includes('documents.html');
+}
+
+// ===== INIT =====
+document.addEventListener('DOMContentLoaded', () => {
   initTheme();
   setActiveNav();
   initFadeUp();
   initContactForm();
   initViewToggle();
-  initDownloadButtons();
-
+  
+  // Jika di halaman documents, jalankan fungsi khusus
+  if (isDocumentsPage()) {
+    renderTable();
+    initFilter();
+    initDownloadButtons();
+    initDisabledGridButtons();
+  }
+  
   // Dark toggle click
   const toggle = document.querySelector('.dark-toggle');
   if (toggle) toggle.addEventListener('click', toggleTheme);
-
+  
   // Hamburger
   const ham = document.querySelector('.hamburger');
   if (ham) ham.addEventListener('click', toggleMobileMenu);
-
+  
   // Close mobile menu on link click
   document.querySelectorAll('.mobile-menu a').forEach(a => {
     a.addEventListener('click', () => {
       document.getElementById('mobileMenu')?.classList.remove('open');
     });
   });
-
+  
   // Add fade-up to elements on page
   setTimeout(() => {
     document.querySelectorAll('.fade-up').forEach((el, i) => {
       el.style.transitionDelay = `${i * 0.05}s`;
     });
   }, 100);
-  });
+});

@@ -125,12 +125,10 @@ button {
   flex-wrap: wrap;
   margin-bottom: 40px;
   color: #000000;
-  /* tambahkan ini untuk teks hitam */
 }
 
 .announcement-bar i {
   color: #000000;
-  /* tambahkan ini untuk ikon hitam */
 }
 
 /* ===== LOADING OVERLAY ===== */
@@ -148,6 +146,10 @@ button {
   justify-content: center;
   opacity: 0;
   transition: opacity 0.3s ease;
+}
+
+.loading-overlay.active {
+  opacity: 1;
 }
 
 .loading-card {
@@ -204,55 +206,129 @@ button {
   gap: 6px;
 }
 
-/* Animations */
-@keyframes spin {
-  to {
-    transform: rotate(360deg);
-  }
+/* ===== MODAL POPUP ERROR (VERSI FINAL - TIDAK DUPLIKAT) ===== */
+.modal {
+  display: none;
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.8);
+  backdrop-filter: blur(8px);
+  z-index: 10001;
+  align-items: center;
+  justify-content: center;
 }
 
-@keyframes slideInRight {
-  from {
-    transform: translateX(100%);
-    opacity: 0;
-  }
-
-  to {
-    transform: translateX(0);
-    opacity: 1;
-  }
+.modal.show {
+  display: flex;
 }
 
-@keyframes slideOutRight {
-  from {
-    transform: translateX(0);
-    opacity: 1;
-  }
-
-  to {
-    transform: translateX(100%);
-    opacity: 0;
-  }
+.modal-card {
+  background: var(--card-bg);
+  border-radius: 24px;
+  max-width: 400px;
+  width: 90%;
+  padding: 32px 28px;
+  text-align: center;
+  border: 1px solid var(--border);
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+  animation: fadeUp 0.3s ease;
+  pointer-events: auto;
 }
 
-/* Responsive loading */
-@media (max-width: 480px) {
-  .loading-card {
-    min-width: 260px;
-    padding: 24px 20px;
-    margin: 0 16px;
-  }
-
-  .loading-spinner {
-    width: 44px;
-    height: 44px;
-  }
-
-  .loading-text {
-    font-size: 0.9rem;
-  }
+.modal-icon {
+  width: 70px;
+  height: 70px;
+  background: linear-gradient(135deg, rgba(255, 107, 107, 0.15), rgba(255, 107, 107, 0.05));
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto 20px;
 }
 
+.modal-icon i {
+  font-size: 2.5rem;
+  color: #FF6B6B;
+}
+
+.modal-card h3 {
+  font-size: 1.3rem;
+  font-weight: 700;
+  margin-bottom: 12px;
+  color: var(--text);
+}
+
+.modal-card p {
+  color: var(--text2);
+  font-size: 0.9rem;
+  line-height: 1.6;
+  margin-bottom: 24px;
+}
+
+.modal-card p strong {
+  color: var(--accent);
+  font-weight: 700;
+}
+
+.modal-buttons {
+  display: flex;
+  gap: 12px;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+.modal-btn {
+  padding: 10px 20px;
+  border-radius: 99px;
+  font-weight: 600;
+  font-size: 0.85rem;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  border: none;
+  text-decoration: none;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.modal-btn-primary {
+  background: linear-gradient(135deg, #25D366, #128C7E);
+  color: white;
+}
+
+.modal-btn-primary:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(37, 211, 102, 0.4);
+}
+
+.modal-btn-secondary {
+  background: var(--bg3);
+  border: 1px solid var(--border);
+  color: var(--text2);
+}
+
+.modal-btn-secondary:hover {
+  background: var(--bg2);
+  transform: translateY(-2px);
+}
+
+/* ===== TOMBOL DISABLED ===== */
+.btn-disabled {
+  background: var(--bg3);
+  color: var(--text3);
+  cursor: not-allowed;
+  opacity: 0.6;
+  border: 1px solid var(--border);
+}
+
+.btn-disabled:hover {
+  transform: none;
+  box-shadow: none;
+  background: var(--bg3);
+}
 
 /* ===== NAVBAR ===== */
 .navbar {
@@ -535,11 +611,11 @@ button {
 
   0%,
   100% {
-    transform: scale(1)
+    transform: scale(1);
   }
 
   50% {
-    transform: scale(1.05)
+    transform: scale(1.05);
   }
 }
 
@@ -960,6 +1036,81 @@ footer span {
   line-height: 1.5;
 }
 
+/* Filter buttons */
+.filter-buttons {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-bottom: 30px;
+  justify-content: center;
+}
+
+.filter-btn {
+  padding: 8px 18px;
+  border-radius: 99px;
+  background: var(--bg3);
+  border: 1px solid var(--border);
+  color: var(--text2);
+  font-size: 0.85rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.filter-btn i {
+  font-size: 0.9rem;
+}
+
+.filter-btn.active {
+  background: linear-gradient(135deg, var(--c1), var(--c2));
+  color: white;
+  border-color: transparent;
+}
+
+.filter-btn:hover:not(.active) {
+  background: var(--bg2);
+  transform: translateY(-2px);
+}
+
+/* Badge file type */
+.file-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 3px 8px;
+  border-radius: 99px;
+  font-size: 0.65rem;
+  font-weight: 600;
+  margin-top: 8px;
+}
+
+.file-badge.pdf {
+  background: rgba(217, 48, 37, 0.15);
+  color: #d93025;
+}
+
+.file-badge.excel {
+  background: rgba(33, 115, 70, 0.15);
+  color: #217346;
+}
+
+.file-badge.word {
+  background: rgba(43, 87, 154, 0.15);
+  color: #2b579a;
+}
+
+.file-size {
+  font-size: 0.7rem;
+  color: var(--text3);
+  margin-top: 6px;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
 /* Table */
 .doc-table-wrap {
   overflow-x: auto;
@@ -1360,8 +1511,6 @@ footer span {
 
 /* ===== RESPONSIVE ABOUT PAGE ===== */
 @media (max-width: 768px) {
-
-  /* About grid jadi 1 kolom di HP */
   .about-grid {
     grid-template-columns: 1fr;
     gap: 16px;
@@ -1376,7 +1525,6 @@ footer span {
     margin: 0 auto 12px;
   }
 
-  /* Quote box padding lebih kecil */
   .quote-box {
     padding: 20px;
     margin: 0 8px;
@@ -1388,7 +1536,6 @@ footer span {
     left: 10px;
   }
 
-  /* About hero spacing */
   .about-hero {
     padding: 40px 0 30px;
   }
@@ -1398,7 +1545,6 @@ footer span {
     height: 150px;
   }
 
-  /* Info items stacking */
   .about-info-item {
     padding: 16px;
   }
@@ -1410,7 +1556,6 @@ footer span {
   }
 }
 
-/* Untuk tablet kecil */
 @media (max-width: 480px) {
   .about-info-item {
     flex-direction: column;
@@ -1472,7 +1617,6 @@ footer span {
   }
 }
 
-/* Untuk layar sangat kecil */
 @media (max-width: 480px) {
   .container {
     padding: 0 12px;
@@ -1507,6 +1651,34 @@ footer span {
 
   .stat-value {
     font-size: 1.5rem;
+  }
+
+  .modal-card {
+    width: 85%;
+    padding: 24px 20px;
+    margin: 0 16px;
+  }
+
+  .modal-icon {
+    width: 55px;
+    height: 55px;
+  }
+
+  .modal-icon i {
+    font-size: 2rem;
+  }
+
+  .modal-card h3 {
+    font-size: 1.1rem;
+  }
+
+  .modal-card p {
+    font-size: 0.85rem;
+  }
+
+  .modal-btn {
+    padding: 8px 16px;
+    font-size: 0.8rem;
   }
 }
 
@@ -1563,4 +1735,34 @@ footer span {
   background: var(--card-bg);
   color: var(--accent);
   box-shadow: var(--shadow);
+}
+
+/* ===== RESPONSIVE MODAL ===== */
+@media (max-width: 480px) {
+  .modal-card {
+    width: 85%;
+    padding: 24px 20px;
+  }
+
+  .modal-icon {
+    width: 55px;
+    height: 55px;
+  }
+
+  .modal-icon i {
+    font-size: 2rem;
+  }
+
+  .modal-card h3 {
+    font-size: 1.1rem;
+  }
+
+  .modal-card p {
+    font-size: 0.85rem;
+  }
+
+  .modal-btn {
+    padding: 8px 16px;
+    font-size: 0.8rem;
+  }
 }

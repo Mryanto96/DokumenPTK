@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="id" data-theme="light">
+
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -7,10 +8,101 @@
   <meta name="description" content="Unduh dokumen guru: ijazah SD, SMP, SMA, S1, dan SK Dinas dari Google Drive.">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap"
+    rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
   <link rel="stylesheet" href="css/style.css">
+  <style>
+    /* Filter buttons */
+    .filter-buttons {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-bottom: 30px;
+      justify-content: center;
+    }
+
+    .filter-btn {
+      padding: 8px 18px;
+      border-radius: 99px;
+      background: var(--bg3);
+      border: 1px solid var(--border);
+      color: var(--text2);
+      font-size: 0.85rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .filter-btn i {
+      font-size: 0.9rem;
+    }
+
+    .filter-btn.active {
+      background: linear-gradient(135deg, var(--c1), var(--c2));
+      color: white;
+      border-color: transparent;
+    }
+
+    .filter-btn:hover:not(.active) {
+      background: var(--bg2);
+      transform: translateY(-2px);
+    }
+
+    /* Badge file type */
+    .file-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      padding: 3px 8px;
+      border-radius: 99px;
+      font-size: 0.65rem;
+      font-weight: 600;
+      margin-top: 8px;
+    }
+
+    .file-badge.pdf {
+      background: rgba(217, 48, 37, 0.15);
+      color: #d93025;
+    }
+
+    .file-badge.excel {
+      background: rgba(33, 115, 70, 0.15);
+      color: #217346;
+    }
+
+    .file-badge.word {
+      background: rgba(43, 87, 154, 0.15);
+      color: #2b579a;
+    }
+
+    .file-size {
+      font-size: 0.7rem;
+      color: var(--text3);
+      margin-top: 6px;
+      display: flex;
+      align-items: center;
+      gap: 4px;
+    }
+
+    /* Tombol disabled */
+    .btn-disabled {
+      background: var(--bg3);
+      color: var(--text3);
+      cursor: not-allowed;
+      opacity: 0.6;
+    }
+
+    .btn-disabled:hover {
+      transform: none;
+      box-shadow: none;
+    }
+  </style>
 </head>
+
 <body>
 
   <!-- NAVBAR -->
@@ -20,15 +112,16 @@
         <a href="index.html" class="logo">
           <div class="logo-icon">SMP</div>
           <div class="logo-text">
-          <span class="logo-title">Persiapan Negeri</span>
+            <span class="logo-title">Persiapan Negeri</span>
             <span class="logo-sub">Pulau Tiga • Nakai</span>
           </div>
         </a>
         <ul class="nav-links">
-          <li><a href="index.html" class="active">Home</a></li>
-          <li><a href="documents.html">Documents</a></li>
+          <li><a href="index.html">Home</a></li>
+          <li><a href="documents.html" class="active">Documents</a></li>
           <li><a href="about.html">About Me</a></li>
           <li><a href="contact.html">Contact Me</a></li>
+          <li><a href="gallery.html" class="active">Galeri</a></li>
         </ul>
         <div class="nav-right">
           <button class="dark-toggle" aria-label="Toggle dark mode">
@@ -42,10 +135,11 @@
     </div>
   </nav>
   <div class="mobile-menu" id="mobileMenu">
-    <a href="index.html" class="active">Home</a>
-    <a href="documents.html">Documents</a>
+    <a href="index.html">Home</a>
+    <a href="documents.html" class="active">Documents</a>
     <a href="about.html">About Me</a>
     <a href="contact.html">Contact Me</a>
+    <a href="gallery.html" class="active">Galeri</a>
   </div>
 
   <div class="page-content">
@@ -54,14 +148,16 @@
     <div class="page-header">
       <div class="page-header-bg"></div>
       <div class="container">
-        <div class="fade-up" style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:20px;">
+        <div class="fade-up"
+          style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:20px;">
           <div>
-            <p class="section-label">Portal Administrasi NUPTK</p>
+            <p class="section-label">Portal Administrasi Guru</p>
             <h1 style="font-size:clamp(1.8rem,4vw,2.6rem);font-weight:800;letter-spacing:-1px;margin-bottom:10px;">
               Arsip <span class="gradient-text">Dokumen Guru</span>
             </h1>
             <p style="color:var(--text2);font-size:0.95rem;max-width:520px;line-height:1.7;">
-              Klik tombol download pada setiap file untuk mengunduh langsung dari Google Drive. Semua file dalam format PDF dan dapat diakses tanpa login.
+              Klik tombol download pada setiap file untuk mengunduh langsung dari Google Drive.
+              Tersedia format PDF, Excel, dan Word.
             </p>
           </div>
           <div class="view-toggle">
@@ -76,73 +172,143 @@
       </div>
     </div>
 
-    <!-- DOCUMENTS GRID -->
+    <!-- FILTER JENIS FILE -->
+    <div class="container">
+      <div class="filter-buttons fade-up">
+        <button class="filter-btn active" data-filter="all">
+          <i class="fas fa-folder-open"></i> Semua
+        </button>
+        <button class="filter-btn" data-filter="pdf">
+          <i class="fas fa-file-pdf"></i> PDF
+        </button>
+        <button class="filter-btn" data-filter="excel">
+          <i class="fas fa-file-excel"></i> Excel
+        </button>
+        <button class="filter-btn" data-filter="word">
+          <i class="fas fa-file-word"></i> Word
+        </button>
+      </div>
+    </div>
+
+    <!-- DOKUMEN LIST -->
     <div class="container" style="padding-bottom:80px;">
 
       <!-- GRID VIEW -->
       <div class="doc-grid" id="gridView" style="margin-bottom:48px;">
 
-        <div class="doc-card fade-up">
+        <!-- 1. PDF: Ijazah S1 (AKTIF) -->
+        <div class="doc-card fade-up" data-file-type="pdf">
           <div class="doc-thumb">
-            <i class="fas fa-file-pdf"></i>
+            <i class="fas fa-file-pdf" style="color:#d93025;"></i>
           </div>
           <div class="doc-body">
             <div class="doc-name">Ijazah Sarjana (S1)</div>
             <div class="doc-desc">Ijazah Sarjana Pendidikan Bahasa Inggris</div>
-            <a href="https://drive.google.com/uc?export=download&id=1kQxhubOSgE9pZeAB9QtHHHojbgsGh0kB" target="_blank" class="btn btn-download" style="width:100%;justify-content:center;">
-              <i class="fas fa-download"></i> Download PDF
+            <span class="file-badge pdf"><i class="fas fa-file-pdf"></i> PDF</span>
+            <div class="file-size"><i class="fas fa-database"></i> ~2.5 MB</div>
+            <a href="https://drive.google.com/uc?export=download&id=1kQxhubOSgE9pZeAB9QtHHHojbgsGh0kB" target="_blank"
+              class="btn btn-download" style="width:100%;justify-content:center;margin-top:12px;">
+              <i class="fas fa-download"></i> Download
             </a>
           </div>
         </div>
 
-        <div class="doc-card fade-up">
+        <!-- 2. PDF: Ijazah SMA (AKTIF) -->
+        <div class="doc-card fade-up" data-file-type="pdf">
           <div class="doc-thumb">
-            <i class="fas fa-file-pdf"></i>
+            <i class="fas fa-file-pdf" style="color:#d93025;"></i>
           </div>
           <div class="doc-body">
             <div class="doc-name">Ijazah SMA</div>
             <div class="doc-desc">Ijazah Sekolah Menengah Atas</div>
-            <a href="https://drive.google.com/uc?export=download&id=1irCfRd6JHdLPsjBxyOzjcqokTXgOGAtb" target="_blank" class="btn btn-download" style="width:100%;justify-content:center;">
-              <i class="fas fa-download"></i> Download PDF
+            <span class="file-badge pdf"><i class="fas fa-file-pdf"></i> PDF</span>
+            <div class="file-size"><i class="fas fa-database"></i> ~1.8 MB</div>
+            <a href="https://drive.google.com/uc?export=download&id=1irCfRd6JHdLPsjBxyOzjcqokTXgOGAtb" target="_blank"
+              class="btn btn-download" style="width:100%;justify-content:center;margin-top:12px;">
+              <i class="fas fa-download"></i> Download
             </a>
           </div>
         </div>
 
-        <div class="doc-card fade-up">
+        <!-- 3. PDF: Ijazah SMP (AKTIF) -->
+        <div class="doc-card fade-up" data-file-type="pdf">
           <div class="doc-thumb">
-            <i class="fas fa-file-pdf"></i>
+            <i class="fas fa-file-pdf" style="color:#d93025;"></i>
           </div>
           <div class="doc-body">
             <div class="doc-name">Ijazah SMP</div>
             <div class="doc-desc">Ijazah Sekolah Menengah Pertama</div>
-            <a href="https://drive.google.com/uc?export=download&id=1m6bhWIYA3X7st0P-k4SoFKmagq0d98h7" target="_blank" class="btn btn-download" style="width:100%;justify-content:center;">
-              <i class="fas fa-download"></i> Download PDF
+            <span class="file-badge pdf"><i class="fas fa-file-pdf"></i> PDF</span>
+            <div class="file-size"><i class="fas fa-database"></i> ~1.5 MB</div>
+            <a href="https://drive.google.com/uc?export=download&id=1m6bhWIYA3X7st0P-k4SoFKmagq0d98h7" target="_blank"
+              class="btn btn-download" style="width:100%;justify-content:center;margin-top:12px;">
+              <i class="fas fa-download"></i> Download
             </a>
           </div>
         </div>
 
-        <div class="doc-card fade-up">
+        <!-- 4. PDF: Ijazah SD (AKTIF) -->
+        <div class="doc-card fade-up" data-file-type="pdf">
           <div class="doc-thumb">
-            <i class="fas fa-file-pdf"></i>
+            <i class="fas fa-file-pdf" style="color:#d93025;"></i>
           </div>
           <div class="doc-body">
             <div class="doc-name">Ijazah SD</div>
             <div class="doc-desc">Ijazah Sekolah Dasar</div>
-            <a href="https://drive.google.com/uc?export=download&id=1lpWM0bd8CqH1utpGSHhE2GEEQtGNMNmd" target="_blank" class="btn btn-download" style="width:100%;justify-content:center;">
-              <i class="fas fa-download"></i> Download PDF
+            <span class="file-badge pdf"><i class="fas fa-file-pdf"></i> PDF</span>
+            <div class="file-size"><i class="fas fa-database"></i> ~1.2 MB</div>
+            <a href="https://drive.google.com/uc?export=download&id=1lpWM0bd8CqH1utpGSHhE2GEEQtGNMNmd" target="_blank"
+              class="btn btn-download" style="width:100%;justify-content:center;margin-top:12px;">
+              <i class="fas fa-download"></i> Download
             </a>
           </div>
         </div>
 
-        <div class="doc-card fade-up">
+        <!-- 5. PDF: SK Dinas (AKTIF) -->
+        <div class="doc-card fade-up" data-file-type="pdf">
           <div class="doc-thumb">
-            <i class="fas fa-file-pdf"></i>
+            <i class="fas fa-file-pdf" style="color:#d93025;"></i>
           </div>
           <div class="doc-body">
             <div class="doc-name">SK Dinas & SK Pembagian Tugas</div>
             <div class="doc-desc">Surat Keputusan Dinas Pendidikan dan Pembagian Tugas Mengajar</div>
-            <a href="https://drive.google.com/uc?export=download&id=1IVrOtRUw2TAWYRkyuuUAR2iAUw91JDBo" target="_blank" class="btn btn-download" style="width:100%;justify-content:center;">
-              <i class="fas fa-download"></i> Download PDF
+            <span class="file-badge pdf"><i class="fas fa-file-pdf"></i> PDF</span>
+            <div class="file-size"><i class="fas fa-database"></i> ~3.2 MB</div>
+            <a href="https://drive.google.com/uc?export=download&id=1IVrOtRUw2TAWYRkyuuUAR2iAUw91JDBo" target="_blank"
+              class="btn btn-download" style="width:100%;justify-content:center;margin-top:12px;">
+              <i class="fas fa-download"></i> Download
+            </a>
+          </div>
+        </div>
+
+        <!-- 6. EXCEL: Rekap Nilai (BELUM TERSEDIA - DISABLED) -->
+        <div class="doc-card fade-up" data-file-type="excel">
+          <div class="doc-thumb">
+            <i class="fas fa-file-excel" style="color:#217346;"></i>
+          </div>
+          <div class="doc-body">
+            <div class="doc-name">Rekap Nilai Siswa</div>
+            <div class="doc-desc">Rekapitulasi nilai siswa semester ganjil 2025/2026</div>
+            <span class="file-badge excel"><i class="fas fa-file-excel"></i> Excel</span>
+            <div class="file-size"><i class="fas fa-database"></i> ~0.8 MB</div>
+            <a href="#" class="btn btn-disabled" style="width:100%;justify-content:center;margin-top:12px;">
+              <i class="fas fa-download"></i> Belum Tersedia
+            </a>
+          </div>
+        </div>
+
+        <!-- 7. WORD: Proposal (BELUM TERSEDIA - DISABLED) -->
+        <div class="doc-card fade-up" data-file-type="word">
+          <div class="doc-thumb">
+            <i class="fas fa-file-word" style="color:#2b579a;"></i>
+          </div>
+          <div class="doc-body">
+            <div class="doc-name">Proposal Program Kerja</div>
+            <div class="doc-desc">Proposal program kerja tahun ajaran 2025/2026</div>
+            <span class="file-badge word"><i class="fas fa-file-word"></i> Word</span>
+            <div class="file-size"><i class="fas fa-database"></i> ~1.1 MB</div>
+            <a href="#" class="btn btn-disabled" style="width:100%;justify-content:center;margin-top:12px;">
+              <i class="fas fa-download"></i> Belum Tersedia
             </a>
           </div>
         </div>
@@ -160,41 +326,14 @@
               <tr>
                 <th>No</th>
                 <th>Nama Dokumen</th>
+                <th>Tipe</th>
                 <th>Deskripsi</th>
+                <th>Ukuran</th>
                 <th>Aksi</th>
               </tr>
             </thead>
-            <tbody>
-              <tr>
-                <td><span style="font-weight:600;color:var(--text2);">01</span></td>
-                <td><div style="display:flex;align-items:center;gap:10px;"><i class="fas fa-file-pdf" style="color:#d93025;font-size:1.1rem;"></i><span style="font-weight:600;">Ijazah Sarjana (S1)</span></div></td>
-                <td style="color:var(--text2);">Ijazah Sarjana Pendidikan Bahasa Inggris</td>
-                <td><a href="https://drive.google.com/uc?export=download&id=1kQxhubOSgE9pZeAB9QtHHHojbgsGh0kB" target="_blank" class="btn btn-download"><i class="fas fa-download"></i> Download</a></td>
-              </tr>
-              <tr>
-                <td><span style="font-weight:600;color:var(--text2);">02</span></td>
-                <td><div style="display:flex;align-items:center;gap:10px;"><i class="fas fa-file-pdf" style="color:#d93025;font-size:1.1rem;"></i><span style="font-weight:600;">Ijazah SMA</span></div></td>
-                <td style="color:var(--text2);">Ijazah Sekolah Menengah Atas</td>
-                <td><a href="https://drive.google.com/uc?export=download&id=1irCfRd6JHdLPsjBxyOzjcqokTXgOGAtb" target="_blank" class="btn btn-download"><i class="fas fa-download"></i> Download</a></td>
-              </tr>
-              <tr>
-                <td><span style="font-weight:600;color:var(--text2);">03</span></td>
-                <td><div style="display:flex;align-items:center;gap:10px;"><i class="fas fa-file-pdf" style="color:#d93025;font-size:1.1rem;"></i><span style="font-weight:600;">Ijazah SMP</span></div></td>
-                <td style="color:var(--text2);">Ijazah Sekolah Menengah Pertama</td>
-                <td><a href="https://drive.google.com/uc?export=download&id=1m6bhWIYA3X7st0P-k4SoFKmagq0d98h7" target="_blank" class="btn btn-download"><i class="fas fa-download"></i> Download</a></td>
-              </tr>
-              <tr>
-                <td><span style="font-weight:600;color:var(--text2);">04</span></td>
-                <td><div style="display:flex;align-items:center;gap:10px;"><i class="fas fa-file-pdf" style="color:#d93025;font-size:1.1rem;"></i><span style="font-weight:600;">Ijazah SD</span></div></td>
-                <td style="color:var(--text2);">Ijazah Sekolah Dasar</td>
-                <td><a href="https://drive.google.com/uc?export=download&id=1lpWM0bd8CqH1utpGSHhE2GEEQtGNMNmd" target="_blank" class="btn btn-download"><i class="fas fa-download"></i> Download</a></td>
-              </tr>
-              <tr>
-                <td><span style="font-weight:600;color:var(--text2);">05</span></td>
-                <td><div style="display:flex;align-items:center;gap:10px;"><i class="fas fa-file-pdf" style="color:#d93025;font-size:1.1rem;"></i><span style="font-weight:600;">SK Dinas & SK Pembagian Tugas</span></div></td>
-                <td style="color:var(--text2);">SK Dinas Pendidikan dan Pembagian Tugas Mengajar</td>
-                <td><a href="https://drive.google.com/uc?export=download&id=1IVrOtRUw2TAWYRkyuuUAR2iAUw91JDBo" target="_blank" class="btn btn-download"><i class="fas fa-download"></i> Download</a></td>
-              </tr>
+            <tbody id="tableBody">
+              <!-- Data akan diisi oleh JS dari main.js -->
             </tbody>
           </table>
         </div>
@@ -207,34 +346,38 @@
           <ul class="step-list">
             <li>
               <div class="step-num">1</div>
-              <div>Pilih dokumen yang ingin diunduh dari daftar di atas.</div>
+              <div>Filter file berdasarkan jenis (PDF/Excel/Word) jika perlu.</div>
             </li>
             <li>
               <div class="step-num">2</div>
-              <div>Klik tombol <strong>"Download PDF"</strong> berwarna merah.</div>
+              <div>Pilih dokumen yang ingin diunduh.</div>
             </li>
             <li>
               <div class="step-num">3</div>
-              <div>Browser akan otomatis mengunduh file dari Google Drive.</div>
+              <div>Klik tombol <strong>"Download"</strong> berwarna merah.</div>
             </li>
             <li>
               <div class="step-num">4</div>
-              <div>File tersimpan di folder <em>Downloads</em> perangkat Anda.</div>
+              <div>File akan otomatis terunduh ke folder <em>Downloads</em>.</div>
             </li>
           </ul>
-          <div style="margin-top:16px;padding:12px 16px;background:var(--bg3);border-radius:var(--radius-sm);font-size:0.82rem;color:var(--text2);">
+          <div
+            style="margin-top:16px;padding:12px 16px;background:var(--bg3);border-radius:var(--radius-sm);font-size:0.82rem;color:var(--text2);">
             <i class="fas fa-shield-alt" style="color:var(--accent);margin-right:6px;"></i>
-            Jika ada masalah saat download, silahkan hubungi via WhatsApp.
+            File PDF aktif. File Excel & Word akan segera tersedia.
           </div>
         </div>
 
         <div class="info-box total-box">
           <div style="margin-bottom:8px;">
-            <i class="fas fa-folder-open" style="font-size:2rem;color:var(--accent);margin-bottom:12px;display:block;"></i>
-            <div style="font-size:0.82rem;font-weight:600;color:var(--text2);text-transform:uppercase;letter-spacing:1px;margin-bottom:4px;">Total Dokumen</div>
+            <i class="fas fa-folder-open"
+              style="font-size:2rem;color:var(--accent);margin-bottom:12px;display:block;"></i>
+            <div
+              style="font-size:0.82rem;font-weight:600;color:var(--text2);text-transform:uppercase;letter-spacing:1px;margin-bottom:4px;">
+              Total Dokumen</div>
           </div>
-          <div class="total-num">5</div>
-          <div style="font-size:0.85rem;color:var(--text2);margin-top:12px;">File tersedia untuk diunduh</div>
+          <div class="total-num" id="totalDocs">7</div>
+          <div style="font-size:0.85rem;color:var(--text2);margin-top:12px;">5 PDF Aktif + 2 Segera</div>
           <div class="divider" style="margin:16px 0;"></div>
           <div style="display:flex;flex-direction:column;gap:8px;text-align:left;">
             <div style="display:flex;align-items:center;gap:8px;font-size:0.82rem;color:var(--text2);">
@@ -244,11 +387,12 @@
               <i class="fas fa-check-circle" style="color:#10b981;"></i> 1 SK Dinas & Pembagian Tugas
             </div>
             <div style="display:flex;align-items:center;gap:8px;font-size:0.82rem;color:var(--text2);">
-              <i class="fas fa-check-circle" style="color:#10b981;"></i> Format PDF • Google Drive
+              <i class="fas fa-clock" style="color:#f59e0b;"></i> 2 File (Excel & Word) segera menyusul
             </div>
           </div>
           <div style="margin-top:20px;">
-            <a href="contact.html" class="btn btn-outline" style="width:100%;justify-content:center;font-size:0.85rem;padding:10px 16px;">
+            <a href="contact.html" class="btn btn-outline"
+              style="width:100%;justify-content:center;font-size:0.85rem;padding:10px 16px;">
               <i class="fab fa-whatsapp" style="color:#25D366;"></i> Ada Pertanyaan?
             </a>
           </div>
@@ -258,13 +402,34 @@
     </div>
   </div>
 
+  <!-- MODAL POPUP ERROR (HTML SAJA, JS DI main.js) -->
+  <div id="errorModal" class="modal">
+    <div class="modal-card">
+      <div class="modal-icon">
+        <i class="fas fa-exclamation-triangle"></i>
+      </div>
+      <h3>File Belum Tersedia</h3>
+      <p>Maaf, file yang Anda cari belum tersedia saat ini. File sedang dalam proses persiapan dan akan segera diunggah.
+      </p>
+      <div class="modal-buttons">
+        <a href="contact.html" class="modal-btn modal-btn-primary">
+          <i class="fab fa-whatsapp"></i> Hubungi Pengelola
+        </a>
+        <button class="modal-btn modal-btn-secondary" id="closeModalBtn">
+          <i class="fas fa-times"></i> Tutup
+        </button>
+      </div>
+    </div>
+  </div>
+
   <!-- FOOTER -->
   <footer>
     <div class="container">
-    © 2026 SMP Persiapan Negeri Pulau Tiga. All rights are reserved
+      © 2026 SMP Persiapan Negeri Pulau Tiga. All rights are reserved
     </div>
   </footer>
 
   <script src="js/main.js"></script>
 </body>
+
 </html>
