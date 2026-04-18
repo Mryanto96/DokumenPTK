@@ -12,6 +12,9 @@
         rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <!-- jsPDF untuk export PDF -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.8.2/jspdf.plugin.autotable.min.js"></script>
     <link rel="stylesheet" href="css/style.css">
     <style>
         /* ===== EXAM PAGE STYLES ===== */
@@ -102,6 +105,7 @@
             align-items: center;
             justify-content: center;
             transition: all 0.2s;
+            flex-shrink: 0;
         }
 
         .pilihan-item.selected .pilihan-radio {
@@ -245,17 +249,13 @@
             font-family: var(--font);
             font-size: 0.9rem;
             transition: all 0.3s;
+            box-sizing: border-box;
         }
 
         .form-group input:focus,
         .form-group select:focus {
             outline: none;
             border-color: var(--c1);
-        }
-
-        .form-group option {
-            background: var(--bg);
-            color: var(--text);
         }
 
         .btn-submit {
@@ -276,10 +276,10 @@
             box-shadow: 0 4px 15px rgba(255, 107, 107, 0.4);
         }
 
-        /* Stats & History */
+        /* Stats */
         .stats-grid {
             display: grid;
-            grid-template-columns: repeat(2, 1fr);
+            grid-template-columns: repeat(4, 1fr);
             gap: 16px;
             margin-bottom: 24px;
         }
@@ -303,7 +303,15 @@
             margin-top: 5px;
         }
 
-        .filter-bar {
+        /* History Section */
+        .history-section {
+            background: var(--card-bg);
+            border: 1px solid var(--border);
+            border-radius: 20px;
+            padding: 28px;
+        }
+
+        .history-toolbar {
             display: flex;
             gap: 12px;
             margin-bottom: 20px;
@@ -311,30 +319,86 @@
             align-items: center;
         }
 
-        .filter-input {
-            padding: 10px 18px;
+        .history-toolbar-left {
+            display: flex;
+            gap: 12px;
+            flex: 1;
+            flex-wrap: wrap;
+            align-items: center;
+        }
+
+        .history-toolbar-right {
+            display: flex;
+            gap: 10px;
+        }
+
+        .filter-select {
+            padding: 10px 16px;
             border-radius: 99px;
             border: 1px solid var(--border);
             background: var(--bg);
             color: var(--text);
             font-size: 0.85rem;
+            font-family: var(--font);
             cursor: pointer;
+        }
+
+        .btn-icon {
+            padding: 10px 18px;
+            border-radius: 99px;
+            border: 1px solid var(--border);
+            background: var(--bg);
+            color: var(--text);
+            font-size: 0.82rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .btn-icon:hover {
+            background: var(--bg2);
+        }
+
+        .btn-icon.primary {
+            background: linear-gradient(135deg, var(--c1), var(--c2));
+            color: white;
+            border-color: transparent;
+        }
+
+        .btn-icon.primary:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 3px 10px rgba(255, 107, 107, 0.3);
+        }
+
+        .btn-icon.pdf-btn {
+            background: #dc2626;
+            color: white;
+            border-color: transparent;
+        }
+
+        .btn-icon.pdf-btn:hover {
+            background: #b91c1c;
+            transform: translateY(-1px);
         }
 
         .history-table-container {
             overflow-x: auto;
             border-radius: 16px;
+            border: 1px solid var(--border);
         }
 
         .history-table {
             width: 100%;
             border-collapse: collapse;
-            min-width: 500px;
+            min-width: 600px;
         }
 
         .history-table th,
         .history-table td {
-            padding: 12px;
+            padding: 13px 14px;
             text-align: center;
             border-bottom: 1px solid var(--border);
             font-size: 0.8rem;
@@ -344,10 +408,29 @@
             background: var(--bg3);
             font-weight: 700;
             color: var(--text);
+            white-space: nowrap;
         }
 
         .history-table td {
             color: var(--text2);
+        }
+
+        .history-table tr:last-child td {
+            border-bottom: none;
+        }
+
+        .history-table tr:hover td {
+            background: var(--bg2);
+        }
+
+        .history-table td.jawaban-cell {
+            font-size: 0.72rem;
+            letter-spacing: 0.3px;
+            text-align: left;
+            max-width: 220px;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
         }
 
         .badge-lulus {
@@ -357,6 +440,7 @@
             border-radius: 99px;
             font-size: 0.7rem;
             display: inline-block;
+            font-weight: 600;
         }
 
         .badge-tidak {
@@ -366,9 +450,69 @@
             border-radius: 99px;
             font-size: 0.7rem;
             display: inline-block;
+            font-weight: 600;
         }
 
-        /* Modal Custom */
+        /* Pagination */
+        .pagination-bar {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-top: 20px;
+            gap: 12px;
+            flex-wrap: wrap;
+        }
+
+        .pagination-info {
+            font-size: 0.8rem;
+            color: var(--text2);
+        }
+
+        .pagination-buttons {
+            display: flex;
+            gap: 8px;
+            align-items: center;
+        }
+
+        .page-btn {
+            padding: 8px 16px;
+            border-radius: 8px;
+            border: 1px solid var(--border);
+            background: var(--bg);
+            color: var(--text);
+            font-size: 0.82rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .page-btn:hover:not(:disabled) {
+            background: var(--c1);
+            color: white;
+            border-color: var(--c1);
+        }
+
+        .page-btn:disabled {
+            opacity: 0.4;
+            cursor: not-allowed;
+        }
+
+        .page-btn.active {
+            background: var(--c1);
+            color: white;
+            border-color: var(--c1);
+        }
+
+        .page-indicator {
+            font-size: 0.82rem;
+            font-weight: 600;
+            color: var(--text);
+            padding: 8px 14px;
+            background: var(--bg2);
+            border-radius: 8px;
+        }
+
+        /* Modal */
         .custom-modal {
             display: none;
             position: fixed;
@@ -439,7 +583,6 @@
             font-size: 0.9rem;
             line-height: 1.6;
             margin-bottom: 24px;
-            white-space: pre-line;
         }
 
         .modal-buttons {
@@ -469,15 +612,17 @@
             color: var(--text2);
         }
 
-        /* Loading Spinner */
+        /* Spinner */
         .loading-spinner {
             display: inline-block;
-            width: 20px;
-            height: 20px;
-            border: 2px solid var(--border);
-            border-top-color: var(--c1);
+            width: 18px;
+            height: 18px;
+            border: 2px solid rgba(255, 255, 255, 0.4);
+            border-top-color: white;
             border-radius: 50%;
             animation: spin 0.8s linear infinite;
+            vertical-align: middle;
+            margin-right: 6px;
         }
 
         @keyframes spin {
@@ -486,7 +631,7 @@
             }
         }
 
-        /* Tab Buttons */
+        /* Tabs */
         .tab-buttons {
             display: flex;
             gap: 15px;
@@ -519,6 +664,38 @@
             transform: translateY(-2px);
         }
 
+        /* PDF loading overlay */
+        .pdf-overlay {
+            display: none;
+            position: fixed;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.6);
+            backdrop-filter: blur(4px);
+            z-index: 9999;
+            align-items: center;
+            justify-content: center;
+            flex-direction: column;
+            gap: 16px;
+        }
+
+        .pdf-overlay.show {
+            display: flex;
+        }
+
+        .pdf-overlay-box {
+            background: var(--card-bg);
+            border-radius: 20px;
+            padding: 32px 40px;
+            text-align: center;
+            border: 1px solid var(--border);
+        }
+
+        .pdf-overlay-box p {
+            color: var(--text2);
+            font-size: 0.9rem;
+            margin-top: 12px;
+        }
+
         /* Responsive */
         @media (max-width: 900px) {
             .exam-layout {
@@ -534,12 +711,17 @@
                 min-width: auto;
             }
 
-            .nav-soal-grid {
-                grid-template-columns: repeat(5, 1fr);
-            }
-
             .stats-grid {
                 grid-template-columns: repeat(2, 1fr);
+            }
+
+            .history-toolbar {
+                flex-direction: column;
+                align-items: stretch;
+            }
+
+            .history-toolbar-right {
+                justify-content: flex-end;
             }
         }
 
@@ -549,7 +731,7 @@
             }
 
             .modal-content {
-                width: 85%;
+                width: 88%;
                 padding: 24px 20px;
             }
 
@@ -560,6 +742,10 @@
 
             .modal-icon i {
                 font-size: 2rem;
+            }
+
+            .stats-grid {
+                grid-template-columns: repeat(2, 1fr);
             }
         }
     </style>
@@ -634,12 +820,13 @@
                 <button class="tab-btn" onclick="showTab('history')">📊 Riwayat & Statistik</button>
             </div>
 
-            <!-- TAB UJIAN -->
+            <!-- ===== TAB UJIAN ===== -->
             <div id="tabExam" class="fade-up">
-                <!-- Form Identitas Siswa -->
+
+                <!-- Form Identitas -->
                 <div id="identityForm" class="exam-form-card">
                     <h3 style="margin-bottom: 20px;"><i class="fas fa-user-graduate"></i> Identitas Siswa</h3>
-                    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 20px;">
+                    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 20px;">
                         <div class="form-group">
                             <label><i class="fas fa-user"></i> Nama Lengkap</label>
                             <input type="text" id="studentName" placeholder="Masukkan nama lengkap">
@@ -657,7 +844,7 @@
                             <label><i class="fas fa-calendar"></i> Semester</label>
                             <select id="studentSemester">
                                 <option value="1">Semester 1</option>
-                                <option value="2">Semester 2</option>
+                                <option value="2" selected>Semester 2</option>
                             </select>
                         </div>
                         <div class="form-group">
@@ -669,16 +856,18 @@
                     </div>
                 </div>
 
-                <!-- Soal Ujian (hidden awal) -->
+                <!-- Soal Ujian (hidden) -->
                 <div id="examContent" style="display: none;">
                     <div class="exam-layout">
                         <div class="soal-container">
                             <div id="soalContainer"></div>
                             <div class="nav-buttons">
-                                <button id="prevQuestionBtn" class="nav-btn"><i class="fas fa-chevron-left"></i>
-                                    Sebelumnya</button>
-                                <button id="nextQuestionBtn" class="nav-btn">Selanjutnya <i
-                                        class="fas fa-chevron-right"></i></button>
+                                <button id="prevQuestionBtn" class="nav-btn">
+                                    <i class="fas fa-chevron-left"></i> Sebelumnya
+                                </button>
+                                <button id="nextQuestionBtn" class="nav-btn">
+                                    Selanjutnya <i class="fas fa-chevron-right"></i>
+                                </button>
                             </div>
                         </div>
 
@@ -702,66 +891,121 @@
                 </div>
             </div>
 
-            <!-- TAB RIWAYAT & STATISTIK -->
+            <!-- ===== TAB RIWAYAT & STATISTIK ===== -->
             <div id="tabHistory" class="fade-up" style="display: none;">
-                <div class="exam-layout">
-                    <div class="exam-form-card">
-                        <h3 style="margin-bottom: 20px;"><i class="fas fa-chart-pie"></i> Statistik Ujian</h3>
-                        <div class="stats-grid">
-                            <div class="stat-item">
-                                <div class="stat-number" id="statTotalPeserta">0</div>
-                                <div class="stat-label">Total Peserta</div>
-                            </div>
-                            <div class="stat-item">
-                                <div class="stat-number" id="statRataRata">0</div>
-                                <div class="stat-label">Rata-rata Nilai</div>
-                            </div>
-                            <div class="stat-item">
-                                <div class="stat-number" id="statTertinggi">0</div>
-                                <div class="stat-label">Nilai Tertinggi</div>
-                            </div>
-                            <div class="stat-item">
-                                <div class="stat-number" id="statTerendah">0</div>
-                                <div class="stat-label">Nilai Terendah</div>
-                            </div>
-                        </div>
-                        <div class="chart-container" style="height: 200px;">
-                            <canvas id="statChart"></canvas>
-                        </div>
-                    </div>
 
-                    <div class="exam-form-card">
-                        <h3 style="margin-bottom: 20px;"><i class="fas fa-history"></i> Riwayat Ujian</h3>
-                        <div class="filter-bar">
-                            <select id="filterKelas" class="filter-input">
+                <!-- Statistik -->
+                <div class="exam-form-card" style="margin-bottom: 24px;">
+                    <div
+                        style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 20px; flex-wrap: wrap; gap: 12px;">
+                        <h3 style="margin: 0;"><i class="fas fa-chart-pie"></i> Statistik Ujian</h3>
+                        <div style="display: flex; gap: 10px; align-items: center;">
+                            <select id="filterStatKelas" class="filter-select">
                                 <option value="">Semua Kelas</option>
                                 <option value="7A">Kelas 7A</option>
                                 <option value="8A">Kelas 8A</option>
                                 <option value="9A">Kelas 9A</option>
                             </select>
-                            <button id="refreshHistoryBtn" class="filter-input"
-                                style="background: var(--c1); color: white; border: none;">
+                        </div>
+                    </div>
+                    <div class="stats-grid">
+                        <div class="stat-item">
+                            <div class="stat-number" id="statTotalPeserta">—</div>
+                            <div class="stat-label">Total Peserta</div>
+                        </div>
+                        <div class="stat-item">
+                            <div class="stat-number" id="statRataRata">—</div>
+                            <div class="stat-label">Rata-rata Nilai</div>
+                        </div>
+                        <div class="stat-item">
+                            <div class="stat-number" id="statTertinggi">—</div>
+                            <div class="stat-label">Nilai Tertinggi</div>
+                        </div>
+                        <div class="stat-item">
+                            <div class="stat-number" id="statTerendah">—</div>
+                            <div class="stat-label">Nilai Terendah</div>
+                        </div>
+                    </div>
+                    <div style="display: grid; grid-template-columns: 1fr 220px; gap: 20px; align-items: center;">
+                        <div style="display: flex; gap: 16px; align-items: center; flex-wrap: wrap;">
+                            <div class="stat-item" style="flex: 1; min-width: 120px;">
+                                <div class="stat-number" style="color: #10b981;" id="statLulus">—</div>
+                                <div class="stat-label">Lulus</div>
+                            </div>
+                            <div class="stat-item" style="flex: 1; min-width: 120px;">
+                                <div class="stat-number" style="color: #ef4444;" id="statTidakLulus">—</div>
+                                <div class="stat-label">Tidak Lulus</div>
+                            </div>
+                        </div>
+                        <div style="height: 180px; position: relative;">
+                            <canvas id="statChart"></canvas>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Riwayat Ujian -->
+                <div class="history-section">
+                    <div
+                        style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 20px; flex-wrap: wrap; gap: 12px;">
+                        <h3 style="margin: 0;"><i class="fas fa-history"></i> Riwayat Ujian</h3>
+                    </div>
+
+                    <!-- Toolbar -->
+                    <div class="history-toolbar">
+                        <div class="history-toolbar-left">
+                            <select id="filterKelas" class="filter-select">
+                                <option value="7A">Kelas 7A</option>
+                                <option value="8A">Kelas 8A</option>
+                                <option value="9A">Kelas 9A</option>
+                            </select>
+                            <button id="refreshHistoryBtn" class="btn-icon primary">
                                 <i class="fas fa-sync-alt"></i> Refresh
                             </button>
                         </div>
-                        <div class="history-table-container">
-                            <table class="history-table">
-                                <thead>
-                                    <tr>
-                                        <th>Tanggal</th>
-                                        <th>Nama Siswa</th>
-                                        <th>Kelas</th>
-                                        <th>Nilai</th>
-                                        <th>Benar</th>
-                                        <th>Status</th>
-                                    </tr>
-                                </thead>
-                                <tbody id="historyTableBody">
-                                    <tr>
-                                        <td colspan="6" style="text-align: center;">Loading data......</td>
-                                    </tr>
-                                </tbody>
-                            </table>
+                        <div class="history-toolbar-right">
+                            <button id="exportPdfBtn" class="btn-icon pdf-btn">
+                                <i class="fas fa-file-pdf"></i> Export PDF
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Tabel -->
+                    <div class="history-table-container">
+                        <table class="history-table">
+                            <thead>
+                                <tr>
+                                    <th>No</th>
+                                    <th>Tanggal</th>
+                                    <th>Nama Siswa</th>
+                                    <th>Kelas</th>
+                                    <th>Smt</th>
+                                    <th>Nilai</th>
+                                    <th>Benar</th>
+                                    <th>Jawaban Siswa</th>
+                                    <th>Status</th>
+                                </tr>
+                            </thead>
+                            <tbody id="historyTableBody">
+                                <tr>
+                                    <td colspan="9" style="text-align:center; padding: 30px; color: var(--text2);">
+                                        Pilih kelas dan klik Refresh untuk memuat data
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <!-- Pagination -->
+                    <div class="pagination-bar" id="paginationBar" style="display: none;">
+                        <div class="pagination-info" id="paginationInfo">Menampilkan data...</div>
+                        <div class="pagination-buttons">
+                            <button class="page-btn" id="prevPageBtn" onclick="changePage(-1)" disabled>
+                                <i class="fas fa-chevron-left"></i> Sebelumnya
+                            </button>
+                            <span class="page-indicator" id="pageIndicator">1 / 1</span>
+                            <button class="page-btn" id="nextPageBtn" onclick="changePage(1)" disabled>
+                                Selanjutnya <i class="fas fa-chevron-right"></i>
+                            </button>
                         </div>
                     </div>
                 </div>
@@ -769,21 +1013,29 @@
         </div>
     </div>
 
-<!-- CUSTOM MODAL -->
-<div id="customModal" class="custom-modal">
-    <div class="modal-content">
-        <div class="modal-icon" id="modalIcon">
-            <i class="fas fa-info-circle"></i>
-        </div>
-        <h3 id="modalTitle">Pesan</h3>
-        <p id="modalMessage">Ini adalah pesan modal</p>
-        <div class="modal-buttons">
-            <button class="modal-btn modal-btn-primary" id="modalOkBtn">OK</button>
-            <button class="modal-btn modal-btn-secondary" id="modalCancelBtn" style="display: none;">Batal</button>
-            <button class="modal-btn modal-btn-secondary" id="modalCloseBtn" style="display: none;">Tutup</button>
+    <!-- CUSTOM MODAL -->
+    <div id="customModal" class="custom-modal">
+        <div class="modal-content">
+            <div class="modal-icon" id="modalIcon">
+                <i class="fas fa-info-circle"></i>
+            </div>
+            <h3 id="modalTitle">Pesan</h3>
+            <p id="modalMessage">Ini adalah pesan modal</p>
+            <div class="modal-buttons">
+                <button class="modal-btn modal-btn-primary" id="modalOkBtn">OK</button>
+                <button class="modal-btn modal-btn-secondary" id="modalCancelBtn" style="display:none;">Batal</button>
+            </div>
         </div>
     </div>
-</div>
+
+    <!-- PDF LOADING OVERLAY -->
+    <div id="pdfOverlay" class="pdf-overlay">
+        <div class="pdf-overlay-box">
+            <div class="loading-spinner" style="width:32px;height:32px;border-width:3px;margin:0 auto;display:block;">
+            </div>
+            <p>Membuat file PDF rekap ujian...</p>
+        </div>
+    </div>
 
     <footer>
         <div class="container">
@@ -792,519 +1044,687 @@
     </footer>
 
     <script src="js/main.js"></script>
-    
-<script>
-    // ===== KONFIGURASI =====
-    // GANTI DENGAN URL WEB APP ANDA YANG BARU!
-    const APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbyS3THHS6wjOuSL6VXU-b590M8ZhVKnhqGBgGw0tL1fQT4AnLoiKPck2umb1HKj_VSt/exec';
 
-    // Variabel global
-    let soalList = [];
-    let jawabanSiswa = {};
-    let versiSoal = [];
-    let timerInterval = null;
-    let waktuTersisa = 30 * 60;
-    let ujianDimulai = false;
-    let currentQuestionIndex = 0;
-    let statChart = null;
+    <script>
+        // ============================================================
+        // KONFIGURASI
+        // ============================================================
+        // GANTI DENGAN URL WEB APP ANDA!
+        const APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbzY4sug8X37P422FZVYW-BVZ7jW1lo1R05mulnnMjcpepDfwBMIYAPzGWEcculnuR3qaA/exec';
 
-    // ===== MODAL FUNCTIONS =====
-    function showModal(title, message, type = 'info', showConfirmButtons = false, onConfirm = null, onCancel = null) {
-        const modal = document.getElementById('customModal');
-        const icon = document.getElementById('modalIcon');
-        const modalTitle = document.getElementById('modalTitle');
-        const modalMessage = document.getElementById('modalMessage');
-        const okBtn = document.getElementById('modalOkBtn');
-        const cancelBtn = document.getElementById('modalCancelBtn');
-        const closeBtn = document.getElementById('modalCloseBtn');
+        const ITEMS_PER_PAGE = 12;
 
-        // Set icon
-        icon.className = 'modal-icon';
-        if (type === 'success') {
-            icon.classList.add('success');
-            icon.innerHTML = '<i class="fas fa-check-circle"></i>';
-        } else if (type === 'error') {
-            icon.classList.add('error');
-            icon.innerHTML = '<i class="fas fa-times-circle"></i>';
-        } else if (type === 'warning') {
-            icon.classList.add('warning');
-            icon.innerHTML = '<i class="fas fa-exclamation-triangle"></i>';
-        } else {
-            icon.innerHTML = '<i class="fas fa-info-circle"></i>';
-        }
+        // ============================================================
+        // STATE GLOBAL
+        // ============================================================
+        let soalList = [];
+        let jawabanSiswa = {};
+        let versiSoal = [];
+        let timerInterval = null;
+        let waktuTersisa = 30 * 60;
+        let ujianDimulai = false;
+        let currentQuestionIndex = 0;
+        let statChart = null;
 
-        modalTitle.textContent = title;
-        modalMessage.innerHTML = message.replace(/\n/g, '<br>');
+        // Pagination state
+        let currentPage = 1;
+        let totalPages = 1;
+        let totalItems = 0;
 
-        // Reset buttons
-        okBtn.style.display = 'none';
-        cancelBtn.style.display = 'none';
-        closeBtn.style.display = 'none';
+        // ============================================================
+        // MODAL
+        // ============================================================
+        function showModal(title, message, type = 'info', showConfirm = false, onConfirm = null, onCancel = null) {
+            const modal = document.getElementById('customModal');
+            const icon = document.getElementById('modalIcon');
+            const okBtn = document.getElementById('modalOkBtn');
+            const cancelBtn = document.getElementById('modalCancelBtn');
 
-        if (showConfirmButtons) {
-            okBtn.style.display = 'inline-block';
-            cancelBtn.style.display = 'inline-block';
-            okBtn.textContent = 'Ya, Kirim';
-            cancelBtn.textContent = 'Tidak, Batal';
-
-            // Replace buttons to remove old listeners
-            const newOkBtn = okBtn.cloneNode(true);
-            const newCancelBtn = cancelBtn.cloneNode(true);
-            okBtn.parentNode.replaceChild(newOkBtn, okBtn);
-            cancelBtn.parentNode.replaceChild(newCancelBtn, cancelBtn);
-
-            newOkBtn.onclick = () => {
-                closeModal();
-                if (onConfirm) onConfirm();
+            icon.className = 'modal-icon';
+            const iconMap = {
+                success: ['success', 'fa-check-circle'],
+                error: ['error', 'fa-times-circle'],
+                warning: ['warning', 'fa-exclamation-triangle'],
             };
-            newCancelBtn.onclick = () => {
-                closeModal();
-                if (onCancel) onCancel();
-            };
-        } else {
-            okBtn.style.display = 'inline-block';
-            okBtn.textContent = 'OK';
+            const [cls, ico] = iconMap[type] || ['', 'fa-info-circle'];
+            if (cls) icon.classList.add(cls);
+            icon.innerHTML = `<i class="fas ${ico}"></i>`;
 
-            const newOkBtn = okBtn.cloneNode(true);
-            okBtn.parentNode.replaceChild(newOkBtn, okBtn);
-            newOkBtn.onclick = () => {
-                closeModal();
-                if (onConfirm) onConfirm();
-            };
-        }
+            document.getElementById('modalTitle').textContent = title;
+            document.getElementById('modalMessage').innerHTML = message.replace(/\n/g, '<br>');
 
-        modal.classList.add('show');
-    }
-
-    function closeModal() {
-        const modal = document.getElementById('customModal');
-        modal.classList.remove('show');
-    }
-
-    // ===== AMBIL SOAL DARI APPS SCRIPT =====
-    async function fetchSoal() {
-        try {
-            showModal('Loading', 'Mengambil soal ujian...', 'info');
-
-            const url = `${APPS_SCRIPT_URL}?action=getSoal&t=${Date.now()}`;
-            const response = await fetch(url);
-
-            if (!response.ok) {
-                throw new Error(`HTTP ${response.status}`);
+            if (showConfirm) {
+                okBtn.style.display = 'inline-block';
+                cancelBtn.style.display = 'inline-block';
+                okBtn.textContent = 'Ya, Kirim';
+                cancelBtn.textContent = 'Batal';
+            } else {
+                okBtn.style.display = 'inline-block';
+                cancelBtn.style.display = 'none';
+                okBtn.textContent = 'OK';
             }
 
-            const data = await response.json();
-            closeModal();
+            // Ganti node supaya tidak ada listener lama
+            const newOk = okBtn.cloneNode(true);
+            const newCan = cancelBtn.cloneNode(true);
+            okBtn.parentNode.replaceChild(newOk, okBtn);
+            cancelBtn.parentNode.replaceChild(newCan, cancelBtn);
 
-            if (data.success) {
-                soalList = data.data;
-                versiSoal = data.versiSoal || [];
-                return soalList;
-            } else {
-                showModal('Error', data.message || 'Gagal mengambil soal', 'error');
+            newOk.onclick = () => { closeModal(); if (onConfirm) onConfirm(); };
+            newCan.onclick = () => { closeModal(); if (onCancel) onCancel(); };
+
+            modal.classList.add('show');
+        }
+
+        function closeModal() {
+            document.getElementById('customModal').classList.remove('show');
+        }
+
+        // ============================================================
+        // FETCH SOAL — kirim kelas agar Apps Script tahu soal mana
+        // ============================================================
+        async function fetchSoal(kelas) {
+            try {
+                showModal('Loading', 'Mengambil soal ujian...', 'info');
+                const url = `${APPS_SCRIPT_URL}?action=getSoal&kelas=${encodeURIComponent(kelas)}&t=${Date.now()}`;
+                const response = await fetch(url);
+                if (!response.ok) throw new Error(`HTTP ${response.status}`);
+                const data = await response.json();
+                closeModal();
+                if (data.success) {
+                    soalList = data.data;
+                    versiSoal = data.versiSoal || [];
+                    return soalList;
+                } else {
+                    showModal('Error', data.message || 'Gagal mengambil soal', 'error');
+                    return [];
+                }
+            } catch (error) {
+                closeModal();
+                showModal('Error', 'Gagal mengambil soal. Pastikan Web App sudah di-deploy dengan akses "Anyone".\n\nError: ' + error.message, 'error');
                 return [];
             }
-        } catch (error) {
-            closeModal();
-            console.error('Error fetching soal:', error);
-            showModal('Error', 'Gagal mengambil soal. Pastikan Web App sudah di-deploy dengan akses "Anyone".\n\nError: ' + error.message, 'error');
-            return [];
         }
-    }
 
-    // ===== RENDER SOAL SAAT INI =====
-    function renderCurrentQuestion() {
-        const container = document.getElementById('soalContainer');
-        if (!container || soalList.length === 0) return;
+        // ============================================================
+        // RENDER SOAL
+        // ============================================================
+        function renderCurrentQuestion() {
+            const container = document.getElementById('soalContainer');
+            if (!container || soalList.length === 0) return;
+            const soal = soalList[currentQuestionIndex];
+            const jawabanSaatIni = jawabanSiswa[soal.no] || '';
 
-        const soal = soalList[currentQuestionIndex];
-        const jawabanSaatIni = jawabanSiswa[soal.no] || '';
-
-        container.innerHTML = `
+            container.innerHTML = `
             <div class="soal-item">
                 <div class="soal-nomor">Soal ${soal.no} dari ${soalList.length}</div>
                 <div class="soal-teks">${soal.soal}</div>
                 <div class="pilihan-list">
                     ${Object.entries(soal.pilihan).map(([key, value]) => `
-                        <div class="pilihan-item ${jawabanSaatIni === key ? 'selected' : ''}" onclick="pilihJawaban(${soal.no}, '${key}')">
+                        <div class="pilihan-item ${jawabanSaatIni === key ? 'selected' : ''}"
+                             onclick="pilihJawaban(${soal.no}, '${key}')">
                             <div class="pilihan-radio"></div>
                             <div class="pilihan-teks"><strong>${key}.</strong> ${value}</div>
                         </div>
                     `).join('')}
                 </div>
-            </div>
-        `;
-    }
+            </div>`;
+        }
 
-    // ===== RENDER NAVIGASI SOAL =====
-    function renderNavSoal() {
-        const grid = document.getElementById('navSoalGrid');
-        if (!grid) return;
-
-        grid.innerHTML = soalList.map((soal, idx) => `
-            <div class="nav-soal-btn ${jawabanSiswa[soal.no] ? 'answered' : ''} ${idx === currentQuestionIndex ? 'current' : ''}"
-                 onclick="goToQuestion(${idx})">
-                ${soal.no}
-            </div>
+        function renderNavSoal() {
+            const grid = document.getElementById('navSoalGrid');
+            if (!grid) return;
+            grid.innerHTML = soalList.map((soal, idx) => `
+            <div class="nav-soal-btn
+                ${jawabanSiswa[soal.no] ? 'answered' : ''}
+                ${idx === currentQuestionIndex ? 'current' : ''}"
+                onclick="goToQuestion(${idx})">${soal.no}</div>
         `).join('');
-    }
+        }
 
-    // ===== PILIH JAWABAN =====
-    window.pilihJawaban = function (no, jawaban) {
-        jawabanSiswa[no] = jawaban;
-        renderCurrentQuestion();
-        renderNavSoal();
-    }
-
-    // ===== PINDAH KE SOAL TERTENTU =====
-    window.goToQuestion = function (index) {
-        currentQuestionIndex = index;
-        renderCurrentQuestion();
-        renderNavSoal();
-    }
-
-    // ===== NEXT & PREVIOUS =====
-    function nextQuestion() {
-        if (currentQuestionIndex < soalList.length - 1) {
-            currentQuestionIndex++;
+        window.pilihJawaban = function (no, jawaban) {
+            jawabanSiswa[no] = jawaban;
             renderCurrentQuestion();
             renderNavSoal();
-        }
-    }
+        };
 
-    function prevQuestion() {
-        if (currentQuestionIndex > 0) {
-            currentQuestionIndex--;
+        window.goToQuestion = function (index) {
+            currentQuestionIndex = index;
             renderCurrentQuestion();
             renderNavSoal();
-        }
-    }
+        };
 
-    // ===== CEK SEMUA SOAL SUDAH DIJAWAB =====
-    function isAllQuestionsAnswered() {
-        for (let i = 1; i <= soalList.length; i++) {
-            if (!jawabanSiswa[i]) {
-                return false;
+        function nextQuestion() {
+            if (currentQuestionIndex < soalList.length - 1) {
+                currentQuestionIndex++;
+                renderCurrentQuestion();
+                renderNavSoal();
             }
         }
-        return true;
-    }
 
-    // ===== MULAI UJIAN =====
-    async function startExam() {
-        const name = document.getElementById('studentName').value.trim();
-        const kelas = document.getElementById('studentClass').value;
-        const semester = document.getElementById('studentSemester').value;
-
-        if (!name) {
-            showModal('Peringatan', 'Masukkan nama lengkap!', 'warning');
-            return;
-        }
-        if (!kelas) {
-            showModal('Peringatan', 'Pilih kelas!', 'warning');
-            return;
+        function prevQuestion() {
+            if (currentQuestionIndex > 0) {
+                currentQuestionIndex--;
+                renderCurrentQuestion();
+                renderNavSoal();
+            }
         }
 
-        localStorage.setItem('examStudentName', name);
-        localStorage.setItem('examStudentClass', kelas);
-        localStorage.setItem('examStudentSemester', semester);
-
-        const soal = await fetchSoal();
-        if (soal.length === 0) {
-            return;
+        function isAllQuestionsAnswered() {
+            for (let i = 1; i <= soalList.length; i++) {
+                if (!jawabanSiswa[i]) return false;
+            }
+            return true;
         }
 
-        soalList = soal;
-        jawabanSiswa = {};
-        currentQuestionIndex = 0;
-        waktuTersisa = 30 * 60;
-        ujianDimulai = true;
+        // ============================================================
+        // MULAI UJIAN
+        // ============================================================
+        async function startExam() {
+            const name = document.getElementById('studentName').value.trim();
+            const kelas = document.getElementById('studentClass').value;
+            const semester = document.getElementById('studentSemester').value;
 
-        document.getElementById('identityForm').style.display = 'none';
-        document.getElementById('examContent').style.display = 'block';
+            if (!name) { showModal('Peringatan', 'Masukkan nama lengkap!', 'warning'); return; }
+            if (!kelas) { showModal('Peringatan', 'Pilih kelas terlebih dahulu!', 'warning'); return; }
 
-        renderCurrentQuestion();
-        renderNavSoal();
-        startTimer();
-    }
+            localStorage.setItem('examStudentName', name);
+            localStorage.setItem('examStudentClass', kelas);
+            localStorage.setItem('examStudentSemester', semester);
 
-    // ===== MULAI TIMER =====
-    function startTimer() {
-        if (timerInterval) clearInterval(timerInterval);
+            // Ambil soal sesuai kelas
+            const soal = await fetchSoal(kelas);
+            if (soal.length === 0) return;
 
-        timerInterval = setInterval(() => {
-            if (!ujianDimulai) return;
+            soalList = soal;
+            jawabanSiswa = {};
+            currentQuestionIndex = 0;
+            waktuTersisa = 30 * 60;
+            ujianDimulai = true;
 
-            if (waktuTersisa <= 0) {
-                clearInterval(timerInterval);
-                if (!isAllQuestionsAnswered()) {
+            document.getElementById('identityForm').style.display = 'none';
+            document.getElementById('examContent').style.display = 'block';
+
+            renderCurrentQuestion();
+            renderNavSoal();
+            startTimer();
+        }
+
+        // ============================================================
+        // TIMER
+        // ============================================================
+        function startTimer() {
+            if (timerInterval) clearInterval(timerInterval);
+            timerInterval = setInterval(() => {
+                if (!ujianDimulai) return;
+                if (waktuTersisa <= 0) {
+                    clearInterval(timerInterval);
                     showModal('Waktu Habis!', 'Waktu ujian telah habis. Jawaban akan dikirim apa adanya.', 'warning', false, () => {
                         prosesSubmitUjian();
                     });
                 } else {
-                    prosesSubmitUjian();
+                    waktuTersisa--;
+                    updateTimerDisplay();
                 }
-            } else {
-                waktuTersisa--;
-                updateTimerDisplay();
-            }
-        }, 1000);
-    }
-
-    function updateTimerDisplay() {
-        const menit = Math.floor(waktuTersisa / 60);
-        const detik = waktuTersisa % 60;
-        const display = document.getElementById('timerDisplay');
-        if (display) {
-            display.textContent = `${menit.toString().padStart(2, '0')}:${detik.toString().padStart(2, '0')}`;
-            if (waktuTersisa <= 300) {
-                display.style.color = '#ef4444';
-            }
-        }
-    }
-
-    // ===== SUBMIT UJIAN =====
-    async function submitExam() {
-        if (!ujianDimulai) return;
-
-        if (!isAllQuestionsAnswered()) {
-            const belumTerisi = soalList.length - Object.keys(jawabanSiswa).length;
-            showModal('Peringatan', `Anda belum menyelesaikan semua soal! Masih ${belumTerisi} soal yang belum dijawab. Harap selesaikan terlebih dahulu.`, 'warning');
-            return;
+            }, 1000);
         }
 
-        showModal('Konfirmasi', 'Apakah Anda yakin ingin mengirim ujian?\n\nPastikan semua jawaban sudah benar karena tidak dapat diubah lagi!', 'warning', true,
-            () => { prosesSubmitUjian(); },
-            () => { showModal('Info', 'Ujian dibatalkan. Lanjutkan mengerjakan soal.', 'info'); }
-        );
-    }
-
-    // ===== PROSES SUBMIT KE APPS SCRIPT =====
-    async function prosesSubmitUjian() {
-        ujianDimulai = false;
-        if (timerInterval) clearInterval(timerInterval);
-
-        const name = localStorage.getItem('examStudentName');
-        const kelas = localStorage.getItem('examStudentClass');
-        const semester = localStorage.getItem('examStudentSemester');
-
-        const jawabanArray = [];
-        for (let i = 1; i <= soalList.length; i++) {
-            jawabanArray.push(jawabanSiswa[i] || '');
+        function updateTimerDisplay() {
+            const menit = Math.floor(waktuTersisa / 60);
+            const detik = waktuTersisa % 60;
+            const display = document.getElementById('timerDisplay');
+            if (display) {
+                display.textContent = `${String(menit).padStart(2, '0')}:${String(detik).padStart(2, '0')}`;
+                display.style.color = waktuTersisa <= 300 ? '#ef4444' : 'var(--c1)';
+            }
         }
 
-        const formData = {
-            action: 'submitUjian',
-            namaSiswa: name,
-            kelas: kelas,
-            semester: parseInt(semester),
-            jawaban: jawabanArray,
-            versiSoal: versiSoal
-        };
-
-        const submitBtn = document.getElementById('submitExamBtn');
-        const originalText = submitBtn.innerHTML;
-        submitBtn.innerHTML = '<span class="loading-spinner"></span> Mengirim...';
-        submitBtn.disabled = true;
-
-        try {
-            // Kirim data ke Apps Script
-            const response = await fetch(APPS_SCRIPT_URL, {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify(formData)
-            });
-
-            const result = await response.json();
-
-            if (result.success) {
-                showModal('Sukses!', `✅ Ujian selesai!\n\n📝 Nilai Anda: ${result.data.nilai}\n✅ Jawaban Benar: ${result.data.jumlahBenar}/${result.data.totalSoal}\n🏆 Status: ${result.data.status}`, 'success');
-
-                // Reset form
-                document.getElementById('identityForm').style.display = 'block';
-                document.getElementById('examContent').style.display = 'none';
-                document.getElementById('studentName').value = '';
-                document.getElementById('studentClass').value = '';
-
-                // Refresh data
-                loadHistoryData();
-                loadStatistics();
-            } else if (result.error === 'DUPLICATE') {
-                showModal('Gagal!', result.message, 'error');
-                document.getElementById('identityForm').style.display = 'block';
-                document.getElementById('examContent').style.display = 'none';
-            } else if (result.error === 'INCOMPLETE') {
-                showModal('Gagal!', result.message, 'warning');
-                ujianDimulai = true;
-                startTimer();
-            } else {
-                showModal('Gagal!', result.message || 'Terjadi kesalahan. Silakan coba lagi.', 'error');
-                ujianDimulai = true;
-                startTimer();
+        // ============================================================
+        // SUBMIT UJIAN
+        // ============================================================
+        async function submitExam() {
+            if (!ujianDimulai) return;
+            if (!isAllQuestionsAnswered()) {
+                const sisa = soalList.length - Object.keys(jawabanSiswa).length;
+                showModal('Peringatan', `Masih ada ${sisa} soal yang belum dijawab.\nHarap selesaikan terlebih dahulu!`, 'warning');
+                return;
             }
-        } catch (error) {
-            console.error('Submit error:', error);
+            showModal(
+                'Konfirmasi',
+                'Apakah Anda yakin ingin mengirim ujian?\n\nJawaban tidak dapat diubah setelah dikirim.',
+                'warning', true,
+                () => prosesSubmitUjian(),
+                () => { }
+            );
+        }
 
-            // Coba kirim dengan mode no-cors sebagai fallback
+        async function prosesSubmitUjian() {
+            ujianDimulai = false;
+            if (timerInterval) clearInterval(timerInterval);
+
+            const name = localStorage.getItem('examStudentName');
+            const kelas = localStorage.getItem('examStudentClass');
+            const semester = localStorage.getItem('examStudentSemester');
+
+            // Susun jawaban sebagai array berurutan
+            const jawabanArray = [];
+            for (let i = 1; i <= soalList.length; i++) {
+                jawabanArray.push(jawabanSiswa[i] || '');
+            }
+
+            const formData = {
+                action: 'submitUjian',
+                namaSiswa: name,
+                kelas: kelas,
+                semester: parseInt(semester),
+                jawaban: jawabanArray,
+                versiSoal: versiSoal   // array {no, idAsli, jawabanBenar}
+            };
+
+            const submitBtn = document.getElementById('submitExamBtn');
+            const origText = submitBtn.innerHTML;
+            submitBtn.innerHTML = '<span class="loading-spinner"></span> Mengirim...';
+            submitBtn.disabled = true;
+
             try {
-                await fetch(APPS_SCRIPT_URL, {
+                const response = await fetch(APPS_SCRIPT_URL, {
                     method: 'POST',
-                    mode: 'no-cors',
-                    headers: {
-                        'Content-Type': 'application/json',
-                    },
+                    headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify(formData)
                 });
+                const result = await response.json();
 
-                // Karena mode no-cors, response tidak bisa dibaca
-                // Tapi request tetap terkirim
-                showModal('Info', 'Ujian telah dikirim! Data akan diproses.', 'success');
-
-                document.getElementById('identityForm').style.display = 'block';
-                document.getElementById('examContent').style.display = 'none';
-                document.getElementById('studentName').value = '';
-                document.getElementById('studentClass').value = '';
-
-                loadHistoryData();
-                loadStatistics();
-            } catch (fallbackError) {
-                showModal('Error', 'Gagal mengirim ujian. Silakan coba lagi.\n\nPastikan koneksi internet stabil.', 'error');
-                ujianDimulai = true;
-                startTimer();
+                if (result.success) {
+                    const d = result.data;
+                    showModal('Selesai! 🎉',
+                        `Ujian berhasil dikirim!\n\n📊 Nilai: ${d.nilai}\n✅ Benar: ${d.jumlahBenar}/${d.totalSoal}\n🏅 Status: ${d.status}\n🔖 ID: ${d.idUnik}`,
+                        'success');
+                    resetFormUjian();
+                } else if (result.error === 'DUPLICATE') {
+                    showModal('Ditolak!', result.message, 'error');
+                    resetFormUjian();
+                } else if (result.error === 'INCOMPLETE') {
+                    showModal('Belum Selesai!', result.message, 'warning');
+                    ujianDimulai = true;
+                    startTimer();
+                } else {
+                    showModal('Gagal!', result.message || 'Terjadi kesalahan. Silakan coba lagi.', 'error');
+                    ujianDimulai = true;
+                    startTimer();
+                }
+            } catch (error) {
+                // Fallback no-cors
+                try {
+                    await fetch(APPS_SCRIPT_URL, {
+                        method: 'POST', mode: 'no-cors',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify(formData)
+                    });
+                    showModal('Info', 'Ujian terkirim! Data sedang diproses.', 'success');
+                    resetFormUjian();
+                } catch {
+                    showModal('Error', 'Gagal mengirim ujian. Periksa koneksi internet Anda.', 'error');
+                    ujianDimulai = true;
+                    startTimer();
+                }
+            } finally {
+                submitBtn.innerHTML = origText;
+                submitBtn.disabled = false;
             }
-        } finally {
-            submitBtn.innerHTML = originalText;
-            submitBtn.disabled = false;
         }
-    }
 
-    // ===== LOAD HISTORY DATA =====
-    async function loadHistoryData() {
-        try {
-            const kelas = document.getElementById('filterKelas')?.value || '';
-            let url = `${APPS_SCRIPT_URL}?action=getSemuaHasil&t=${Date.now()}`;
-            if (kelas) url += `&kelas=${kelas}`;
+        function resetFormUjian() {
+            document.getElementById('identityForm').style.display = 'block';
+            document.getElementById('examContent').style.display = 'none';
+            document.getElementById('studentName').value = '';
+            document.getElementById('studentClass').value = '';
+        }
 
-            const response = await fetch(url);
-            const data = await response.json();
-
+        // ============================================================
+        // LOAD HISTORY — pagination, selalu filter per kelas
+        // ============================================================
+        async function loadHistoryData(page = 1) {
+            currentPage = page;
+            const kelas = document.getElementById('filterKelas')?.value || '7A';
             const tbody = document.getElementById('historyTableBody');
-            if (!tbody) return;
 
-            if (data.success && data.data && data.data.length > 0) {
-                tbody.innerHTML = data.data.map(item => `
-                    <tr>
-                        <td>${new Date(item.timestamp).toLocaleDateString('id-ID')}</td>
-                        <td>${escapeHtml(item.namaSiswa)}</td>
-                        <td>${item.kelas}</td>
-                        <td style="font-weight:700; color: ${item.nilai >= 70 ? '#10b981' : '#ef4444'}">${item.nilai}</td>
-                        <td>${item.jumlahBenar}/10</td>
-                        <td><span class="${item.status === 'LULUS' ? 'badge-lulus' : 'badge-tidak'}">${item.status}</span></td>
-                    </tr>
-                `).join('');
+            tbody.innerHTML = `<tr><td colspan="9" style="text-align:center;padding:30px;color:var(--text2);">
+            <span class="loading-spinner" style="border-color:var(--border);border-top-color:var(--c1);"></span>
+            &nbsp; Memuat data...</td></tr>`;
+
+            try {
+                const url = `${APPS_SCRIPT_URL}?action=getSemuaHasil&kelas=${encodeURIComponent(kelas)}&page=${page}&limit=${ITEMS_PER_PAGE}&t=${Date.now()}`;
+                const response = await fetch(url);
+                const data = await response.json();
+
+                if (!data.success) {
+                    tbody.innerHTML = `<tr><td colspan="9" style="text-align:center;padding:30px;">Gagal memuat data</td></tr>`;
+                    return;
+                }
+
+                const items = data.data || [];
+                const pg = data.pagination || {};
+
+                // Update pagination state
+                totalPages = pg.totalPage || 1;
+                totalItems = pg.total || 0;
+                const startNo = (page - 1) * ITEMS_PER_PAGE + 1;
+
+                if (items.length === 0) {
+                    tbody.innerHTML = `<tr><td colspan="9" style="text-align:center;padding:30px;color:var(--text2);">Belum ada data untuk kelas ${kelas}</td></tr>`;
+                    document.getElementById('paginationBar').style.display = 'none';
+                    return;
+                }
+
+                tbody.innerHTML = items.map((item, idx) => {
+                    const tgl = item.timestamp ? new Date(item.timestamp).toLocaleDateString('id-ID', { day: '2-digit', month: 'short', year: 'numeric' }) : '—';
+                    const nilaiColor = Number(item.nilai) >= 70 ? '#10b981' : '#ef4444';
+                    const rowNo = startNo + idx;
+                    return `
+                <tr>
+                    <td style="font-weight:600;">${rowNo}</td>
+                    <td>${tgl}</td>
+                    <td style="font-weight:600;text-align:left;">${escapeHtml(item.namaSiswa)}</td>
+                    <td>${item.kelas}</td>
+                    <td>${item.semester || '—'}</td>
+                    <td style="font-weight:800;color:${nilaiColor};font-size:1rem;">${item.nilai}</td>
+                    <td>${item.jumlahBenar}/${item.totalSoal}</td>
+                    <td class="jawaban-cell" title="${escapeHtml(item.jawabanSiswa)}">${escapeHtml(item.jawabanSiswa) || '—'}</td>
+                    <td><span class="${item.status === 'LULUS' ? 'badge-lulus' : 'badge-tidak'}">${item.status}</span></td>
+                </tr>`;
+                }).join('');
+
+                // Render pagination
+                renderPagination(pg);
+
+            } catch (error) {
+                console.error('loadHistoryData error:', error);
+                tbody.innerHTML = `<tr><td colspan="9" style="text-align:center;padding:30px;color:var(--text2);">Gagal memuat data. Coba lagi.</td></tr>`;
+            }
+        }
+
+        function renderPagination(pg) {
+            const bar = document.getElementById('paginationBar');
+            const info = document.getElementById('paginationInfo');
+            const indicator = document.getElementById('pageIndicator');
+            const prevBtn = document.getElementById('prevPageBtn');
+            const nextBtn = document.getElementById('nextPageBtn');
+
+            if (!pg || pg.total === 0) { bar.style.display = 'none'; return; }
+
+            bar.style.display = 'flex';
+            const from = (pg.page - 1) * pg.limit + 1;
+            const to = Math.min(pg.page * pg.limit, pg.total);
+            info.textContent = `Menampilkan ${from}–${to} dari ${pg.total} data`;
+            indicator.textContent = `${pg.page} / ${pg.totalPage}`;
+            prevBtn.disabled = !pg.hasPrev;
+            nextBtn.disabled = !pg.hasNext;
+        }
+
+        window.changePage = function (delta) {
+            const newPage = currentPage + delta;
+            if (newPage < 1 || newPage > totalPages) return;
+            loadHistoryData(newPage);
+        };
+
+        // ============================================================
+        // LOAD STATISTIK — filter per kelas atau semua
+        // ============================================================
+        async function loadStatistics() {
+            const kelas = document.getElementById('filterStatKelas')?.value || '';
+            try {
+                const url = `${APPS_SCRIPT_URL}?action=getStatistik&kelas=${encodeURIComponent(kelas)}&t=${Date.now()}`;
+                const resp = await fetch(url);
+                const data = await resp.json();
+
+                if (data.success && data.statistik) {
+                    const s = data.statistik;
+                    document.getElementById('statTotalPeserta').textContent = s.totalPeserta ?? 0;
+                    document.getElementById('statRataRata').textContent = s.rataRataNilai ?? 0;
+                    document.getElementById('statTertinggi').textContent = s.tertinggi ?? 0;
+                    document.getElementById('statTerendah').textContent = s.terendah ?? 0;
+                    document.getElementById('statLulus').textContent = s.lulus ?? 0;
+                    document.getElementById('statTidakLulus').textContent = s.tidakLulus ?? 0;
+                    updateStatChart(s.lulus || 0, s.tidakLulus || 0);
+                }
+            } catch (e) {
+                console.error('loadStatistics error:', e);
+            }
+        }
+
+        function updateStatChart(lulus, tidakLulus) {
+            const ctx = document.getElementById('statChart')?.getContext('2d');
+            if (!ctx) return;
+            if (statChart) statChart.destroy();
+            statChart = new Chart(ctx, {
+                type: 'doughnut',
+                data: {
+                    labels: ['Lulus', 'Tidak Lulus'],
+                    datasets: [{ data: [lulus, tidakLulus], backgroundColor: ['#10b981', '#ef4444'], borderWidth: 0 }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: { legend: { position: 'bottom', labels: { font: { size: 12 } } } },
+                    cutout: '65%'
+                }
+            });
+        }
+
+        // ============================================================
+        // EXPORT PDF — ambil SEMUA data kelas yg dipilih lalu generate
+        // ============================================================
+        async function exportPDF() {
+            const kelas = document.getElementById('filterKelas')?.value || '7A';
+            const overlay = document.getElementById('pdfOverlay');
+            overlay.classList.add('show');
+
+            try {
+                // Ambil semua data untuk kelas ini (tanpa pagination)
+                const url = `${APPS_SCRIPT_URL}?action=getExportPDF&kelas=${encodeURIComponent(kelas)}&t=${Date.now()}`;
+                const resp = await fetch(url);
+                const data = await resp.json();
+
+                if (!data.success || !data.data) {
+                    overlay.classList.remove('show');
+                    showModal('Error', 'Gagal mengambil data untuk export PDF', 'error');
+                    return;
+                }
+
+                generatePDF(data.data, data.statistik, kelas, data.exportedAt);
+            } catch (e) {
+                console.error('exportPDF error:', e);
+                showModal('Error', 'Gagal membuat PDF. Coba lagi.\n\n' + e.message, 'error');
+            } finally {
+                overlay.classList.remove('show');
+            }
+        }
+
+        function generatePDF(items, statistik, kelas, exportedAt) {
+            const { jsPDF } = window.jspdf;
+            const doc = new jsPDF({ orientation: 'landscape', unit: 'mm', format: 'a4' });
+
+            const labelKelas = kelas || 'Semua Kelas';
+            const tglExport = exportedAt ? new Date(exportedAt).toLocaleDateString('id-ID', { day: '2-digit', month: 'long', year: 'numeric', hour: '2-digit', minute: '2-digit' }) : new Date().toLocaleDateString('id-ID');
+
+            // ── Header ──
+            doc.setFillColor(44, 62, 80);
+            doc.rect(0, 0, 297, 28, 'F');
+            doc.setTextColor(255, 255, 255);
+            doc.setFont('helvetica', 'bold');
+            doc.setFontSize(14);
+            doc.text('REKAP HASIL UJIAN BAHASA INGGRIS', 148.5, 11, { align: 'center' });
+            doc.setFontSize(10);
+            doc.setFont('helvetica', 'normal');
+            doc.text(`SMP Persiapan Negeri Pulau Tiga  |  Kelas: ${labelKelas}  |  Dicetak: ${tglExport}`, 148.5, 20, { align: 'center' });
+
+            // ── Statistik Box ──
+            doc.setTextColor(44, 62, 80);
+            doc.setFont('helvetica', 'bold');
+            doc.setFontSize(10);
+            doc.text('RINGKASAN STATISTIK', 14, 36);
+
+            const s = statistik || {};
+            const statItems = [
+                ['Total Peserta', s.totalPeserta ?? 0],
+                ['Rata-rata Nilai', s.rataRataNilai ?? 0],
+                ['Nilai Tertinggi', s.tertinggi ?? 0],
+                ['Nilai Terendah', s.terendah ?? 0],
+                ['Lulus', s.lulus ?? 0],
+                ['Tidak Lulus', s.tidakLulus ?? 0],
+            ];
+
+            const boxW = 40, boxH = 14, startX = 14, statY = 40;
+            statItems.forEach(([label, val], i) => {
+                const x = startX + i * (boxW + 5);
+                doc.setFillColor(245, 247, 250);
+                doc.roundedRect(x, statY, boxW, boxH, 2, 2, 'F');
+                doc.setFont('helvetica', 'bold');
+                doc.setFontSize(13);
+                doc.setTextColor(220, 50, 50);
+                doc.text(String(val), x + boxW / 2, statY + 8, { align: 'center' });
+                doc.setFont('helvetica', 'normal');
+                doc.setFontSize(7.5);
+                doc.setTextColor(100, 100, 100);
+                doc.text(label, x + boxW / 2, statY + 12.5, { align: 'center' });
+            });
+
+            // ── Tabel ──
+            const tableColumns = [
+                { header: 'No', dataKey: 'no' },
+                { header: 'Tanggal', dataKey: 'tgl' },
+                { header: 'Nama Siswa', dataKey: 'nama' },
+                { header: 'Kelas', dataKey: 'kelas' },
+                { header: 'Smt', dataKey: 'smt' },
+                { header: 'Nilai', dataKey: 'nilai' },
+                { header: 'Benar', dataKey: 'benar' },
+                { header: 'Status', dataKey: 'status' },
+            ];
+
+            const tableRows = items.map((item, idx) => ({
+                no: idx + 1,
+                tgl: item.timestamp ? new Date(item.timestamp).toLocaleDateString('id-ID', { day: '2-digit', month: 'short', year: '2-digit' }) : '—',
+                nama: item.namaSiswa || '—',
+                kelas: item.kelas || '—',
+                smt: item.semester || '—',
+                nilai: item.nilai ?? '—',
+                benar: `${item.jumlahBenar ?? '—'}/${item.totalSoal ?? '—'}`,
+                status: item.status || '—',
+            }));
+
+            doc.autoTable({
+                startY: 60,
+                columns: tableColumns,
+                body: tableRows,
+                theme: 'grid',
+                headStyles: {
+                    fillColor: [44, 62, 80],
+                    textColor: 255,
+                    fontStyle: 'bold',
+                    fontSize: 9,
+                    halign: 'center',
+                },
+                bodyStyles: { fontSize: 8.5, cellPadding: 3 },
+                columnStyles: {
+                    0: { halign: 'center', cellWidth: 12 },
+                    1: { halign: 'center', cellWidth: 28 },
+                    2: { halign: 'left', cellWidth: 55 },
+                    3: { halign: 'center', cellWidth: 18 },
+                    4: { halign: 'center', cellWidth: 14 },
+                    5: { halign: 'center', cellWidth: 18, fontStyle: 'bold' },
+                    6: { halign: 'center', cellWidth: 20 },
+                    7: { halign: 'center', cellWidth: 26 },
+                },
+                alternateRowStyles: { fillColor: [248, 249, 252] },
+                didDrawCell: (hookData) => {
+                    // Warna nilai & status
+                    if (hookData.section === 'body') {
+                        if (hookData.column.dataKey === 'nilai') {
+                            const val = Number(hookData.cell.raw);
+                            hookData.cell.styles.textColor = val >= 70 ? [16, 185, 129] : [239, 68, 68];
+                        }
+                        if (hookData.column.dataKey === 'status') {
+                            hookData.cell.styles.textColor = hookData.cell.raw === 'LULUS' ? [16, 185, 129] : [239, 68, 68];
+                            hookData.cell.styles.fontStyle = 'bold';
+                        }
+                    }
+                },
+            });
+
+            // ── Footer halaman ──
+            const pageCount = doc.internal.getNumberOfPages();
+            for (let i = 1; i <= pageCount; i++) {
+                doc.setPage(i);
+                doc.setFontSize(8);
+                doc.setTextColor(150, 150, 150);
+                doc.text(`Halaman ${i} dari ${pageCount}`, 148.5, 205, { align: 'center' });
+            }
+
+            // Simpan
+            const fileName = `Rekap_Ujian_${labelKelas.replace(/\s/g, '_')}_${Date.now()}.pdf`;
+            doc.save(fileName);
+        }
+
+        // ============================================================
+        // HELPER
+        // ============================================================
+        function escapeHtml(text) {
+            if (!text) return '';
+            const d = document.createElement('div');
+            d.textContent = text;
+            return d.innerHTML;
+        }
+
+        // ============================================================
+        // TAB NAVIGATION
+        // ============================================================
+        window.showTab = function (tab) {
+            const tabExam = document.getElementById('tabExam');
+            const tabHistory = document.getElementById('tabHistory');
+            const buttons = document.querySelectorAll('.tab-btn');
+            buttons.forEach(b => b.classList.remove('active'));
+
+            if (tab === 'exam') {
+                tabExam.style.display = 'block';
+                tabHistory.style.display = 'none';
+                buttons[0].classList.add('active');
             } else {
-                tbody.innerHTML = '<tr><td colspan="6" style="text-align: center;">Belum ada data ujian</td></tr>';
+                tabExam.style.display = 'none';
+                tabHistory.style.display = 'block';
+                buttons[1].classList.add('active');
+                loadStatistics();
+                loadHistoryData(1);
             }
-        } catch (error) {
-            console.error('Error loading history:', error);
-            const tbody = document.getElementById('historyTableBody');
-            if (tbody) {
-                tbody.innerHTML = '<tr><td colspan="6" style="text-align: center;">Gagal memuat data</td></tr>';
-            }
-        }
-    }
+        };
 
-    // ===== LOAD STATISTICS =====
-    async function loadStatistics() {
-        try {
-            const response = await fetch(`${APPS_SCRIPT_URL}?action=getStatistik&t=${Date.now()}`);
-            const data = await response.json();
+        // ============================================================
+        // EVENT LISTENERS
+        // ============================================================
+        document.getElementById('startExamBtn')?.addEventListener('click', startExam);
+        document.getElementById('submitExamBtn')?.addEventListener('click', submitExam);
+        document.getElementById('prevQuestionBtn')?.addEventListener('click', prevQuestion);
+        document.getElementById('nextQuestionBtn')?.addEventListener('click', nextQuestion);
 
-            if (data.success && data.statistik) {
-                const stats = data.statistik;
-                document.getElementById('statTotalPeserta').textContent = stats.totalPeserta || 0;
-                document.getElementById('statRataRata').textContent = stats.rataRataNilai || 0;
-                document.getElementById('statTertinggi').textContent = stats.tertinggi || 0;
-                document.getElementById('statTerendah').textContent = stats.terendah || 0;
-                updateStatChart(stats.lulus || 0, stats.tidakLulus || 0);
-            }
-        } catch (error) {
-            console.error('Error loading statistics:', error);
-        }
-    }
-
-    function updateStatChart(lulus, tidakLulus) {
-        const ctx = document.getElementById('statChart')?.getContext('2d');
-        if (!ctx) return;
-        if (statChart) statChart.destroy();
-
-        statChart = new Chart(ctx, {
-            type: 'doughnut',
-            data: {
-                labels: ['Lulus', 'Tidak Lulus'],
-                datasets: [{
-                    data: [lulus, tidakLulus],
-                    backgroundColor: ['#10b981', '#ef4444'],
-                    borderWidth: 0
-                }]
-            },
-            options: {
-                responsive: true,
-                maintainAspectRatio: true,
-                plugins: { legend: { position: 'bottom' } }
-            }
-        });
-    }
-
-    // Helper function untuk escape HTML
-    function escapeHtml(text) {
-        if (!text) return '';
-        const div = document.createElement('div');
-        div.textContent = text;
-        return div.innerHTML;
-    }
-
-    // ===== TAB NAVIGATION =====
-    window.showTab = function (tab) {
-        const tabExam = document.getElementById('tabExam');
-        const tabHistory = document.getElementById('tabHistory');
-        const buttons = document.querySelectorAll('.tab-btn');
-
-        buttons.forEach(btn => btn.classList.remove('active'));
-
-        if (tab === 'exam') {
-            tabExam.style.display = 'block';
-            tabHistory.style.display = 'none';
-            buttons[0].classList.add('active');
-        } else {
-            tabExam.style.display = 'none';
-            tabHistory.style.display = 'block';
-            buttons[1].classList.add('active');
-            loadHistoryData();
+        document.getElementById('refreshHistoryBtn')?.addEventListener('click', () => {
+            loadHistoryData(1);
             loadStatistics();
-        }
-    }
+        });
 
-    // ===== EVENT LISTENERS =====
-    document.getElementById('startExamBtn')?.addEventListener('click', startExam);
-    document.getElementById('submitExamBtn')?.addEventListener('click', submitExam);
-    document.getElementById('prevQuestionBtn')?.addEventListener('click', prevQuestion);
-    document.getElementById('nextQuestionBtn')?.addEventListener('click', nextQuestion);
-    document.getElementById('refreshHistoryBtn')?.addEventListener('click', () => {
-        loadHistoryData();
-        loadStatistics();
-    });
-    document.getElementById('filterKelas')?.addEventListener('change', () => loadHistoryData());
+        document.getElementById('filterKelas')?.addEventListener('change', () => loadHistoryData(1));
 
-    // ===== INIT =====
-    document.addEventListener('DOMContentLoaded', () => {
-        // Pre-load soal di background
-        fetchSoal();
-    });
-</script>
+        document.getElementById('filterStatKelas')?.addEventListener('change', () => loadStatistics());
 
+        document.getElementById('exportPdfBtn')?.addEventListener('click', exportPDF);
+
+        // Tutup modal dengan klik backdrop
+        document.getElementById('customModal')?.addEventListener('click', function (e) {
+            if (e.target === this) closeModal();
+        });
+
+        // ============================================================
+        // INIT — tidak pre-load soal, tunggu siswa pilih kelas dulu
+        // ============================================================
+    </script>
 
 </body>
 
