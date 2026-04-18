@@ -844,8 +844,8 @@ footer span {
 /* ===== PROFILE IMAGE ===== */
 .profile-frame {
   position: relative;
-  width: 320px;
-  height: 355px;
+  width: 400px;
+  height: 450px;
   flex-shrink: 0;
 }
 

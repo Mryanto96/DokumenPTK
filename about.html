@@ -13,6 +13,460 @@
     rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
   <link rel="stylesheet" href="css/style.css">
+
+<style>
+  /* =============================================
+       RESPONSIVE FIXES — about.html
+       Mobile-first, overrides for tablet & desktop
+    ============================================= */
+
+  /* --- HERO SECTION --- */
+  .about-hero {
+    padding: 70px 0 60px;
+    background: var(--bg2, #f8f9fc);
+    border-bottom: 1px solid var(--border, #e5e7eb);
+    position: relative;
+    overflow: hidden;
+  }
+
+  .about-hero-inner {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 28px;
+    text-align: center;
+  }
+
+  @media (min-width: 720px) {
+    .about-hero-inner {
+      display: grid;
+      grid-template-columns: auto 1fr;
+      gap: 48px;
+      align-items: center;
+      text-align: left;
+    }
+  }
+
+  /* --- PROFILE FRAME --- */
+  .profile-wrapper {
+    display: flex;
+    justify-content: center;
+    flex-shrink: 0;
+  }
+
+  .profile-frame {
+    width: 140px !important;
+    height: 140px !important;
+  }
+
+  @media (min-width: 480px) {
+    .profile-frame {
+      width: 170px !important;
+      height: 170px !important;
+    }
+  }
+
+  @media (min-width: 720px) {
+    .profile-frame {
+      width: 200px !important;
+      height: 200px !important;
+    }
+  }
+
+  /* --- HERO TEXT --- */
+  .about-hero-text h1 {
+    font-size: clamp(1.35rem, 5vw, 2.4rem);
+    font-weight: 800;
+    letter-spacing: -1px;
+    margin-bottom: 8px;
+  }
+
+  .about-hero-text p {
+    color: var(--text2, #6b7280);
+    font-size: clamp(0.85rem, 3vw, 0.95rem);
+    line-height: 1.7;
+    margin-bottom: 20px;
+    max-width: 580px;
+  }
+
+  /* --- TAGS --- */
+  .hero-tags {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+
+  @media (min-width: 720px) {
+    .hero-tags {
+      justify-content: flex-start;
+    }
+  }
+
+  .hero-tags .tag {
+    font-size: clamp(0.72rem, 2.5vw, 0.82rem);
+    padding: 4px 10px;
+    white-space: nowrap;
+  }
+
+  /* --- BADGE --- */
+  .about-badge {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 12px;
+  }
+
+  @media (min-width: 720px) {
+    .about-badge {
+      justify-content: flex-start;
+    }
+  }
+
+  /* --- QUOTE BOX --- */
+  .about-quote {
+    max-width: 720px;
+    margin: 0 auto 60px;
+    padding: 0 16px;
+  }
+
+  .quote-box {
+    padding: clamp(20px, 4vw, 32px) clamp(20px, 5vw, 40px) !important;
+    font-size: clamp(0.9rem, 3vw, 1.05rem);
+    line-height: 1.7;
+  }
+
+  /* --- FEATURE GRID --- */
+  .about-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 16px;
+    margin-bottom: 60px;
+  }
+
+  @media (min-width: 500px) {
+    .about-grid {
+      grid-template-columns: repeat(2, 1fr);
+    }
+  }
+
+  @media (min-width: 900px) {
+    .about-grid {
+      grid-template-columns: repeat(4, 1fr);
+    }
+  }
+
+  .feature-card {
+    padding: clamp(18px, 3vw, 24px);
+  }
+
+  .feature-card h3 {
+    font-size: clamp(0.92rem, 2.5vw, 1rem);
+  }
+
+  .feature-card p {
+    font-size: clamp(0.82rem, 2.2vw, 0.88rem);
+    line-height: 1.65;
+  }
+
+  /* --- TIMELINE ZIG-ZAG (DESKTOP) & LURUS (MOBILE) --- */
+  .timeline-wrapper {
+    max-width: 900px;
+    margin: 0 auto;
+    padding: 0 4px;
+  }
+
+  .timeline-inner {
+    position: relative;
+    padding-left: 28px;
+  }
+
+  /* Garis vertikal untuk mobile */
+  .timeline-line {
+    position: absolute;
+    left: 12px;
+    top: 0;
+    bottom: 0;
+    width: 2px;
+    background: linear-gradient(to bottom, var(--c1, #ff6b6b), var(--c2, #4ecdc4), var(--c3, #45b7d1));
+    border-radius: 99px;
+  }
+
+  .timeline-item {
+    position: relative;
+    margin-bottom: 28px;
+  }
+
+  .timeline-dot {
+    position: absolute;
+    left: -22px;
+    top: 6px;
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    border: 2px solid var(--bg, #fff);
+  }
+
+  .timeline-card {
+    background: var(--card-bg, #fff);
+    border: 1px solid var(--border, #e5e7eb);
+    border-radius: var(--radius-sm, 12px);
+    padding: clamp(14px, 3vw, 20px) clamp(14px, 3vw, 22px);
+    transition: all 0.2s ease;
+  }
+
+  .timeline-card h4 {
+    font-weight: 700;
+    font-size: clamp(0.88rem, 2.5vw, 0.95rem);
+    margin-bottom: 6px;
+  }
+
+  .timeline-card p {
+    font-size: clamp(0.8rem, 2.2vw, 0.84rem);
+    color: var(--text2, #6b7280);
+    line-height: 1.6;
+  }
+
+  .timeline-label {
+    font-size: 0.72rem;
+    font-weight: 700;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    margin-bottom: 6px;
+  }
+
+  /* ---- DESKTOP ZIG-ZAG (min-width: 768px) ---- */
+  @media (min-width: 768px) {
+    .timeline-wrapper {
+      max-width: 1000px;
+    }
+
+    .timeline-inner {
+      padding-left: 0;
+      display: flex;
+      flex-direction: column;
+      gap: 32px;
+      position: relative;
+    }
+
+    /* GARIS VERTIKAL TENGAH untuk desktop */
+    .timeline-inner::before {
+      content: '';
+      position: absolute;
+      left: 50%;
+      top: 20px;
+      bottom: 20px;
+      width: 2px;
+      background: linear-gradient(to bottom, var(--c1, #ff6b6b), var(--c2, #4ecdc4), var(--c3, #45b7d1), var(--c4, #f59e0b));
+      transform: translateX(-50%);
+      border-radius: 99px;
+      opacity: 0.4;
+      z-index: 0;
+    }
+
+    /* Sembunyikan garis vertikal bawaan (yang untuk mobile) */
+    .timeline-line {
+      display: none;
+    }
+
+    .timeline-item {
+      margin-bottom: 0;
+      width: 100%;
+      position: relative;
+      z-index: 1;
+    }
+
+    /* Gaya untuk setiap item: bergantian posisi */
+    .timeline-item:nth-child(odd) .timeline-card {
+      margin-left: 0;
+      margin-right: auto;
+      max-width: 45%;
+      position: relative;
+    }
+
+    .timeline-item:nth-child(even) .timeline-card {
+      margin-left: auto;
+      margin-right: 0;
+      max-width: 45%;
+      position: relative;
+    }
+
+    /* Dot dan garis penghubung zig-zag */
+    .timeline-dot {
+      width: 18px;
+      height: 18px;
+      top: 50%;
+      transform: translateY(-50%);
+      z-index: 3;
+    }
+
+    /* Dot untuk item ganjil (kiri) - berada di sebelah kanan card */
+    .timeline-item:nth-child(odd) .timeline-dot {
+      left: auto;
+      right: -9px;
+    }
+
+    /* Dot untuk item genap (kanan) - berada di sebelah kiri card */
+    .timeline-item:nth-child(even) .timeline-dot {
+      left: -9px;
+      right: auto;
+    }
+
+    /* Garis penghubung horizontal (dari card ke garis tengah) */
+    .timeline-item:nth-child(odd) .timeline-card::before {
+      content: '';
+      position: absolute;
+      right: -32px;
+      top: 50%;
+      width: 32px;
+      height: 2px;
+      background: linear-gradient(90deg, var(--c2, #4ecdc4), var(--c3, #45b7d1));
+      transform: translateY(-50%);
+      z-index: 2;
+      border-radius: 2px;
+    }
+
+    .timeline-item:nth-child(even) .timeline-card::before {
+      content: '';
+      position: absolute;
+      left: -32px;
+      top: 50%;
+      width: 32px;
+      height: 2px;
+      background: linear-gradient(90deg, var(--c3, #45b7d1), var(--c2, #4ecdc4));
+      transform: translateY(-50%);
+      z-index: 2;
+      border-radius: 2px;
+    }
+
+    /* Card hover effect */
+    .timeline-card:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 12px 24px -12px rgba(0, 0, 0, 0.15);
+      border-color: rgba(78, 205, 196, 0.3);
+    }
+  }
+
+  /* --- Penyesuaian untuk tablet kecil (768px - 1024px) --- */
+  @media (min-width: 768px) and (max-width: 1024px) {
+
+    .timeline-item:nth-child(odd) .timeline-card,
+    .timeline-item:nth-child(even) .timeline-card {
+      max-width: 55%;
+    }
+
+    .timeline-item:nth-child(odd) .timeline-card::before,
+    .timeline-item:nth-child(even) .timeline-card::before {
+      width: 24px;
+    }
+
+    .timeline-item:nth-child(odd) .timeline-card::before {
+      right: -24px;
+    }
+
+    .timeline-item:nth-child(even) .timeline-card::before {
+      left: -24px;
+    }
+
+    .timeline-item:nth-child(odd) .timeline-dot {
+      right: -7px;
+    }
+
+    .timeline-item:nth-child(even) .timeline-dot {
+      left: -7px;
+    }
+  }
+
+  /* Mobile: tetap tampil lurus dengan garis vertikal */
+  @media (max-width: 767px) {
+    .timeline-inner {
+      padding-left: 28px;
+    }
+
+    /* Sembunyikan garis vertikal tengah desktop di mobile */
+    .timeline-inner::before {
+      display: none;
+    }
+
+    .timeline-line {
+      display: block;
+    }
+
+    .timeline-dot {
+      left: -22px;
+      top: 6px;
+    }
+
+    .timeline-card::before {
+      display: none;
+    }
+
+    .timeline-item {
+      margin-bottom: 28px;
+    }
+
+    .timeline-card {
+      margin: 0;
+      max-width: 100%;
+    }
+  }
+
+  /* --- CTA SECTION --- */
+  .about-cta {
+    text-align: center;
+    max-width: 520px;
+    margin: 0 auto;
+    padding: 0 16px;
+  }
+
+  .about-cta h2 {
+    font-size: clamp(1.3rem, 4.5vw, 1.8rem);
+    font-weight: 800;
+    letter-spacing: -0.8px;
+    margin-bottom: 12px;
+  }
+
+  .about-cta p {
+    color: var(--text2, #6b7280);
+    margin-bottom: 28px;
+    font-size: clamp(0.85rem, 2.5vw, 0.95rem);
+    line-height: 1.7;
+  }
+
+  .cta-buttons {
+    display: flex;
+    gap: 10px;
+    justify-content: center;
+    flex-wrap: wrap;
+  }
+
+  .cta-buttons .btn {
+    font-size: clamp(0.82rem, 2.5vw, 0.9rem);
+    padding: 10px 18px;
+    white-space: nowrap;
+  }
+
+  /* --- SECTION TITLE RESPONSIVE --- */
+  .section-title {
+    font-size: clamp(1.4rem, 4vw, 2rem) !important;
+  }
+
+  /* --- CONTAINER PADDING ON MOBILE --- */
+  .container {
+    padding-left: max(16px, env(safe-area-inset-left));
+    padding-right: max(16px, env(safe-area-inset-right));
+  }
+
+  /* --- SECTION PADDING --- */
+  .section {
+    padding-top: clamp(40px, 6vw, 80px) !important;
+    padding-bottom: clamp(40px, 6vw, 80px) !important;
+  }
+
+  /* Divider margin */
+  .divider {
+    margin: clamp(32px, 5vw, 60px) 0 !important;
+  }
+</style>
 </head>
 
 <body>
@@ -58,18 +512,18 @@
     <a href="contact.html">Contact Me</a>
   </div>
 
-
-  
   <div class="page-content">
+
     <!-- HERO ABOUT -->
-    <section
-      style="padding:70px 0 60px;background:var(--bg2);border-bottom:1px solid var(--border);position:relative;overflow:hidden;">
+    <section class="about-hero">
       <div class="page-header-bg"></div>
       <div class="dots-grid" style="top:10%;right:5%;opacity:0.3;"></div>
       <div class="container">
-        <div style="display:grid;grid-template-columns:auto 1fr;gap:48px;align-items:center;" class="fade-up">
+        <div class="about-hero-inner fade-up">
+
+          <!-- Profile Image -->
           <div class="profile-wrapper">
-            <div class="profile-frame" style="width:200px;height:200px;">
+            <div class="profile-frame">
               <img src="images/Foto1.png" alt="Aurelius Santotinus Agung, S.Pd." class="profile-img"
                 onerror="this.style.display='none';this.parentNode.querySelector('.profile-placeholder').style.display='flex'">
               <div class="profile-placeholder"
@@ -77,75 +531,69 @@
                 👨‍🏫</div>
             </div>
           </div>
-          <div>
-            <div class="badge" style="margin-bottom:16px;">
-              <span class="badge-dot"></span>
-              Guru Bahasa Inggris • Pengabdi Daerah 3T
+
+          <!-- Text Content -->
+          <div class="about-hero-text">
+            <div class="about-badge">
+              <div class="badge">
+                <span class="badge-dot"></span>
+                Guru Bahasa Inggris • Pengabdi Daerah 3T
+              </div>
             </div>
-            <h1 style="font-size:clamp(1.6rem,4vw,2.4rem);font-weight:800;letter-spacing:-1px;margin-bottom:8px;">
+            <h1>
               Aurelius Santotinus Agung, <span class="gradient-text">S.Pd.</span>
             </h1>
-            <p style="color:var(--text2);font-size:0.95rem;line-height:1.7;margin-bottom:20px;max-width:580px;">
+            <p>
               Lulusan Pendidikan Bahasa Inggris yang memilih jalur pengabdian di daerah Terdepan, Terluar, dan
               Tertinggal (3T). Telah mengajar di SMP Persiapan Negeri Pulau Tiga selama hampir 2 tahun lebih.
             </p>
-            <div style="display:flex;gap:10px;flex-wrap:wrap;">
+            <div class="hero-tags">
               <span class="tag"><i class="fas fa-graduation-cap" style="margin-right:5px;"></i>S.Pd. Bahasa
                 Inggris</span>
-              <span class="tag"><i class="fas fa-map-marker-alt" style="margin-right:5px;"></i>Kampung Nakai, Distrik
-                Pulau Tiga</span>
+              <span class="tag"><i class="fas fa-map-marker-alt" style="margin-right:5px;"></i>Kampung Nakai, Pulau
+                Tiga</span>
               <span class="tag"><i class="fas fa-calendar" style="margin-right:5px;"></i>2+ Tahun Mengabdi</span>
               <span class="tag"><i class="fas fa-star" style="margin-right:5px;"></i>Daerah 3T</span>
             </div>
           </div>
+
         </div>
       </div>
     </section>
 
-    <!-- MAIN ABOUT CONTENT -->
+    <!-- MAIN CONTENT -->
     <section class="section">
       <div class="container">
 
         <!-- FILOSOFI QUOTE -->
-        <div class="fade-up" style="max-width:720px;margin:0 auto 60px;">
+        <div class="about-quote fade-up">
           <p class="section-label" style="text-align:center;margin-bottom:12px;">Filosofi Pendidikan Saya</p>
-          <div class="quote-box" style="text-align:center;padding:32px 40px;">
+          <div class="quote-box" style="text-align:center;">
             Pendidikan adalah seni menyalakan api, bukan sekadar mengisi bejana.
           </div>
         </div>
 
         <!-- FEATURE GRID -->
-        <div class="about-grid fade-up" style="margin-bottom:60px;">
+        <div class="about-grid fade-up">
           <div class="feature-card">
-            <div class="feature-icon fi-1">
-              <i class="fas fa-bullseye"></i>
-            </div>
+            <div class="feature-icon fi-1"><i class="fas fa-bullseye"></i></div>
             <h3>Visi</h3>
             <p>Mewujudkan generasi Pulau Tiga yang unggul dalam literasi global dan mampu bersaing di era modern.</p>
           </div>
-
           <div class="feature-card">
-            <div class="feature-icon fi-2">
-              <i class="fas fa-route"></i>
-            </div>
+            <div class="feature-icon fi-2"><i class="fas fa-route"></i></div>
             <h3>Misi Pengajaran</h3>
             <p>Pembelajaran kontekstual yang menyesuaikan dengan budaya lokal, memfasilitasi akses digital, dan
               membangun karakter adaptif siswa.</p>
           </div>
-
           <div class="feature-card">
-            <div class="feature-icon fi-3">
-              <i class="fas fa-heart"></i>
-            </div>
+            <div class="feature-icon fi-3"><i class="fas fa-heart"></i></div>
             <h3>Semangat Pengabdian</h3>
             <p>Percaya bahwa keterbatasan geografis bukan halangan untuk memberikan pendidikan berkualitas kepada setiap
               anak di daerah 3T.</p>
           </div>
-
           <div class="feature-card">
-            <div class="feature-icon fi-4">
-              <i class="fas fa-laptop"></i>
-            </div>
+            <div class="feature-icon fi-4"><i class="fas fa-laptop"></i></div>
             <h3>Tujuan Website</h3>
             <p>Memudahkan operator sekolah mengakses dokumen kependidikan tanpa perlu mencari di tumpukan berkas atau
               pesan yang tenggelam.</p>
@@ -154,93 +602,73 @@
 
         <div class="divider"></div>
 
-        <!-- TIMELINE / JOURNEY -->
-        <div class="fade-up" style="max-width:680px;margin:0 auto;">
+        <!-- TIMELINE ZIG-ZAG (DESKTOP) & LURUS (MOBILE) -->
+        <div class="timeline-wrapper fade-up">
           <p class="section-label" style="text-align:center;margin-bottom:12px;">Perjalanan</p>
           <h2 class="section-title" style="text-align:center;margin-bottom:40px;">
             Jejak <span class="gradient-text">Pengabdian</span>
           </h2>
 
-          <div style="position:relative;padding-left:32px;">
-            <div
-              style="position:absolute;left:14px;top:0;bottom:0;width:2px;background:linear-gradient(to bottom,var(--c1),var(--c2),var(--c3));border-radius:99px;">
-            </div>
+          <div class="timeline-inner">
+            <div class="timeline-line"></div>
 
-            <div style="position:relative;margin-bottom:32px;">
-              <div
-                style="position:absolute;left:-26px;top:4px;width:14px;height:14px;border-radius:50%;background:linear-gradient(135deg,var(--c1),var(--c2));border:2px solid var(--bg);">
-              </div>
-              <div
-                style="background:var(--card-bg);border:1px solid var(--border);border-radius:var(--radius-sm);padding:20px 22px;">
-                <div
-                  style="font-size:0.75rem;color:var(--accent);font-weight:700;letter-spacing:1px;text-transform:uppercase;margin-bottom:6px;">
-                  Pendidikan</div>
-                <h4 style="font-weight:700;font-size:0.95rem;margin-bottom:6px;">Sarjana Pendidikan Bahasa Inggris
-                  (S.Pd.)</h4>
-                <p style="font-size:0.84rem;color:var(--text2);line-height:1.6;">Alumni universitas Sanata Dharma
-                  Yogyakarta.</p>
+            <!-- Item 1: Pendidikan -->
+            <div class="timeline-item">
+              <div class="timeline-dot" style="background:linear-gradient(135deg,var(--c1),var(--c2));"></div>
+              <div class="timeline-card">
+                <div class="timeline-label" style="color:var(--accent);">Pendidikan</div>
+                <h4>Sarjana Pendidikan Bahasa Inggris (S.Pd.)</h4>
+                <p>Alumni universitas Sanata Dharma Yogyakarta.</p>
               </div>
             </div>
 
-            <div style="position:relative;margin-bottom:32px;">
-              <div
-                style="position:absolute;left:-26px;top:4px;width:14px;height:14px;border-radius:50%;background:linear-gradient(135deg,var(--c2),var(--c3));border:2px solid var(--bg);">
-              </div>
-              <div
-                style="background:var(--card-bg);border:1px solid var(--border);border-radius:var(--radius-sm);padding:20px 22px;">
-                <div
-                  style="font-size:0.75rem;color:var(--c2);font-weight:700;letter-spacing:1px;text-transform:uppercase;margin-bottom:6px;">
-                  Pengabdian Dimulai</div>
-                <h4 style="font-weight:700;font-size:0.95rem;margin-bottom:6px;">Tiba di Pulau Tiga</h4>
-                <p style="font-size:0.84rem;color:var(--text2);line-height:1.6;">Memulai pengabdian sebagai guru Bahasa
-                  Inggris di SMP Persiapan Negeri Pulau Tiga, Kab. Asmat, Provinsi Papua Selatan.</p>
+            <!-- Item 2: Pengabdian Dimulai -->
+            <div class="timeline-item">
+              <div class="timeline-dot" style="background:linear-gradient(135deg,var(--c2),var(--c3));"></div>
+              <div class="timeline-card">
+                <div class="timeline-label" style="color:var(--c2);">Pengabdian Dimulai</div>
+                <h4>Tiba di Pulau Tiga</h4>
+                <p>Memulai pengabdian sebagai guru Bahasa Inggris di SMP Persiapan Negeri Pulau Tiga, Kab. Asmat,
+                  Provinsi Papua Selatan.</p>
               </div>
             </div>
 
-            <div style="position:relative;margin-bottom:32px;">
-              <div
-                style="position:absolute;left:-26px;top:4px;width:14px;height:14px;border-radius:50%;background:linear-gradient(135deg,var(--c3),var(--c4));border:2px solid var(--bg);">
-              </div>
-              <div
-                style="background:var(--card-bg);border:1px solid var(--border);border-radius:var(--radius-sm);padding:20px 22px;">
-                <div
-                  style="font-size:0.75rem;color:#f59e0b;font-weight:700;letter-spacing:1px;text-transform:uppercase;margin-bottom:6px;">
-                  Berkembang</div>
-                <h4 style="font-weight:700;font-size:0.95rem;margin-bottom:6px;">2+ Tahun Mengajar & Mengabdi</h4>
-                <p style="font-size:0.84rem;color:var(--text2);line-height:1.6;">Terus berdedikasi mendidik siswa-siswi
-                  Pulau Tiga, membangun literasi bahasa Inggris di tengah keterbatasan sarana prasarana.</p>
+            <!-- Item 3: Berkembang -->
+            <div class="timeline-item">
+              <div class="timeline-dot" style="background:linear-gradient(135deg,var(--c3),var(--c4));"></div>
+              <div class="timeline-card">
+                <div class="timeline-label" style="color:#f59e0b;">Berkembang</div>
+                <h4>2+ Tahun Mengajar & Mengabdi</h4>
+                <p>Terus berdedikasi mendidik siswa-siswi Pulau Tiga, membangun literasi bahasa Inggris di tengah
+                  keterbatasan sarana prasarana.</p>
               </div>
             </div>
 
-            <div style="position:relative;">
-              <div
-                style="position:absolute;left:-26px;top:4px;width:14px;height:14px;border-radius:50%;background:linear-gradient(135deg,var(--c4),var(--c5));border:2px solid var(--bg);animation:pulse 2s ease infinite;">
-              </div>
-              <div
-                style="background:linear-gradient(135deg,rgba(255,107,107,0.04),rgba(78,205,196,0.04));border:1px solid var(--border);border-radius:var(--radius-sm);padding:20px 22px;">
-                <div
-                  style="font-size:0.75rem;font-weight:700;letter-spacing:1px;text-transform:uppercase;margin-bottom:6px;background:linear-gradient(90deg,var(--c1),var(--c2));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;">
+            <!-- Item 4: Saat Ini (dengan animasi pulse) -->
+            <div class="timeline-item" style="margin-bottom:0;">
+              <div class="timeline-dot"
+                style="background:linear-gradient(135deg,var(--c4),var(--c5));animation:pulse 2s ease infinite;"></div>
+              <div class="timeline-card"
+                style="background:linear-gradient(135deg,rgba(255,107,107,0.04),rgba(78,205,196,0.04));">
+                <div class="timeline-label"
+                  style="background:linear-gradient(90deg,var(--c1),var(--c2));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;">
                   Saat Ini • 2026</div>
-                <h4 style="font-weight:700;font-size:0.95rem;margin-bottom:6px;">Masih Mengabdi dengan Penuh Semangat
-                </h4>
-                <p style="font-size:0.84rem;color:var(--text2);line-height:1.6;">Terus hadir di Pulau Tiga, membawa
-                  perubahan lewat pendidikan. "Mendidik dengan Hati, Mengabdi Tanpa Henti."</p>
+                <h4>Masih Mengabdi dengan Penuh Semangat</h4>
+                <p>Terus hadir di Pulau Tiga, membawa perubahan lewat pendidikan. "Mendidik dengan Hati, Mengabdi
+                  Tanpa Henti."</p>
               </div>
             </div>
+
           </div>
         </div>
 
         <div class="divider"></div>
 
         <!-- CTA -->
-        <div class="fade-up" style="text-align:center;max-width:520px;margin:0 auto;">
-          <h2 style="font-size:1.8rem;font-weight:800;letter-spacing:-0.8px;margin-bottom:12px;">
-            Ingin Tahu Lebih Lanjut?
-          </h2>
-          <p style="color:var(--text2);margin-bottom:28px;font-size:0.95rem;line-height:1.7;">
-            Hubungi saya langsung via WhatsApp atau lihat dokumen yang tersedia di portal ini.
-          </p>
-          <div style="display:flex;gap:12px;justify-content:center;flex-wrap:wrap;">
+        <div class="about-cta fade-up">
+          <h2>Ingin Tahu Lebih Lanjut?</h2>
+          <p>Hubungi saya langsung via WhatsApp atau lihat dokumen yang tersedia di portal ini.</p>
+          <div class="cta-buttons">
             <a href="contact.html" class="btn btn-primary">
               <i class="fab fa-whatsapp"></i> Hubungi Saya
             </a>
