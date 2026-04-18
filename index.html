@@ -55,7 +55,20 @@
       transform: translateY(-2px);
     }
 
+    /* PERBAIKAN: Responsive untuk section Tentang Portal Ini */
+    .about-portal-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 60px;
+      align-items: center;
+    }
+
     @media (max-width: 768px) {
+      .about-portal-grid {
+        grid-template-columns: 1fr;
+        gap: 40px;
+      }
+
       .announcement-bar {
         font-size: 0.85rem;
       }
@@ -104,9 +117,6 @@
     <a href="about.html">About Me</a>
     <a href="contact.html">Contact Me</a>
   </div>
-
-
-
 
   <div class="page-content">
     <!-- HERO - versi lebih rendah hati & profesional -->
@@ -202,7 +212,7 @@
       <div class="announcement-bar fade-up" style="color: #000000">
         <i class="fas fa-bullhorn" style="font-size: 1.2rem; background-color: white; color: #000000"></i>
         <span><strong>Reminder:</strong> Seluruh dokumen pengajuan
-          <strong>NUPTK</strong> terbaru per Aril 2026 sudah diunggah. Jika
+          <strong>NUPTK</strong> terbaru per April 2026 sudah diunggah. Jika
           ada berkas yang kurang, Mohon hubungi via WhatsApp.</span>
       </div>
     </div>
@@ -362,15 +372,11 @@
       </div>
     </section>
 
-    <!-- ABOUT SNIPPET - lebih netral & tidak hiperbola -->
+    <!-- ABOUT SNIPPET - PERBAIKAN: Responsive mobile -->
     <section class="section">
       <div class="container">
-        <div style="
-              display: grid;
-              grid-template-columns: 1fr 1fr;
-              gap: 60px;
-              align-items: center;
-            ">
+        <div class="about-portal-grid">
+          <!-- Kolom Kiri: Teks -->
           <div class="fade-up">
             <p class="section-label">Tentang Portal Ini</p>
             <h2 class="section-title">Mengapa portal ini dibuat?</h2>
@@ -395,6 +401,8 @@
               <i class="fas fa-arrow-right" style="margin-left: 4px"></i>
             </a>
           </div>
+
+          <!-- Kolom Kanan: Info Cards -->
           <div class="fade-up" style="display: flex; flex-direction: column; gap: 16px">
             <div style="
                   display: flex;
