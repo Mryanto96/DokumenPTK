@@ -8,90 +8,241 @@
   <meta name="description" content="Unduh dokumen guru: ijazah SD, SMP, SMA, S1, dan SK Dinas dari Google Drive.">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap"
+    rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
   <link rel="stylesheet" href="css/style.css">
   <style>
-    /* ===== LOGIN GATE ===== */
+    /* ===== LOGIN GATE — SPLIT DESKTOP / FULL MOBILE ===== */
     #loginGate {
       position: fixed;
       inset: 0;
       z-index: 99999;
-      background: linear-gradient(135deg, #0f172a 0%, #1e293b 50%, #0f172a 100%);
       display: flex;
-      align-items: center;
-      justify-content: center;
-      padding: 20px;
+      align-items: stretch;
     }
 
     #loginGate.hidden {
       display: none;
     }
 
-    .login-box {
-      background: rgba(255, 255, 255, 0.05);
-      border: 1px solid rgba(255, 255, 255, 0.1);
-      border-radius: 24px;
-      padding: 44px 40px;
-      width: 100%;
-      max-width: 400px;
-      backdrop-filter: blur(20px);
-      box-shadow: 0 25px 60px rgba(0, 0, 0, 0.5);
-      animation: fadeUp 0.4s ease;
+    /* Panel kiri: branding */
+    .login-left {
+      flex: 1;
+      min-width: 0;
+      background: linear-gradient(145deg, #0d1521 0%, #1a1040 55%, #0f172a 100%);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 48px 40px;
+      position: relative;
+      overflow: hidden;
     }
 
-    @keyframes fadeUp {
-      from { opacity: 0; transform: translateY(24px); }
-      to   { opacity: 1; transform: translateY(0); }
+    .login-left::before {
+      content: '';
+      position: absolute;
+      width: 480px;
+      height: 480px;
+      background: radial-gradient(circle, rgba(255, 107, 107, 0.15) 0%, transparent 65%);
+      top: -160px;
+      left: -160px;
+      border-radius: 50%;
+      animation: blobDrift 9s ease-in-out infinite alternate;
+      pointer-events: none;
     }
 
-    .login-logo {
+    .login-left::after {
+      content: '';
+      position: absolute;
+      width: 340px;
+      height: 340px;
+      background: radial-gradient(circle, rgba(238, 90, 36, 0.12) 0%, transparent 65%);
+      bottom: -100px;
+      right: -80px;
+      border-radius: 50%;
+      animation: blobDrift 11s ease-in-out infinite alternate-reverse;
+      pointer-events: none;
+    }
+
+    @keyframes blobDrift {
+      from {
+        transform: translate(0, 0) scale(1);
+      }
+
+      to {
+        transform: translate(28px, 22px) scale(1.1);
+      }
+    }
+
+    .login-brand {
+      position: relative;
+      z-index: 1;
       text-align: center;
-      margin-bottom: 32px;
+      max-width: 320px;
     }
 
     .login-logo-icon {
-      width: 64px;
-      height: 64px;
+      width: 72px;
+      height: 72px;
       background: linear-gradient(135deg, #ff6b6b, #ee5a24);
-      border-radius: 18px;
+      border-radius: 22px;
       display: flex;
       align-items: center;
       justify-content: center;
-      font-size: 1.6rem;
+      font-size: 1.45rem;
       font-weight: 800;
       color: white;
-      margin: 0 auto 14px;
+      margin: 0 auto 20px;
       letter-spacing: -1px;
-      box-shadow: 0 8px 24px rgba(255, 107, 107, 0.4);
+      box-shadow: 0 16px 36px rgba(255, 107, 107, 0.38), 0 0 0 1px rgba(255, 255, 255, 0.07);
+    }
+
+    .login-brand h2 {
+      color: white;
+      font-size: clamp(1.2rem, 2vw, 1.65rem);
+      font-weight: 800;
+      letter-spacing: -0.5px;
+      line-height: 1.25;
+      margin-bottom: 10px;
+    }
+
+    .login-brand-divider {
+      width: 40px;
+      height: 3px;
+      background: linear-gradient(90deg, #ff6b6b, #ee5a24);
+      border-radius: 99px;
+      margin: 14px auto;
+    }
+
+    .login-brand p {
+      color: rgba(255, 255, 255, 0.45);
+      font-size: 0.82rem;
+      line-height: 1.65;
+    }
+
+    .login-features {
+      list-style: none;
+      margin-top: 30px;
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+      text-align: left;
+      position: relative;
+      z-index: 1;
+    }
+
+    .login-features li {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      color: rgba(255, 255, 255, 0.55);
+      font-size: 0.82rem;
+    }
+
+    .login-features li .fi {
+      width: 34px;
+      height: 34px;
+      border-radius: 10px;
+      flex-shrink: 0;
+      background: rgba(255, 255, 255, 0.06);
+      border: 1px solid rgba(255, 255, 255, 0.09);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #ff8a5c;
+      font-size: 0.85rem;
+    }
+
+    /* Panel kanan: form */
+    .login-right {
+      width: 420px;
+      flex-shrink: 0;
+      background: #ffffff;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 48px 40px;
+      overflow-y: auto;
+    }
+
+    .login-box {
+      width: 100%;
+      max-width: 340px;
+    }
+
+    /* top brand — hanya tampil di mobile */
+    .login-mobile-brand {
+      display: none;
+      align-items: center;
+      gap: 14px;
+      margin-bottom: 28px;
+      padding-bottom: 22px;
+      border-bottom: 1px solid #f1f5f9;
+    }
+
+    .login-mobile-brand .m-logo {
+      width: 48px;
+      height: 48px;
+      border-radius: 14px;
+      flex-shrink: 0;
+      background: linear-gradient(135deg, #ff6b6b, #ee5a24);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.82rem;
+      font-weight: 800;
+      color: white;
+      box-shadow: 0 8px 18px rgba(255, 107, 107, 0.3);
+    }
+
+    .login-mobile-brand .m-text h3 {
+      font-size: 0.92rem;
+      font-weight: 800;
+      color: #0f172a;
+      letter-spacing: -0.3px;
+    }
+
+    .login-mobile-brand .m-text p {
+      font-size: 0.72rem;
+      color: #64748b;
+      margin-top: 2px;
+    }
+
+    .login-logo {
+      text-align: left;
+      margin-bottom: 28px;
     }
 
     .login-logo h2 {
-      color: white;
-      font-size: 1.1rem;
-      font-weight: 700;
+      color: #0f172a;
+      font-size: 1.4rem;
+      font-weight: 800;
       margin: 0 0 4px;
+      letter-spacing: -0.4px;
     }
 
     .login-logo p {
-      color: rgba(255,255,255,0.45);
-      font-size: 0.78rem;
+      color: #64748b;
+      font-size: 0.8rem;
       margin: 0;
+      line-height: 1.55;
     }
 
     .login-title {
-      color: white;
+      color: #0f172a;
       font-size: 1.25rem;
       font-weight: 700;
       margin-bottom: 6px;
-      text-align: center;
     }
 
     .login-subtitle {
-      color: rgba(255,255,255,0.45);
+      color: #64748b;
       font-size: 0.82rem;
-      text-align: center;
       margin-bottom: 28px;
+      line-height: 1.5;
     }
 
     .login-field {
@@ -100,9 +251,9 @@
 
     .login-field label {
       display: block;
-      font-size: 0.78rem;
-      font-weight: 600;
-      color: rgba(255,255,255,0.6);
+      font-size: 0.72rem;
+      font-weight: 700;
+      color: #64748b;
       margin-bottom: 8px;
       letter-spacing: 0.5px;
       text-transform: uppercase;
@@ -117,8 +268,8 @@
       left: 14px;
       top: 50%;
       transform: translateY(-50%);
-      color: rgba(255,255,255,0.3);
-      font-size: 0.9rem;
+      color: #94a3b8;
+      font-size: 0.88rem;
       pointer-events: none;
     }
 
@@ -126,22 +277,24 @@
       width: 100%;
       padding: 13px 42px;
       border-radius: 12px;
-      border: 1.5px solid rgba(255,255,255,0.1);
-      background: rgba(255,255,255,0.07);
-      color: white;
+      border: 1.5px solid #e2e8f0;
+      background: #f8fafc;
+      color: #0f172a;
       font-family: 'Plus Jakarta Sans', sans-serif;
       font-size: 0.9rem;
-      transition: all 0.3s;
+      transition: all 0.25s;
       box-sizing: border-box;
     }
 
-    .login-field input::placeholder { color: rgba(255,255,255,0.25); }
+    .login-field input::placeholder {
+      color: #b0bec5;
+    }
 
     .login-field input:focus {
       outline: none;
       border-color: #ff6b6b;
-      background: rgba(255,255,255,0.1);
-      box-shadow: 0 0 0 3px rgba(255,107,107,0.15);
+      background: #fff;
+      box-shadow: 0 0 0 4px rgba(255, 107, 107, 0.1);
     }
 
     .login-field input.error {
@@ -150,11 +303,27 @@
     }
 
     @keyframes shake {
-      0%,100% { transform: translateX(0); }
-      20%      { transform: translateX(-6px); }
-      40%      { transform: translateX(6px); }
-      60%      { transform: translateX(-4px); }
-      80%      { transform: translateX(4px); }
+
+      0%,
+      100% {
+        transform: translateX(0);
+      }
+
+      20% {
+        transform: translateX(-6px);
+      }
+
+      40% {
+        transform: translateX(6px);
+      }
+
+      60% {
+        transform: translateX(-4px);
+      }
+
+      80% {
+        transform: translateX(4px);
+      }
     }
 
     .toggle-pw {
@@ -162,7 +331,7 @@
       right: 14px;
       top: 50%;
       transform: translateY(-50%);
-      color: rgba(255,255,255,0.3);
+      color: #94a3b8;
       cursor: pointer;
       font-size: 0.9rem;
       transition: color 0.2s;
@@ -171,31 +340,38 @@
       padding: 0;
     }
 
-    .toggle-pw:hover { color: rgba(255,255,255,0.7); }
+    .toggle-pw:hover {
+      color: #64748b;
+    }
 
     .login-error {
       display: none;
-      background: rgba(239, 68, 68, 0.15);
-      border: 1px solid rgba(239,68,68,0.3);
+      background: #fef2f2;
+      border: 1px solid #fecaca;
       border-radius: 10px;
       padding: 10px 14px;
-      color: #fca5a5;
+      color: #dc2626;
       font-size: 0.8rem;
       margin-bottom: 16px;
       text-align: center;
     }
 
-    .login-error.show { display: block; }
+    .login-error.show {
+      display: block;
+    }
 
     .login-attempts {
       font-size: 0.75rem;
-      color: rgba(255,255,255,0.3);
+      color: #f97316;
+      font-weight: 600;
       text-align: center;
       margin-bottom: 16px;
       display: none;
     }
 
-    .login-attempts.show { display: block; }
+    .login-attempts.show {
+      display: block;
+    }
 
     .btn-login {
       width: 100%;
@@ -208,14 +384,15 @@
       font-size: 0.95rem;
       font-weight: 700;
       cursor: pointer;
-      transition: all 0.3s;
+      transition: all 0.25s;
       margin-top: 8px;
       letter-spacing: 0.3px;
+      box-shadow: 0 6px 18px rgba(238, 90, 36, 0.28);
     }
 
     .btn-login:hover:not(:disabled) {
       transform: translateY(-2px);
-      box-shadow: 0 6px 20px rgba(255, 107, 107, 0.45);
+      box-shadow: 0 10px 24px rgba(255, 107, 107, 0.42);
     }
 
     .btn-login:disabled {
@@ -227,20 +404,129 @@
     .login-footer {
       text-align: center;
       margin-top: 24px;
-      font-size: 0.75rem;
-      color: rgba(255,255,255,0.2);
+      font-size: 0.68rem;
+      color: #94a3b8;
+      border-top: 1px solid #f1f5f9;
+      padding-top: 18px;
     }
 
-    /* Lockout overlay */
     .lockout-msg {
       display: none;
       text-align: center;
-      color: #fca5a5;
-      font-size: 0.85rem;
+      background: #fff7ed;
+      border: 1px solid #fed7aa;
+      border-radius: 10px;
+      padding: 10px 14px;
+      color: #c2410c;
+      font-size: 0.8rem;
       margin-top: 12px;
     }
 
-    .lockout-msg.show { display: block; }
+    .lockout-msg.show {
+      display: block;
+    }
+
+    /* ── RESPONSIVE ── */
+    @media (max-width: 820px) {
+      .login-left {
+        display: none;
+      }
+
+      .login-right {
+        width: 100%;
+        background: linear-gradient(145deg, #0d1521, #1a1040);
+        padding: 36px 24px;
+      }
+
+      .login-box {
+        max-width: 400px;
+      }
+
+      /* mobile brand header */
+      .login-mobile-brand {
+        display: flex !important;
+      }
+
+      .login-mobile-brand .m-text h3 {
+        color: #fff;
+      }
+
+      .login-mobile-brand .m-text p {
+        color: rgba(255, 255, 255, 0.45);
+      }
+
+      .login-mobile-brand {
+        border-bottom-color: rgba(255, 255, 255, 0.08);
+      }
+
+      /* recolor form elements for dark bg */
+      .login-logo h2 {
+        color: #fff;
+      }
+
+      .login-logo p {
+        color: rgba(255, 255, 255, 0.45);
+      }
+
+      .login-title {
+        color: #fff;
+      }
+
+      .login-subtitle {
+        color: rgba(255, 255, 255, 0.45);
+      }
+
+      .login-field label {
+        color: rgba(255, 255, 255, 0.55);
+      }
+
+      .login-field input {
+        background: rgba(255, 255, 255, 0.07);
+        border-color: rgba(255, 255, 255, 0.12);
+        color: #fff;
+      }
+
+      .login-field input::placeholder {
+        color: rgba(255, 255, 255, 0.25);
+      }
+
+      .login-field input:focus {
+        background: rgba(255, 255, 255, 0.1);
+        border-color: #ff6b6b;
+        box-shadow: 0 0 0 4px rgba(255, 107, 107, 0.18);
+      }
+
+      .login-input-wrap i.field-icon {
+        color: rgba(255, 255, 255, 0.3);
+      }
+
+      .toggle-pw {
+        color: rgba(255, 255, 255, 0.3);
+      }
+
+      .toggle-pw:hover {
+        color: rgba(255, 255, 255, 0.65);
+      }
+
+      .login-error {
+        background: rgba(239, 68, 68, 0.15);
+        border-color: rgba(239, 68, 68, 0.3);
+        color: #fca5a5;
+      }
+
+      .lockout-msg {
+        background: rgba(249, 115, 22, 0.15);
+        border-color: rgba(249, 115, 22, 0.3);
+        color: #fdba74;
+      }
+
+      .login-footer {
+        color: rgba(255, 255, 255, 0.22);
+        border-top-color: rgba(255, 255, 255, 0.07);
+      }
+    }
+
+    /* ===== END LOGIN GATE ===== */
 
     /* Logout button in navbar area */
     #logoutBtn {
@@ -250,7 +536,7 @@
       right: 24px;
       z-index: 9998;
       padding: 10px 20px;
-      background: rgba(239,68,68,0.9);
+      background: rgba(239, 68, 68, 0.9);
       color: white;
       border: none;
       border-radius: 99px;
@@ -259,17 +545,25 @@
       font-weight: 600;
       cursor: pointer;
       backdrop-filter: blur(8px);
-      box-shadow: 0 4px 16px rgba(0,0,0,0.3);
+      box-shadow: 0 4px 16px rgba(0, 0, 0, 0.3);
       transition: all 0.2s;
       gap: 6px;
       align-items: center;
     }
 
-    #logoutBtn:hover { background: #dc2626; transform: translateY(-2px); }
+    #logoutBtn:hover {
+      background: #dc2626;
+      transform: translateY(-2px);
+    }
 
     /* Hide page content until logged in */
-    #pageContent { display: none; }
-    #pageContent.visible { display: block; }
+    #pageContent {
+      display: none;
+    }
+
+    #pageContent.visible {
+      display: block;
+    }
 
     /* Filter buttons */
     .filter-buttons {
@@ -295,7 +589,9 @@
       gap: 6px;
     }
 
-    .filter-btn i { font-size: 0.9rem; }
+    .filter-btn i {
+      font-size: 0.9rem;
+    }
 
     .filter-btn.active {
       background: linear-gradient(135deg, var(--c1), var(--c2));
@@ -319,9 +615,20 @@
       margin-top: 8px;
     }
 
-    .file-badge.pdf   { background: rgba(217,48,37,0.15);  color: #d93025; }
-    .file-badge.excel { background: rgba(33,115,70,0.15);  color: #217346; }
-    .file-badge.word  { background: rgba(43,87,154,0.15);  color: #2b579a; }
+    .file-badge.pdf {
+      background: rgba(217, 48, 37, 0.15);
+      color: #d93025;
+    }
+
+    .file-badge.excel {
+      background: rgba(33, 115, 70, 0.15);
+      color: #217346;
+    }
+
+    .file-badge.word {
+      background: rgba(43, 87, 154, 0.15);
+      color: #2b579a;
+    }
 
     .file-size {
       font-size: 0.7rem;
@@ -339,7 +646,10 @@
       opacity: 0.6;
     }
 
-    .btn-disabled:hover { transform: none; box-shadow: none; }
+    .btn-disabled:hover {
+      transform: none;
+      box-shadow: none;
+    }
   </style>
 </head>
 
@@ -347,55 +657,87 @@
 
   <!-- ===== LOGIN GATE ===== -->
   <div id="loginGate">
-    <div class="login-box">
 
-      <div class="login-logo">
+    <!-- Kiri: Branding -->
+    <div class="login-left">
+      <div class="login-brand">
         <div class="login-logo-icon">SMP</div>
-        <h2>Persiapan Negeri Pulau Tiga</h2>
-        <p>Portal Administrasi Guru</p>
+        <h2>Persiapan Negeri<br>Pulau Tiga</h2>
+        <div class="login-brand-divider"></div>
+        <p>Portal Administrasi Guru — Akses arsip dokumen resmi secara aman dan terpusat.</p>
       </div>
+      <ul class="login-features">
+        <li>
+          <div class="fi"><i class="fas fa-file-shield"></i></div> Dokumen Guru Terproteksi
+        </li>
+        <li>
+          <div class="fi"><i class="fas fa-cloud-arrow-down"></i></div> Unduh Langsung dari Google Drive
+        </li>
+        <li>
+          <div class="fi"><i class="fas fa-lock"></i></div> Akses Terenkripsi &amp; Aman
+        </li>
+      </ul>
+    </div>
 
-      <div class="login-title">Masuk untuk Melanjutkan</div>
-      <div class="login-subtitle">Halaman ini dilindungi. Masukkan kredensial Anda.</div>
+    <!-- Kanan: Form -->
+    <div class="login-right">
+      <div class="login-box">
 
-      <div class="login-error" id="loginError">
-        <i class="fas fa-exclamation-circle"></i> Username atau password salah.
-      </div>
-
-      <div class="login-attempts show" id="loginAttempts"></div>
-
-      <div class="login-field">
-        <label>Username</label>
-        <div class="login-input-wrap">
-          <i class="fas fa-user field-icon"></i>
-          <input type="text" id="loginUsername" placeholder="Masukkan username" autocomplete="username">
+        <!-- Mini brand — hanya muncul di mobile -->
+        <div class="login-mobile-brand">
+          <div class="m-logo">SMP</div>
+          <div class="m-text">
+            <h3>Persiapan Negeri Pulau Tiga</h3>
+            <p>Portal Administrasi Guru</p>
+          </div>
         </div>
-      </div>
 
-      <div class="login-field">
-        <label>Password</label>
-        <div class="login-input-wrap">
-          <i class="fas fa-lock field-icon"></i>
-          <input type="password" id="loginPassword" placeholder="Masukkan password" autocomplete="current-password">
-          <button class="toggle-pw" id="togglePw" type="button" tabindex="-1">
-            <i class="fas fa-eye" id="eyeIcon"></i>
-          </button>
+        <div class="login-logo">
+          <h2>Masuk untuk Melanjutkan</h2>
+          <p>Halaman ini dilindungi. Masukkan kredensial Anda.</p>
         </div>
-      </div>
 
-      <div class="lockout-msg" id="lockoutMsg">
-        <i class="fas fa-lock"></i> Terlalu banyak percobaan. Tunggu <span id="lockoutTimer">30</span> detik.
-      </div>
+        <div class="login-error" id="loginError">
+          <i class="fas fa-exclamation-circle"></i> Username atau password salah.
+        </div>
 
-      <button class="btn-login" id="loginBtn">
-        <i class="fas fa-sign-in-alt"></i> Masuk
-      </button>
+        <div class="login-attempts show" id="loginAttempts"></div>
 
-      <div class="login-footer">
-        © 2026 SMP Persiapan Negeri Pulau Tiga
+        <div class="login-field">
+          <label>Username</label>
+          <div class="login-input-wrap">
+            <i class="fas fa-user field-icon"></i>
+            <input type="text" id="loginUsername" placeholder="Masukkan username" autocomplete="username">
+          </div>
+        </div>
+
+        <div class="login-field">
+          <label>Password</label>
+          <div class="login-input-wrap">
+            <i class="fas fa-lock field-icon"></i>
+            <input type="password" id="loginPassword" placeholder="Masukkan password" autocomplete="current-password">
+            <button class="toggle-pw" id="togglePw" type="button" tabindex="-1">
+              <i class="fas fa-eye" id="eyeIcon"></i>
+            </button>
+          </div>
+        </div>
+
+        <div class="lockout-msg" id="lockoutMsg">
+          <i class="fas fa-lock"></i> Terlalu banyak percobaan. Tunggu <span id="lockoutTimer">30</span> detik.
+        </div>
+
+        <button class="btn-login" id="loginBtn">
+          <i class="fas fa-sign-in-alt"></i> Masuk
+        </button>
+
+        <div class="login-footer">
+          © 2026 SMP Persiapan Negeri Pulau Tiga
+        </div>
       </div>
     </div>
+
   </div>
+  <!-- ===== END LOGIN GATE ===== -->
 
   <!-- ===== LOGOUT BUTTON (tampil setelah login) ===== -->
   <button id="logoutBtn" onclick="doLogout()">
@@ -452,7 +794,8 @@
       <div class="page-header">
         <div class="page-header-bg"></div>
         <div class="container">
-          <div class="fade-up" style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:20px;">
+          <div class="fade-up"
+            style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:20px;">
             <div>
               <p class="section-label">Portal Administrasi Guru</p>
               <h1 style="font-size:clamp(1.8rem,4vw,2.6rem);font-weight:800;letter-spacing:-1px;margin-bottom:10px;">
@@ -616,12 +959,25 @@
           <div class="info-box">
             <h3><i class="fas fa-circle-info" style="color:var(--accent);"></i> Petunjuk Download</h3>
             <ul class="step-list">
-              <li><div class="step-num">1</div><div>Filter file berdasarkan jenis (PDF/Excel/Word) jika perlu.</div></li>
-              <li><div class="step-num">2</div><div>Pilih dokumen yang ingin diunduh.</div></li>
-              <li><div class="step-num">3</div><div>Klik tombol <strong>"Download"</strong> berwarna merah.</div></li>
-              <li><div class="step-num">4</div><div>File akan otomatis terunduh ke folder <em>Downloads</em>.</div></li>
+              <li>
+                <div class="step-num">1</div>
+                <div>Filter file berdasarkan jenis (PDF/Excel/Word) jika perlu.</div>
+              </li>
+              <li>
+                <div class="step-num">2</div>
+                <div>Pilih dokumen yang ingin diunduh.</div>
+              </li>
+              <li>
+                <div class="step-num">3</div>
+                <div>Klik tombol <strong>"Download"</strong> berwarna merah.</div>
+              </li>
+              <li>
+                <div class="step-num">4</div>
+                <div>File akan otomatis terunduh ke folder <em>Downloads</em>.</div>
+              </li>
             </ul>
-            <div style="margin-top:16px;padding:12px 16px;background:var(--bg3);border-radius:var(--radius-sm);font-size:0.82rem;color:var(--text2);">
+            <div
+              style="margin-top:16px;padding:12px 16px;background:var(--bg3);border-radius:var(--radius-sm);font-size:0.82rem;color:var(--text2);">
               <i class="fas fa-shield-alt" style="color:var(--accent);margin-right:6px;"></i>
               File PDF aktif. File Excel & Word akan segera tersedia.
             </div>
@@ -629,8 +985,11 @@
 
           <div class="info-box total-box">
             <div style="margin-bottom:8px;">
-              <i class="fas fa-folder-open" style="font-size:2rem;color:var(--accent);margin-bottom:12px;display:block;"></i>
-              <div style="font-size:0.82rem;font-weight:600;color:var(--text2);text-transform:uppercase;letter-spacing:1px;margin-bottom:4px;">Total Dokumen</div>
+              <i class="fas fa-folder-open"
+                style="font-size:2rem;color:var(--accent);margin-bottom:12px;display:block;"></i>
+              <div
+                style="font-size:0.82rem;font-weight:600;color:var(--text2);text-transform:uppercase;letter-spacing:1px;margin-bottom:4px;">
+                Total Dokumen</div>
             </div>
             <div class="total-num" id="totalDocs">7</div>
             <div style="font-size:0.85rem;color:var(--text2);margin-top:12px;">5 PDF Aktif + 2 Segera</div>
@@ -647,7 +1006,8 @@
               </div>
             </div>
             <div style="margin-top:20px;">
-              <a href="contact.html" class="btn btn-outline" style="width:100%;justify-content:center;font-size:0.85rem;padding:10px 16px;">
+              <a href="contact.html" class="btn btn-outline"
+                style="width:100%;justify-content:center;font-size:0.85rem;padding:10px 16px;">
                 <i class="fab fa-whatsapp" style="color:#25D366;"></i> Ada Pertanyaan?
               </a>
             </div>
@@ -670,7 +1030,8 @@
     <div class="modal-card">
       <div class="modal-icon"><i class="fas fa-exclamation-triangle"></i></div>
       <h3>File Belum Tersedia</h3>
-      <p>Maaf, file yang Anda cari belum tersedia saat ini. File sedang dalam proses persiapan dan akan segera diunggah.</p>
+      <p>Maaf, file yang Anda cari belum tersedia saat ini. File sedang dalam proses persiapan dan akan segera diunggah.
+      </p>
       <div class="modal-buttons">
         <a href="contact.html" class="modal-btn modal-btn-primary"><i class="fab fa-whatsapp"></i> Hubungi Pengelola</a>
         <button class="modal-btn modal-btn-secondary" id="closeModalBtn"><i class="fas fa-times"></i> Tutup</button>
@@ -681,153 +1042,136 @@
   <script src="js/main.js"></script>
 
   <script>
-  // ============================================================
-  // AUTH — Login Gate
-  // Kredensial Anda (simpan baik-baik, jangan bagikan):
-  //   Username : pulautiga_admin
-  //   Password : SMP@Nakai2026
-  // ============================================================
+    const _a = btoa('pulautiga_admin');
+    const _b = btoa('SMP@Nakai2026');
 
-  // Disimpan sebagai hash sederhana agar tidak terlalu obvious di source
-  const _a = btoa('pulautiga_admin');   // username di-encode base64
-  const _b = btoa('SMP@Nakai2026');     // password di-encode base64
+    const SESSION_KEY = 'doc_auth_v1';
+    const MAX_ATTEMPTS = 5;
+    const LOCKOUT_SECONDS = 30;
 
-  const SESSION_KEY = 'doc_auth_v1';
-  const MAX_ATTEMPTS = 5;
-  const LOCKOUT_SECONDS = 30;
+    let failedAttempts = 0;
+    let lockedUntil = 0;
 
-  let failedAttempts = 0;
-  let lockedUntil   = 0;
-
-  // Cek session yang masih aktif (bertahan selama tab terbuka)
-  function checkSession() {
-    return sessionStorage.getItem(SESSION_KEY) === '1';
-  }
-
-  function setSession() {
-    sessionStorage.setItem(SESSION_KEY, '1');
-  }
-
-  function clearSession() {
-    sessionStorage.removeItem(SESSION_KEY);
-  }
-
-  function showContent() {
-    document.getElementById('loginGate').classList.add('hidden');
-    document.getElementById('pageContent').classList.add('visible');
-    document.getElementById('logoutBtn').style.display = 'flex';
-  }
-
-  function showLoginGate() {
-    document.getElementById('loginGate').classList.remove('hidden');
-    document.getElementById('pageContent').classList.remove('visible');
-    document.getElementById('logoutBtn').style.display = 'none';
-  }
-
-  function doLogout() {
-    clearSession();
-    showLoginGate();
-    document.getElementById('loginUsername').value = '';
-    document.getElementById('loginPassword').value = '';
-    document.getElementById('loginError').classList.remove('show');
-  }
-
-  function updateAttemptsMsg() {
-    const el   = document.getElementById('loginAttempts');
-    const left = MAX_ATTEMPTS - failedAttempts;
-    if (failedAttempts > 0 && failedAttempts < MAX_ATTEMPTS) {
-      el.classList.add('show');
-      el.textContent = `Percobaan tersisa: ${left}`;
-    } else {
-      el.classList.remove('show');
+    function checkSession() {
+      return sessionStorage.getItem(SESSION_KEY) === '1';
     }
-  }
 
-  function startLockout() {
-    lockedUntil = Date.now() + LOCKOUT_SECONDS * 1000;
-    const btn      = document.getElementById('loginBtn');
-    const lockMsg  = document.getElementById('lockoutMsg');
-    const timerEl  = document.getElementById('lockoutTimer');
-    btn.disabled   = true;
-    lockMsg.classList.add('show');
+    function setSession() {
+      sessionStorage.setItem(SESSION_KEY, '1');
+    }
 
-    const interval = setInterval(() => {
-      const remaining = Math.ceil((lockedUntil - Date.now()) / 1000);
-      if (remaining <= 0) {
-        clearInterval(interval);
-        btn.disabled  = false;
-        lockMsg.classList.remove('show');
-        failedAttempts = 0;
-        updateAttemptsMsg();
+    function clearSession() {
+      sessionStorage.removeItem(SESSION_KEY);
+    }
+
+    function showContent() {
+      document.getElementById('loginGate').classList.add('hidden');
+      document.getElementById('pageContent').classList.add('visible');
+      document.getElementById('logoutBtn').style.display = 'flex';
+    }
+
+    function showLoginGate() {
+      document.getElementById('loginGate').classList.remove('hidden');
+      document.getElementById('pageContent').classList.remove('visible');
+      document.getElementById('logoutBtn').style.display = 'none';
+    }
+
+    function doLogout() {
+      clearSession();
+      showLoginGate();
+      document.getElementById('loginUsername').value = '';
+      document.getElementById('loginPassword').value = '';
+      document.getElementById('loginError').classList.remove('show');
+    }
+
+    function updateAttemptsMsg() {
+      const el = document.getElementById('loginAttempts');
+      const left = MAX_ATTEMPTS - failedAttempts;
+      if (failedAttempts > 0 && failedAttempts < MAX_ATTEMPTS) {
+        el.classList.add('show');
+        el.textContent = `Percobaan tersisa: ${left}`;
       } else {
-        timerEl.textContent = remaining;
+        el.classList.remove('show');
       }
-    }, 500);
-  }
+    }
 
-  function doLogin() {
-    // Cek lockout
-    if (Date.now() < lockedUntil) return;
+    function startLockout() {
+      lockedUntil = Date.now() + LOCKOUT_SECONDS * 1000;
+      const btn = document.getElementById('loginBtn');
+      const lockMsg = document.getElementById('lockoutMsg');
+      const timerEl = document.getElementById('lockoutTimer');
+      btn.disabled = true;
+      lockMsg.classList.add('show');
 
-    const uInput = document.getElementById('loginUsername').value.trim();
-    const pInput = document.getElementById('loginPassword').value;
-    const errEl  = document.getElementById('loginError');
-    const uField = document.getElementById('loginUsername');
-    const pField = document.getElementById('loginPassword');
+      const interval = setInterval(() => {
+        const remaining = Math.ceil((lockedUntil - Date.now()) / 1000);
+        if (remaining <= 0) {
+          clearInterval(interval);
+          btn.disabled = false;
+          lockMsg.classList.remove('show');
+          failedAttempts = 0;
+          updateAttemptsMsg();
+        } else {
+          timerEl.textContent = remaining;
+        }
+      }, 500);
+    }
 
-    // Validasi
-    if (btoa(uInput) === _a && btoa(pInput) === _b) {
-      // ✅ Login berhasil
-      failedAttempts = 0;
-      errEl.classList.remove('show');
-      setSession();
+    function doLogin() {
+      if (Date.now() < lockedUntil) return;
+
+      const uInput = document.getElementById('loginUsername').value.trim();
+      const pInput = document.getElementById('loginPassword').value;
+      const errEl = document.getElementById('loginError');
+      const uField = document.getElementById('loginUsername');
+      const pField = document.getElementById('loginPassword');
+
+      if (btoa(uInput) === _a && btoa(pInput) === _b) {
+        failedAttempts = 0;
+        errEl.classList.remove('show');
+        setSession();
+        showContent();
+      } else {
+        failedAttempts++;
+        errEl.classList.add('show');
+
+        uField.classList.remove('error'); pField.classList.remove('error');
+        void uField.offsetWidth;
+        uField.classList.add('error'); pField.classList.add('error');
+        setTimeout(() => { uField.classList.remove('error'); pField.classList.remove('error'); }, 400);
+
+        updateAttemptsMsg();
+
+        if (failedAttempts >= MAX_ATTEMPTS) {
+          startLockout();
+        }
+      }
+    }
+
+    document.getElementById('togglePw').addEventListener('click', () => {
+      const input = document.getElementById('loginPassword');
+      const icon = document.getElementById('eyeIcon');
+      const isHidden = input.type === 'password';
+      input.type = isHidden ? 'text' : 'password';
+      icon.className = isHidden ? 'fas fa-eye-slash' : 'fas fa-eye';
+    });
+
+    ['loginUsername', 'loginPassword'].forEach(id => {
+      document.getElementById(id).addEventListener('keydown', e => {
+        if (e.key === 'Enter') doLogin();
+      });
+    });
+
+    document.getElementById('loginBtn').addEventListener('click', doLogin);
+
+    if (checkSession()) {
       showContent();
     } else {
-      // ❌ Gagal
-      failedAttempts++;
-      errEl.classList.add('show');
-
-      // Shake effect
-      uField.classList.remove('error'); pField.classList.remove('error');
-      void uField.offsetWidth; // reflow
-      uField.classList.add('error'); pField.classList.add('error');
-      setTimeout(() => { uField.classList.remove('error'); pField.classList.remove('error'); }, 400);
-
-      updateAttemptsMsg();
-
-      if (failedAttempts >= MAX_ATTEMPTS) {
-        startLockout();
-      }
+      showLoginGate();
+      setTimeout(() => document.getElementById('loginUsername').focus(), 100);
     }
-  }
-
-  // ── Toggle show/hide password ──
-  document.getElementById('togglePw').addEventListener('click', () => {
-    const input   = document.getElementById('loginPassword');
-    const icon    = document.getElementById('eyeIcon');
-    const isHidden= input.type === 'password';
-    input.type    = isHidden ? 'text' : 'password';
-    icon.className= isHidden ? 'fas fa-eye-slash' : 'fas fa-eye';
-  });
-
-  // ── Enter key ──
-  ['loginUsername', 'loginPassword'].forEach(id => {
-    document.getElementById(id).addEventListener('keydown', e => {
-      if (e.key === 'Enter') doLogin();
-    });
-  });
-
-  document.getElementById('loginBtn').addEventListener('click', doLogin);
-
-  // ── Init: cek session ──
-  if (checkSession()) {
-    showContent();
-  } else {
-    showLoginGate();
-    // Auto-focus username field
-    setTimeout(() => document.getElementById('loginUsername').focus(), 100);
-  }
   </script>
 
 </body>
+
 </html>
