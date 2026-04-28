@@ -417,7 +417,7 @@
     <script>
       // ===== KONFIGURASI =====
       const APPS_SCRIPT_URL =
-        "https://script.google.com/macros/s/AKfycbwBAv3l73qBYqrDuHuKbKM2M-8lB-VMEFrnHwMFWCyh3M4GWFpPbIb87SOrxSJmPOKHSQ/exec";
+        "https://script.google.com/macros/s/AKfycbx5X3m01IOS11ELql_n80JMSLxEqTJtSgCcqALxAU9nTeSZoEuF_xcK8NkIIUbkHD6OWA/exec";
       const ADMIN_PASSWORD = "admin123";
       const IMGBB_API_KEY = "97d4e1c605c07bf4b9742dcb56e69a2e";
 
@@ -539,66 +539,107 @@
           return null;
         }
       }
-
-      // ==================== IMAGE UPLOAD HANDLERS ====================
-      const uploadArea = document.getElementById("uploadArea");
-      const imageFile = document.getElementById("imageFile");
-      const imagePreview = document.getElementById("imagePreview");
-      const previewImg = document.getElementById("previewImg");
-
-      if (uploadArea) {
-        uploadArea.addEventListener("click", () => imageFile.click());
-        uploadArea.addEventListener("dragover", (e) => {
-          e.preventDefault();
-          uploadArea.style.borderColor = "var(--c1)";
-        });
-        uploadArea.addEventListener("dragleave", () => {
-          uploadArea.style.borderColor = "var(--border)";
-        });
-        uploadArea.addEventListener("drop", async (e) => {
-          e.preventDefault();
-          uploadArea.style.borderColor = "var(--border)";
-          const file = e.dataTransfer.files[0];
-          if (file && file.type.startsWith("image/")) {
-            await handleImageUpload(file);
-          }
-        });
-      }
-
-      if (imageFile) {
-        imageFile.addEventListener("change", async (e) => {
-          if (e.target.files[0]) await handleImageUpload(e.target.files[0]);
-        });
-      }
-
-      async function handleImageUpload(file) {
-        showToast("Mengupload gambar...", "warning");
-
-        const reader = new FileReader();
-        reader.onload = (e) => {
-          previewImg.src = e.target.result;
-          imagePreview.style.display = "flex";
-          uploadArea.style.display = "none";
-        };
-        reader.readAsDataURL(file);
-
-        const imageUrl = await uploadToImgBB(file);
-        if (imageUrl) {
-          currentImageUrl = imageUrl;
-          showToast("Gambar berhasil diupload!", "success");
-        } else {
-          imagePreview.style.display = "none";
-          uploadArea.style.display = "block";
-          currentImageUrl = "";
+      if (action === 'uploadImage') {
+            const result = uploadImageToDrive(data.base64, data.fileName, data.mimeType);
+            return ContentService
+                .createTextOutput(JSON.stringify(result))
+                .setMimeType(ContentService.MimeType.JSON);
         }
-      }
 
-      function removeImage() {
-        imagePreview.style.display = "none";
-        uploadArea.style.display = "block";
-        currentImageUrl = "";
-        imageFile.value = "";
-      }
+      // ==================== IMAGE UPLOAD KE GOOGLE DRIVE ====================
+        const uploadArea = document.getElementById('uploadArea');
+        const imageFile = document.getElementById('imageFile');
+        const imagePreview = document.getElementById('imagePreview');
+        const previewImg = document.getElementById('previewImg');
+
+        if (uploadArea) {
+            uploadArea.addEventListener('click', () => imageFile.click());
+            uploadArea.addEventListener('dragover', (e) => {
+                e.preventDefault();
+                uploadArea.style.borderColor = 'var(--c1)';
+            });
+            uploadArea.addEventListener('dragleave', () => {
+                uploadArea.style.borderColor = 'var(--border)';
+            });
+            uploadArea.addEventListener('drop', async (e) => {
+                e.preventDefault();
+                uploadArea.style.borderColor = 'var(--border)';
+                const file = e.dataTransfer.files[0];
+                if (file && file.type.startsWith('image/')) {
+                    await handleImageUpload(file);
+                }
+            });
+        }
+
+        if (imageFile) {
+            imageFile.addEventListener('change', async (e) => {
+                if (e.target.files[0]) await handleImageUpload(e.target.files[0]);
+            });
+        }
+
+        async function handleImageUpload(file) {
+            // Cek ukuran file maksimal 2MB
+            if (file.size > 2 * 1024 * 1024) {
+                showToast('Ukuran gambar maksimal 2MB!', 'error');
+                return;
+            }
+
+            showToast('Mengupload gambar...', 'warning');
+
+            // Tampilkan preview lokal dulu
+            const reader = new FileReader();
+            reader.onload = (e) => {
+                previewImg.src = e.target.result;
+                imagePreview.style.display = 'flex';
+                uploadArea.style.display = 'none';
+            };
+            reader.readAsDataURL(file);
+
+            // Konversi ke Base64 (tanpa prefix)
+            const base64 = await fileToBase64(file);
+
+            try {
+                const result = await postToScript({
+                    action: 'uploadImage',
+                    base64: base64,
+                    fileName: file.name,
+                    mimeType: file.type
+                });
+
+                if (result.success) {
+                    currentImageUrl = result.url;
+                    showToast('Gambar berhasil diupload!', 'success');
+                } else {
+                    throw new Error(result.message || 'Upload gagal');
+                }
+            } catch (error) {
+                showToast('Gagal upload gambar: ' + error.message, 'error');
+                imagePreview.style.display = 'none';
+                uploadArea.style.display = 'block';
+                currentImageUrl = '';
+            }
+        }
+
+        // Konversi File ke Base64 string (tanpa prefix data:...)
+        function fileToBase64(file) {
+            return new Promise((resolve, reject) => {
+                const reader = new FileReader();
+                reader.onload = (e) => {
+                    // Hapus prefix "data:image/jpeg;base64," 
+                    const base64 = e.target.result.split(',')[1];
+                    resolve(base64);
+                };
+                reader.onerror = reject;
+                reader.readAsDataURL(file);
+            });
+        }
+
+        function removeImage() {
+            imagePreview.style.display = 'none';
+            uploadArea.style.display = 'block';
+            currentImageUrl = '';
+            imageFile.value = '';
+        }
 
       // ==================== HELPER: POST KE APPS SCRIPT ====================
       // PENTING: Tidak pakai Content-Type: application/json agar tidak trigger CORS preflight
