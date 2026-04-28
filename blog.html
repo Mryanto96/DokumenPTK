@@ -5,6 +5,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
     <title>Blog | SMP Persiapan Negeri Pulau Tiga</title>
+    <meta name="description"
+        content="Blog dan artikel tentang kegiatan belajar mengajar, tips pendidikan, dan pengalaman mengajar di daerah 3T.">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap"
@@ -25,6 +27,7 @@
             border-radius: 20px;
             overflow: hidden;
             transition: all 0.3s ease;
+            cursor: pointer;
         }
 
         .blog-card:hover {
@@ -87,9 +90,10 @@
             font-weight: 700;
             color: var(--text);
             margin-bottom: 8px;
+            line-height: 1.4;
+            overflow: hidden;
             display: -webkit-box;
             -webkit-box-orient: vertical;
-            overflow: hidden;
         }
 
         .blog-meta {
@@ -98,6 +102,13 @@
             margin-bottom: 12px;
             font-size: 0.7rem;
             color: var(--text3);
+            flex-wrap: wrap;
+        }
+
+        .blog-meta span {
+            display: flex;
+            align-items: center;
+            gap: 5px;
         }
 
         .blog-excerpt {
@@ -105,9 +116,9 @@
             color: var(--text2);
             line-height: 1.6;
             margin-bottom: 16px;
+            overflow: hidden;
             display: -webkit-box;
             -webkit-box-orient: vertical;
-            overflow: hidden;
         }
 
         .read-more {
@@ -115,6 +126,9 @@
             font-weight: 600;
             font-size: 0.8rem;
             text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
         }
 
         .read-more:hover {
@@ -134,6 +148,31 @@
             margin-bottom: 16px;
         }
 
+        .empty-blog p {
+            color: var(--text2);
+        }
+
+        .loading {
+            text-align: center;
+            padding: 60px;
+        }
+
+        .loading-spinner {
+            width: 50px;
+            height: 50px;
+            border: 3px solid var(--border);
+            border-top-color: var(--c1);
+            border-radius: 50%;
+            animation: spin 0.8s linear infinite;
+            margin: 0 auto 20px;
+        }
+
+        @keyframes spin {
+            to {
+                transform: rotate(360deg);
+            }
+        }
+
         @media (max-width: 768px) {
             .blog-grid {
                 grid-template-columns: 1fr;
@@ -144,6 +183,7 @@
 
 <body>
 
+    <!-- NAVBAR -->
     <nav class="navbar">
         <div class="container">
             <div class="nav-inner">
@@ -168,7 +208,9 @@
                     <button class="dark-toggle" aria-label="Toggle dark mode">
                         <div class="dark-toggle-ball">☀️</div>
                     </button>
-                    <button class="hamburger" aria-label="Menu"><span></span><span></span><span></span></button>
+                    <button class="hamburger" aria-label="Menu">
+                        <span></span><span></span><span></span>
+                    </button>
                 </div>
             </div>
         </div>
@@ -188,44 +230,44 @@
         <div class="page-header">
             <div class="page-header-bg"></div>
             <div class="container">
-                <div class="fade-up" style="text-align: center;">
+                <div class="fade-up" style="text-align: center; max-width: 700px; margin: 0 auto;">
                     <p class="section-label">Blog & Artikel</p>
-                    <h1 style="font-size:clamp(1.8rem,4vw,2.6rem);font-weight:800;">Catatan <span
-                            class="gradient-text">Pengabdian</span></h1>
-                    <p style="color:var(--text2);">Berbagi pengalaman, tips mengajar, dan cerita inspiratif dari
-                        kegiatan belajar mengajar di daerah 3T.</p>
+                    <h1
+                        style="font-size:clamp(1.8rem,4vw,2.6rem);font-weight:800;letter-spacing:-1px;margin-bottom:16px;">
+                        Catatan <span class="gradient-text">Pengabdian</span>
+                    </h1>
+                    <p style="color:var(--text2);font-size:0.95rem;line-height:1.7;">
+                        Berbagi pengalaman, tips mengajar, dan cerita inspiratif dari kegiatan belajar mengajar di
+                        daerah 3T.
+                    </p>
                 </div>
             </div>
         </div>
 
         <div class="container" style="padding-bottom: 80px;">
-            <div class="blog-grid" id="blogGrid"></div>
-            <div id="emptyBlog" class="empty-blog" style="display: none;">
-                <i class="fas fa-newspaper"></i>
-                <p>Belum ada artikel.</p>
-                <p style="font-size: 0.85rem;">Silakan cek kembali nanti.</p>
+            <!-- BLOG GRID -->
+            <div class="blog-grid" id="blogGrid">
+                <div class="loading">
+                    <div class="loading-spinner"></div>
+                    <p>Memuat artikel...</p>
+                </div>
             </div>
         </div>
     </div>
 
     <footer>
-        <div class="container">© 2026 SMP Persiapan Negeri Pulau Tiga. All rights are reserved</div>
+        <div class="container">
+            © 2026 SMP Persiapan Negeri Pulau Tiga. All rights are reserved
+        </div>
     </footer>
 
     <script src="js/main.js"></script>
     <script>
-        const STORAGE_KEY = 'blog_articles';
+        // ===== KONFIGURASI =====
+        // GANTI DENGAN WEB APP URL ANDA!
+        const APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbwBAv3l73qBYqrDuHuKbKM2M-8lB-VMEFrnHwMFWCyh3M4GWFpPbIb87SOrxSJmPOKHSQ/exec';
 
-        function loadArticles() {
-            const stored = localStorage.getItem(STORAGE_KEY);
-            return stored ? JSON.parse(stored) : [];
-        }
-
-        function formatDate(dateString) {
-            const date = new Date(dateString);
-            return date.toLocaleDateString('id-ID', { day: 'numeric', month: 'long', year: 'numeric' });
-        }
-
+        // ===== FUNGSI =====
         function stripHtml(html) {
             const temp = document.createElement('div');
             temp.innerHTML = html;
@@ -239,48 +281,106 @@
             return div.innerHTML;
         }
 
-        function renderBlog() {
-            const articles = loadArticles();
-            const grid = document.getElementById('blogGrid');
-            const emptyState = document.getElementById('emptyBlog');
+        function formatDate(dateString) {
+            if (!dateString) return '';
+            const date = new Date(dateString);
+            return date.toLocaleDateString('id-ID', { day: 'numeric', month: 'long', year: 'numeric' });
+        }
 
+        function getCategoryLabel(kategori) {
+            const labels = {
+                tips: 'Tips Mengajar',
+                experience: 'Pengalaman',
+                news: 'Berita',
+                activity: 'Kegiatan'
+            };
+            return labels[kategori] || 'Artikel';
+        }
+
+        function getCategoryColor(kategori) {
+            const colors = {
+                tips: '#10b981',
+                experience: '#3b82f6',
+                news: '#f59e0b',
+                activity: '#8b5cf6'
+            };
+            return colors[kategori] || '#10b981';
+        }
+
+        // ===== AMBIL ARTIKEL DARI APPS SCRIPT =====
+        async function loadArticles() {
+            try {
+                const response = await fetch(`${APPS_SCRIPT_URL}?action=getAllArticles&t=${Date.now()}`);
+                const result = await response.json();
+
+                if (result.success && result.data) {
+                    return result.data;
+                }
+                return [];
+            } catch (error) {
+                console.error('Error loading articles:', error);
+                return [];
+            }
+        }
+
+        // ===== RENDER BLOG =====
+        async function renderBlog() {
+            const grid = document.getElementById('blogGrid');
             if (!grid) return;
+
+            const articles = await loadArticles();
+
             if (articles.length === 0) {
-                grid.innerHTML = '';
-                emptyState.style.display = 'block';
+                grid.innerHTML = `
+                    <div class="empty-blog">
+                        <i class="fas fa-newspaper"></i>
+                        <p>Belum ada artikel.</p>
+                        <p style="font-size: 0.85rem;">Silakan cek kembali nanti.</p>
+                    </div>
+                `;
                 return;
             }
-            emptyState.style.display = 'none';
 
-            const categoryLabels = { tips: 'Tips Mengajar', experience: 'Pengalaman', news: 'Berita', activity: 'Kegiatan' };
-            const categoryColors = { tips: '#10b981', experience: '#3b82f6', news: '#f59e0b', activity: '#8b5cf6' };
-            const sortedArticles = [...articles].sort((a, b) => new Date(b.date) - new Date(a.date));
+            // Urutkan dari terbaru ke terlama
+            const sortedArticles = [...articles].sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp));
 
             grid.innerHTML = sortedArticles.map(article => {
-                const plainText = stripHtml(article.content);
+                const plainText = stripHtml(article.isi);
                 const excerpt = plainText.substring(0, 120) + (plainText.length > 120 ? '...' : '');
-                const imageUrl = article.image || `https://placehold.co/600x400/var(--bg3)/var(--text2)?text=${encodeURIComponent(article.title)}`;
+                const imageUrl = article.gambar || `https://placehold.co/600x400/var(--bg3)/var(--text2)?text=${encodeURIComponent(article.judul)}`;
+                const categoryLabel = getCategoryLabel(article.kategori);
+                const categoryColor = getCategoryColor(article.kategori);
+
                 return `
-                    <div class="blog-card">
+                    <div class="blog-card" onclick="window.location.href='post.html?id=${article.id}'">
                         <div class="blog-image">
-                            <img src="${imageUrl}" alt="${article.title}" onerror="this.src='https://placehold.co/600x400/var(--bg3)/var(--text2)?text=${encodeURIComponent(article.title)}'">
-                            <span class="blog-category ${article.category}" style="background: ${categoryColors[article.category]}">${categoryLabels[article.category]}</span>
+                            <img src="${imageUrl}" 
+                                 alt="${escapeHtml(article.judul)}" 
+                                 onerror="this.src='https://placehold.co/600x400/var(--bg3)/var(--text2)?text=${encodeURIComponent(article.judul)}'">
+                            <span class="blog-category ${article.kategori}" style="background: ${categoryColor}">
+                                ${categoryLabel}
+                            </span>
                         </div>
                         <div class="blog-content">
-                            <h3 class="blog-title">${escapeHtml(article.title)}</h3>
+                            <h3 class="blog-title">${escapeHtml(article.judul)}</h3>
                             <div class="blog-meta">
-                                <span><i class="fas fa-calendar-alt"></i> ${formatDate(article.date)}</span>
+                                <span><i class="fas fa-calendar-alt"></i> ${formatDate(article.timestamp)}</span>
                                 <span><i class="fas fa-eye"></i> ${article.views || 0} views</span>
                             </div>
                             <p class="blog-excerpt">${escapeHtml(excerpt)}</p>
-                            <a href="post.html?id=${article.id}" class="read-more">Baca selengkapnya →</a>
+                            <a href="post.html?id=${article.id}" class="read-more" onclick="event.stopPropagation()">
+                                Baca selengkapnya <i class="fas fa-arrow-right"></i>
+                            </a>
                         </div>
                     </div>
                 `;
             }).join('');
         }
 
-        document.addEventListener('DOMContentLoaded', renderBlog);
+        // ===== INIT =====
+        document.addEventListener('DOMContentLoaded', () => {
+            renderBlog();
+        });
     </script>
 </body>
 

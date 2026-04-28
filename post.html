@@ -5,6 +5,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
     <title>Artikel | SMP Persiapan Negeri Pulau Tiga</title>
+    <meta name="description"
+        content="Baca artikel lengkap tentang kegiatan belajar mengajar, tips pendidikan, dan pengalaman mengajar di daerah 3T.">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap"
@@ -66,6 +68,12 @@
             flex-wrap: wrap;
         }
 
+        .article-meta span {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
         .article-image {
             width: 100%;
             max-height: 400px;
@@ -88,6 +96,18 @@
             margin-bottom: 16px;
         }
 
+        .article-content h1 {
+            font-size: 1.8rem;
+        }
+
+        .article-content h2 {
+            font-size: 1.5rem;
+        }
+
+        .article-content h3 {
+            font-size: 1.2rem;
+        }
+
         .article-content p {
             margin-bottom: 16px;
         }
@@ -98,14 +118,56 @@
             padding-left: 24px;
         }
 
+        .article-content li {
+            margin-bottom: 8px;
+        }
+
         .article-content blockquote {
             border-left: 4px solid var(--c1);
             padding-left: 20px;
             margin: 20px 0;
             font-style: italic;
+            color: var(--text);
+        }
+
+        .article-content code {
+            background: var(--bg2);
+            padding: 2px 6px;
+            border-radius: 6px;
+            font-family: monospace;
+        }
+
+        .article-content pre {
+            background: var(--bg2);
+            padding: 16px;
+            border-radius: 12px;
+            overflow-x: auto;
+        }
+
+        .article-content table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+        }
+
+        .article-content th,
+        .article-content td {
+            border: 1px solid var(--border);
+            padding: 8px 12px;
+            text-align: left;
+        }
+
+        .article-content th {
+            background: var(--bg3);
         }
 
         .article-content img {
+            max-width: 100%;
+            border-radius: 12px;
+            margin: 20px 0;
+        }
+
+        .article-content iframe {
             max-width: 100%;
             border-radius: 12px;
             margin: 20px 0;
@@ -129,9 +191,79 @@
             color: white;
         }
 
+        .share-buttons {
+            display: flex;
+            justify-content: center;
+            gap: 16px;
+            margin-top: 40px;
+            padding-top: 20px;
+            border-top: 1px solid var(--border);
+        }
+
+        .share-btn {
+            padding: 8px 16px;
+            border-radius: 99px;
+            background: var(--bg2);
+            color: var(--text);
+            text-decoration: none;
+            font-size: 0.8rem;
+            transition: all 0.3s;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .share-btn:hover {
+            transform: translateY(-2px);
+        }
+
+        .share-btn.whatsapp {
+            background: #25D366;
+            color: white;
+        }
+
+        .share-btn.facebook {
+            background: #1877F2;
+            color: white;
+        }
+
+        .share-btn.twitter {
+            background: #1DA1F2;
+            color: white;
+        }
+
         .loading {
             text-align: center;
             padding: 60px;
+        }
+
+        .loading-spinner {
+            width: 50px;
+            height: 50px;
+            border: 3px solid var(--border);
+            border-top-color: var(--c1);
+            border-radius: 50%;
+            animation: spin 0.8s linear infinite;
+            margin: 0 auto 20px;
+        }
+
+        .error-message {
+            text-align: center;
+            padding: 60px 20px;
+            background: var(--bg2);
+            border-radius: 24px;
+        }
+
+        .error-message i {
+            font-size: 3rem;
+            color: #ef4444;
+            margin-bottom: 16px;
+        }
+
+        @keyframes spin {
+            to {
+                transform: rotate(360deg);
+            }
         }
 
         @media (max-width: 768px) {
@@ -144,12 +276,17 @@
                 align-items: center;
                 gap: 8px;
             }
+
+            .share-buttons {
+                flex-wrap: wrap;
+            }
         }
     </style>
 </head>
 
 <body>
 
+    <!-- NAVBAR -->
     <nav class="navbar">
         <div class="container">
             <div class="nav-inner">
@@ -174,7 +311,9 @@
                     <button class="dark-toggle" aria-label="Toggle dark mode">
                         <div class="dark-toggle-ball">☀️</div>
                     </button>
-                    <button class="hamburger" aria-label="Menu"><span></span><span></span><span></span></button>
+                    <button class="hamburger" aria-label="Menu">
+                        <span></span><span></span><span></span>
+                    </button>
                 </div>
             </div>
         </div>
@@ -193,9 +332,12 @@
     <div class="page-content">
         <div class="container">
             <div class="article-container">
-                <!-- <a href="blog.html" class="back-button"><i class="fas fa-arrow-left"></i> Kembali ke Blog</a> -->
+                <a href="blog.html" class="back-button">
+                    <i class="fas fa-arrow-left"></i> Kembali ke Blog
+                </a>
                 <div id="articleContent">
-                    <div class="loading"><i class="fas fa-spinner fa-spin" style="font-size: 2rem;"></i>
+                    <div class="loading">
+                        <div class="loading-spinner"></div>
                         <p>Memuat artikel...</p>
                     </div>
                 </div>
@@ -204,35 +346,21 @@
     </div>
 
     <footer>
-        <div class="container">© 2026 SMP Persiapan Negeri Pulau Tiga. All rights are reserved</div>
+        <div class="container">
+            © 2026 SMP Persiapan Negeri Pulau Tiga. All rights are reserved
+        </div>
     </footer>
 
     <script src="js/main.js"></script>
     <script>
-        const STORAGE_KEY = 'blog_articles';
+        // ===== KONFIGURASI =====
+        // GANTI DENGAN WEB APP URL ANDA!
+        const APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbwBAv3l73qBYqrDuHuKbKM2M-8lB-VMEFrnHwMFWCyh3M4GWFpPbIb87SOrxSJmPOKHSQ/exec';
 
+        // ===== FUNGSI =====
         function getArticleId() {
             const urlParams = new URLSearchParams(window.location.search);
             return urlParams.get('id');
-        }
-
-        function loadArticles() {
-            const stored = localStorage.getItem(STORAGE_KEY);
-            return stored ? JSON.parse(stored) : [];
-        }
-
-        function formatDate(dateString) {
-            const date = new Date(dateString);
-            return date.toLocaleDateString('id-ID', { day: 'numeric', month: 'long', year: 'numeric' });
-        }
-
-        function updateViews(article) {
-            const articles = loadArticles();
-            const index = articles.findIndex(a => a.id === article.id);
-            if (index !== -1) {
-                articles[index].views = (articles[index].views || 0) + 1;
-                localStorage.setItem(STORAGE_KEY, JSON.stringify(articles));
-            }
         }
 
         function escapeHtml(text) {
@@ -242,45 +370,146 @@
             return div.innerHTML;
         }
 
-        function renderArticle() {
+        function formatDate(dateString) {
+            if (!dateString) return '';
+            const date = new Date(dateString);
+            return date.toLocaleDateString('id-ID', { day: 'numeric', month: 'long', year: 'numeric' });
+        }
+
+        function getCategoryLabel(kategori) {
+            const labels = {
+                tips: 'Tips Mengajar',
+                experience: 'Pengalaman Mengajar',
+                news: 'Berita Sekolah',
+                activity: 'Kegiatan'
+            };
+            return labels[kategori] || 'Artikel';
+        }
+
+        function getCategoryColor(kategori) {
+            const colors = {
+                tips: '#10b981',
+                experience: '#3b82f6',
+                news: '#f59e0b',
+                activity: '#8b5cf6'
+            };
+            return colors[kategori] || '#10b981';
+        }
+
+        // ===== UPDATE VIEWS (tambah 1) =====
+        async function updateViews(id) {
+            try {
+                await fetch(APPS_SCRIPT_URL, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        action: 'updateViews',
+                        id: parseInt(id)
+                    })
+                });
+            } catch (error) {
+                console.error('Error updating views:', error);
+            }
+        }
+
+        // ===== AMBIL ARTIKEL DARI APPS SCRIPT =====
+        async function loadArticle(id) {
+            try {
+                const response = await fetch(`${APPS_SCRIPT_URL}?action=getArticleById&id=${id}&t=${Date.now()}`);
+                const result = await response.json();
+
+                if (result.success && result.data) {
+                    return result.data;
+                }
+                return null;
+            } catch (error) {
+                console.error('Error loading article:', error);
+                return null;
+            }
+        }
+
+        // ===== RENDER ARTIKEL =====
+        async function renderArticle() {
+            const container = document.getElementById('articleContent');
+            if (!container) return;
+
             const id = getArticleId();
+
             if (!id) {
-                document.getElementById('articleContent').innerHTML = '<div class="loading"><p>Artikel tidak ditemukan.</p></div>';
+                container.innerHTML = `
+                    <div class="error-message">
+                        <i class="fas fa-exclamation-triangle"></i>
+                        <h3>Artikel Tidak Ditemukan</h3>
+                        <p>ID artikel tidak valid.</p>
+                        <a href="blog.html" class="back-button" style="margin-top: 20px;">← Kembali ke Blog</a>
+                    </div>
+                `;
                 return;
             }
 
-            const articles = loadArticles();
-            const article = articles.find(a => a.id == id);
+            const article = await loadArticle(id);
 
             if (!article) {
-                document.getElementById('articleContent').innerHTML = '<div class="loading"><p>Artikel tidak ditemukan.</p></div>';
+                container.innerHTML = `
+                    <div class="error-message">
+                        <i class="fas fa-search"></i>
+                        <h3>Artikel Tidak Ditemukan</h3>
+                        <p>Artikel yang Anda cari tidak tersedia atau telah dihapus.</p>
+                        <a href="blog.html" class="back-button" style="margin-top: 20px;">← Kembali ke Blog</a>
+                    </div>
+                `;
                 return;
             }
 
-            updateViews(article);
+            // Update views setelah artikel berhasil dimuat
+            await updateViews(id);
 
-            const categoryLabels = { tips: 'Tips Mengajar', experience: 'Pengalaman Mengajar', news: 'Berita Sekolah', activity: 'Kegiatan' };
+            const categoryLabel = getCategoryLabel(article.kategori);
+            const categoryColor = getCategoryColor(article.kategori);
+
+            // Tampilkan artikel dengan views yang sudah diupdate (+1)
+            const currentViews = (article.views || 0) + 1;
 
             const html = `
                 <div class="article-header">
-                    <span class="article-category ${article.category}">${categoryLabels[article.category]}</span>
-                    <h1 class="article-title">${escapeHtml(article.title)}</h1>
+                    <span class="article-category ${article.kategori}" style="background: ${categoryColor}">
+                        ${categoryLabel}
+                    </span>
+                    <h1 class="article-title">${escapeHtml(article.judul)}</h1>
                     <div class="article-meta">
-                        <span><i class="fas fa-calendar-alt"></i> ${formatDate(article.date)}</span>
-                        <span><i class="fas fa-eye"></i> ${(article.views || 0) + 1} views</span>
+                        <span><i class="fas fa-calendar-alt"></i> ${formatDate(article.timestamp)}</span>
+                        <span><i class="fas fa-eye"></i> ${currentViews} views</span>
                     </div>
                 </div>
-                ${article.image ? `<img src="${article.image}" alt="${escapeHtml(article.title)}" class="article-image" onerror="this.style.display='none'">` : ''}
-                <div class="article-content">${article.content}</div>
+                ${article.gambar ? `<img src="${article.gambar}" alt="${escapeHtml(article.judul)}" class="article-image" onerror="this.style.display='none'">` : ''}
+                <div class="article-content">
+                    ${article.isi}
+                </div>
+                <div class="share-buttons">
+                    <a href="https://wa.me/?text=${encodeURIComponent('Baca artikel: ' + article.judul + ' - ' + window.location.href)}" target="_blank" class="share-btn whatsapp">
+                        <i class="fab fa-whatsapp"></i> WhatsApp
+                    </a>
+                    <a href="https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(window.location.href)}" target="_blank" class="share-btn facebook">
+                        <i class="fab fa-facebook-f"></i> Facebook
+                    </a>
+                    <a href="https://twitter.com/intent/tweet?text=${encodeURIComponent('Baca artikel: ' + article.judul)}&url=${encodeURIComponent(window.location.href)}" target="_blank" class="share-btn twitter">
+                        <i class="fab fa-twitter"></i> Twitter
+                    </a>
+                </div>
                 <div style="margin-top: 40px; text-align: center;">
-                    <a href="blog.html" class="back-button" style="background: var(--c1); color: white;"><i class="fas fa-arrow-left"></i> Kembali ke Blog</a>
+                    <a href="blog.html" class="back-button" style="background: var(--c1); color: white;">
+                        <i class="fas fa-arrow-left"></i> Kembali ke Blog
+                    </a>
                 </div>
             `;
 
-            document.getElementById('articleContent').innerHTML = html;
+            container.innerHTML = html;
         }
 
-        document.addEventListener('DOMContentLoaded', renderArticle);
+        // ===== INIT =====
+        document.addEventListener('DOMContentLoaded', () => {
+            renderArticle();
+        });
     </script>
 </body>
 
