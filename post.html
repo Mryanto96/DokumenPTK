@@ -76,9 +76,8 @@
 
         .article-image {
             width: 100%;
-            max-height: 400px;
+            max-height: 420px;
             object-fit: cover;
-            border-radius: 20px;
             margin-bottom: 32px;
         }
 
@@ -177,7 +176,6 @@
             display: inline-flex;
             align-items: center;
             gap: 8px;
-            margin-bottom: 20px;
             padding: 8px 20px;
             border-radius: 99px;
             background: var(--bg3);
@@ -232,6 +230,113 @@
             color: white;
         }
 
+        /* ===== ARTIKEL TERKAIT ===== */
+        .related-section {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 0 20px 60px;
+        }
+
+        .related-title {
+            font-size: 1.2rem;
+            font-weight: 700;
+            color: var(--text);
+            margin-bottom: 24px;
+            padding-top: 40px;
+            border-top: 2px solid var(--border);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .related-title i {
+            color: var(--c1);
+        }
+
+        .related-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+            gap: 20px;
+            margin-bottom: 40px;
+        }
+
+        .related-card {
+            background: var(--card-bg);
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            overflow: hidden;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            display: block;
+        }
+
+        /* .related-card:hover {
+            transform: translateY(-6px);
+            box-shadow: var(--shadow-lg);
+            border-color: var(--c1);
+        } */
+
+        .related-image {
+            height: 140px;
+            overflow: hidden;
+            background: var(--bg3);
+            position: relative;
+        }
+
+        .related-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.4s ease;
+        }
+
+        .related-card:hover .related-image img {
+            transform: scale(1.05);
+        }
+
+        .related-cat-badge {
+            position: absolute;
+            top: 10px;
+            left: 10px;
+            padding: 3px 10px;
+            border-radius: 99px;
+            font-size: 0.65rem;
+            font-weight: 600;
+            color: white;
+        }
+
+        .related-body {
+            padding: 14px;
+        }
+
+        .related-body h4 {
+            font-size: 0.9rem;
+            font-weight: 700;
+            color: var(--text);
+            line-height: 1.4;
+            margin-bottom: 8px;
+            overflow: hidden;
+            display: -webkit-box;
+            /* -webkit-line-clamp: 2; */
+            -webkit-box-orient: vertical;
+        }
+
+        .related-body p {
+            font-size: 0.75rem;
+            color: var(--text3);
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .article-bottom {
+            display: flex;
+            justify-content: center;
+            padding-top: 8px;
+        }
+
+        /* ===== LOADING & ERROR ===== */
         .loading {
             text-align: center;
             padding: 60px;
@@ -258,6 +363,7 @@
             font-size: 3rem;
             color: #ef4444;
             margin-bottom: 16px;
+            display: block;
         }
 
         @keyframes spin {
@@ -279,6 +385,10 @@
 
             .share-buttons {
                 flex-wrap: wrap;
+            }
+
+            .related-grid {
+                grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
             }
         }
     </style>
@@ -328,12 +438,14 @@
         <a href="about.html">About Me</a>
         <a href="contact.html">Contact Me</a>
     </div>
-    <!-- <a href="blog.html" class="back-button" style="margin-top: 20px;">← Kembali ke Blog</a> -->
-<br><br>
+
+    <br><br>
+
     <div class="page-content">
         <div class="container">
+
+            <!-- KONTEN ARTIKEL -->
             <div class="article-container">
-                <!-- disini -->
                 <div id="articleContent">
                     <div class="loading">
                         <div class="loading-spinner"></div>
@@ -341,22 +453,35 @@
                     </div>
                 </div>
             </div>
+
+            <!-- ARTIKEL TERKAIT + TOMBOL KEMBALI -->
+            <div class="related-section" id="relatedSection" style="display:none;">
+                <h3 class="related-title">
+                    <i class="fas fa-book-open"></i> Artikel Lainnya
+                </h3>
+                <div class="related-grid" id="relatedGrid"></div>
+                <div class="article-bottom">
+                    <a href="blog.html" class="back-button" style="background: var(--c1); color: white;">
+                        <i class="fas fa-arrow-left"></i> Kembali ke Blog
+                    </a>
+                </div>
+            </div>
+
         </div>
     </div>
 
-    <footer>
+    <!-- <footer>
         <div class="container">
             © 2026 SMP Persiapan Negeri Pulau Tiga. All rights are reserved
         </div>
-    </footer>
+    </footer> -->
 
     <script src="js/main.js"></script>
     <script>
         // ===== KONFIGURASI =====
-        // GANTI DENGAN WEB APP URL ANDA!
-        const APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbx5X3m01IOS11ELql_n80JMSLxEqTJtSgCcqALxAU9nTeSZoEuF_xcK8NkIIUbkHD6OWA/exec';
+        const APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbwKklVbd31j2FospmGAJoXkGGZyaASx8MQ3bHzK0GauTwNbEPhc0cIm8lVnHxt32Z-__Q/exec';
 
-        // ===== FUNGSI =====
+        // ===== HELPER =====
         function getArticleId() {
             const urlParams = new URLSearchParams(window.location.search);
             return urlParams.get('id');
@@ -395,12 +520,11 @@
             return colors[kategori] || '#10b981';
         }
 
-        // ===== UPDATE VIEWS (tambah 1) =====
+        // ===== UPDATE VIEWS =====
         async function updateViews(id) {
             try {
                 await fetch(APPS_SCRIPT_URL, {
                     method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({
                         action: 'updateViews',
                         id: parseInt(id)
@@ -411,15 +535,12 @@
             }
         }
 
-        // ===== AMBIL ARTIKEL DARI APPS SCRIPT =====
+        // ===== AMBIL SATU ARTIKEL =====
         async function loadArticle(id) {
             try {
                 const response = await fetch(`${APPS_SCRIPT_URL}?action=getArticleById&id=${id}&t=${Date.now()}`);
                 const result = await response.json();
-
-                if (result.success && result.data) {
-                    return result.data;
-                }
+                if (result.success && result.data) return result.data;
                 return null;
             } catch (error) {
                 console.error('Error loading article:', error);
@@ -427,7 +548,67 @@
             }
         }
 
-        // ===== RENDER ARTIKEL =====
+        // ===== AMBIL SEMUA ARTIKEL =====
+        async function loadAllArticles() {
+            try {
+                const response = await fetch(`${APPS_SCRIPT_URL}?action=getAllArticles&t=${Date.now()}`);
+                const result = await response.json();
+                if (result.success && result.data) return result.data;
+                return [];
+            } catch (error) {
+                console.error('Error loading all articles:', error);
+                return [];
+            }
+        }
+
+        // ===== RENDER ARTIKEL TERKAIT =====
+        async function renderRelatedArticles(currentId, currentKategori) {
+            const section = document.getElementById('relatedSection');
+            const grid = document.getElementById('relatedGrid');
+            if (!section || !grid) return;
+
+            const allArticles = await loadAllArticles();
+
+            // Buang artikel yang sedang dibaca
+            const others = allArticles.filter(a => a.id != currentId);
+
+            // Selalu tampilkan tombol kembali meski tidak ada artikel lain
+            section.style.display = 'block';
+
+            if (others.length === 0) {
+                grid.style.display = 'none';
+                document.querySelector('.related-title').style.display = 'none';
+                return;
+            }
+
+            // Prioritas: kategori sama dulu, lalu kategori lain, maksimal 3
+            const sameCategory = others.filter(a => a.kategori === currentKategori);
+            const diffCategory = others.filter(a => a.kategori !== currentKategori);
+            const related = [...sameCategory, ...diffCategory].slice(0, 3);
+
+            grid.innerHTML = related.map(article => {
+                const label = getCategoryLabel(article.kategori);
+                const color = getCategoryColor(article.kategori);
+
+                return `
+                    <a href="post.html?id=${article.id}" class="related-card">
+                        <div class="related-image">
+                            ${article.gambar
+                        ? `<img src="${article.gambar}" alt="${escapeHtml(article.judul)}" onerror="this.style.display='none'">`
+                        : ''
+                    }
+                            <span class="related-cat-badge" style="background: ${color}">${label}</span>
+                        </div>
+                        <div class="related-body">
+                            <h4>${escapeHtml(article.judul)}</h4>
+                            <p><i class="fas fa-calendar-alt"></i> ${formatDate(article.timestamp)}</p>
+                        </div>
+                    </a>
+                `;
+            }).join('');
+        }
+
+        // ===== RENDER ARTIKEL UTAMA =====
         async function renderArticle() {
             const container = document.getElementById('articleContent');
             if (!container) return;
@@ -460,16 +641,19 @@
                 return;
             }
 
-            // Update views setelah artikel berhasil dimuat
-            await updateViews(id);
+            // Update views hanya jika belum pernah dibuka dari browser ini
+            const storageKey = `viewed_${id}`;
+            const alreadyViewed = localStorage.getItem(storageKey);
+            if (!alreadyViewed) {
+                await updateViews(id);
+                localStorage.setItem(storageKey, 'true');
+            }
+            const currentViews = alreadyViewed ? (article.views || 0) : (article.views || 0) + 1;
 
             const categoryLabel = getCategoryLabel(article.kategori);
             const categoryColor = getCategoryColor(article.kategori);
 
-            // Tampilkan artikel dengan views yang sudah diupdate (+1)
-            const currentViews = (article.views || 0) + 1;
-
-            const html = `
+            container.innerHTML = `
                 <div class="article-header">
                     <span class="article-category ${article.kategori}" style="background: ${categoryColor}">
                         ${categoryLabel}
@@ -485,24 +669,26 @@
                     ${article.isi}
                 </div>
                 <div class="share-buttons">
-                    <a href="https://wa.me/?text=${encodeURIComponent('Baca artikel: ' + article.judul + ' - ' + window.location.href)}" target="_blank" class="share-btn whatsapp">
+                    <a href="https://wa.me/?text=${encodeURIComponent('Baca artikel: ' + article.judul + ' - ' + window.location.href)}"
+                       target="_blank" class="share-btn whatsapp">
                         <i class="fab fa-whatsapp"></i> WhatsApp
                     </a>
-                    <a href="https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(window.location.href)}" target="_blank" class="share-btn facebook">
+                    <a href="https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(window.location.href)}"
+                       target="_blank" class="share-btn facebook">
                         <i class="fab fa-facebook-f"></i> Facebook
                     </a>
-                    <a href="https://twitter.com/intent/tweet?text=${encodeURIComponent('Baca artikel: ' + article.judul)}&url=${encodeURIComponent(window.location.href)}" target="_blank" class="share-btn twitter">
+                    <a href="https://twitter.com/intent/tweet?text=${encodeURIComponent('Baca artikel: ' + article.judul)}&url=${encodeURIComponent(window.location.href)}"
+                       target="_blank" class="share-btn twitter">
                         <i class="fab fa-twitter"></i> Twitter
-                    </a>
-                </div>
-                <div style="margin-top: 40px; text-align: center;">
-                    <a href="blog.html" class="back-button" style="background: var(--c1); color: white;">
-                        <i class="fas fa-arrow-left"></i> Kembali ke Blog
                     </a>
                 </div>
             `;
 
-            container.innerHTML = html;
+            // Update judul tab browser
+            document.title = `${article.judul} | SMP Persiapan Negeri Pulau Tiga`;
+
+            // Render artikel terkait + tombol kembali setelah artikel utama selesai
+            await renderRelatedArticles(id, article.kategori);
         }
 
         // ===== INIT =====
