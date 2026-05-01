@@ -79,6 +79,7 @@
             max-height: 420px;
             object-fit: cover;
             margin-bottom: 32px;
+            border-radius: 16px;
         }
 
         .article-content {
@@ -182,17 +183,18 @@
             display: inline-flex;
             align-items: center;
             gap: 8px;
-            padding: 8px 20px;
+            padding: 10px 24px;
             border-radius: 99px;
-            background: var(--bg3);
-            color: var(--text);
+            background: var(--c1);
+            color: white;
             text-decoration: none;
             transition: all 0.3s;
+            font-weight: 500;
         }
 
         .back-button:hover {
-            background: var(--c1);
-            color: white;
+            background: var(--c2);
+            transform: translateY(-2px);
         }
 
         .share-buttons {
@@ -237,7 +239,7 @@
             color: white;
         }
 
-        /* ===== ARTIKEL TERKAIT - RESPONSIVE IMPROVED ===== */
+        /* ===== ARTIKEL TERKAIT - STYLE LIST VERTICAL (seperti gambar) ===== */
         .related-section {
             max-width: 800px;
             margin: 0 auto;
@@ -245,107 +247,92 @@
         }
 
         .related-title {
-            font-size: 1.2rem;
-            font-weight: 700;
+            font-size: 1rem;
+            font-weight: 600;
             color: var(--text);
-            margin-bottom: 24px;
-            padding-top: 40px;
-            border-top: 2px solid var(--border);
+            margin-bottom: 20px;
+            padding-bottom: 12px;
+            border-bottom: 2px solid var(--border);
             display: flex;
             align-items: center;
             gap: 10px;
+            letter-spacing: 0.5px;
         }
 
         .related-title i {
             color: var(--c1);
+            font-size: 1rem;
         }
 
-        /* Responsive Grid - Lebih baik untuk mobile */
-        .related-grid {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 16px;
+        /* List style - stack vertikal seperti contoh */
+        .related-list {
+            display: flex;
+            flex-direction: column;
+            gap: 24px;
             margin-bottom: 40px;
         }
 
-        .related-card {
-            background: var(--card-bg);
-            border: 1px solid var(--border);
-            border-radius: 16px;
-            overflow: hidden;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            text-decoration: none;
+        .related-item {
             display: flex;
             flex-direction: column;
-            height: 100%;
+            gap: 6px;
+            text-decoration: none;
+            transition: all 0.2s ease;
+            border-bottom: 1px solid var(--border);
+            padding-bottom: 20px;
         }
 
-        .related-card:hover {
-            transform: translateY(-4px);
-            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.12);
-            border-color: var(--c1);
+        .related-item:last-child {
+            border-bottom: none;
+            padding-bottom: 0;
         }
 
-        .related-image {
-            height: 140px;
-            overflow: hidden;
-            background: var(--bg3);
-            position: relative;
-            flex-shrink: 0;
+        .related-item:hover {
+            transform: translateX(4px);
         }
 
-        .related-image img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-            transition: transform 0.4s ease;
-        }
-
-        .related-card:hover .related-image img {
-            transform: scale(1.05);
-        }
-
-        .related-cat-badge {
-            position: absolute;
-            top: 10px;
-            left: 10px;
-            padding: 4px 10px;
+        /* Badge kategori */
+        .related-item-badge {
+            display: inline-block;
+            padding: 4px 12px;
             border-radius: 99px;
-            font-size: 0.65rem;
+            font-size: 0.7rem;
             font-weight: 600;
             color: white;
-            background: rgba(0, 0, 0, 0.5);
-            backdrop-filter: blur(2px);
+            width: fit-content;
+            margin-bottom: 8px;
         }
 
-        .related-body {
-            padding: 14px 12px;
-            flex: 1;
-            display: flex;
-            flex-direction: column;
-        }
-
-        .related-body h4 {
-            font-size: 0.85rem;
+        /* Judul artikel */
+        .related-item-title {
+            font-size: 1rem;
             font-weight: 700;
             color: var(--text);
             line-height: 1.4;
-            margin-bottom: 8px;
-            overflow: hidden;
-            display: -webkit-box;
-            /* -webkit-line-clamp: 2; */
-            -webkit-box-orient: vertical;
-            min-height: 38px;
+            margin: 0 0 6px 0;
         }
 
-        .related-body p {
+        /* Deskripsi singkat / excerpt */
+        .related-item-excerpt {
+            font-size: 0.85rem;
+            color: var(--text2);
+            line-height: 1.5;
+            margin: 0 0 8px 0;
+        }
+
+        /* Meta info: tanggal + views */
+        .related-item-meta {
+            display: flex;
+            align-items: center;
+            gap: 16px;
             font-size: 0.7rem;
             color: var(--text3);
+        }
+
+        .related-item-meta span {
             display: flex;
             align-items: center;
             gap: 5px;
-            margin-top: auto;
         }
 
         .article-bottom {
@@ -390,7 +377,7 @@
             }
         }
 
-        /* ===== RESPONSIVE BREAKPOINTS ===== */
+        /* ===== RESPONSIVE ===== */
         @media (max-width: 768px) {
             .article-container {
                 padding: 20px 16px;
@@ -415,99 +402,46 @@
                 font-size: 0.75rem;
             }
 
-            /* Tablet: 2 kolom */
-            .related-grid {
-                grid-template-columns: repeat(2, 1fr);
-                gap: 14px;
-            }
-
-            .related-body {
-                padding: 10px;
-            }
-
-            .related-body h4 {
-                font-size: 0.8rem;
-                /* -webkit-line-clamp: 3; */
-                min-height: 54px;
-            }
-
-            .related-image {
-                height: 120px;
-            }
-        }
-
-        @media (max-width: 480px) {
-
-            /* Mobile kecil: tetap 2 kolom agar tidak terlalu kecil */
-            .related-grid {
-                grid-template-columns: repeat(2, 1fr);
-                gap: 12px;
-            }
-
             .related-section {
                 padding: 0 16px 40px;
             }
 
-            .related-title {
-                font-size: 1rem;
-                padding-top: 30px;
-                margin-bottom: 16px;
+            .related-item-title {
+                font-size: 0.95rem;
             }
 
-            .related-body h4 {
-                font-size: 0.75rem;
-                /* -webkit-line-clamp: 3; */
-                min-height: 50px;
-            }
-
-            .related-body p {
-                font-size: 0.65rem;
-            }
-
-            .related-image {
-                height: 100px;
-            }
-
-            .related-cat-badge {
-                font-size: 0.6rem;
-                padding: 2px 8px;
-                top: 6px;
-                left: 6px;
-            }
-
-            .article-bottom .back-button {
-                padding: 8px 16px;
+            .related-item-excerpt {
                 font-size: 0.8rem;
             }
         }
 
-        @media (max-width: 360px) {
-
-            /* Layar sangat kecil (seperti Galaxy Fold) tetap 2 kolom */
-            .related-grid {
-                grid-template-columns: repeat(2, 1fr);
-                gap: 8px;
+        @media (max-width: 480px) {
+            .related-item-title {
+                font-size: 0.9rem;
             }
 
-            .related-body h4 {
-                font-size: 0.7rem;
-                min-height: 46px;
+            .related-item-excerpt {
+                font-size: 0.75rem;
             }
 
-            .related-image {
-                height: 90px;
+            .related-item-meta {
+                font-size: 0.65rem;
+                gap: 12px;
+            }
+
+            .related-item-badge {
+                font-size: 0.65rem;
+                padding: 3px 10px;
             }
         }
 
-        /* Dark mode support untuk card */
-        body.dark .related-card {
-            background: var(--card-bg);
-            border-color: var(--border);
+        /* Dark mode support */
+        body.dark .related-item {
+            border-bottom-color: var(--border);
         }
 
-        body.dark .related-card:hover {
-            border-color: var(--c1);
-            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
+        body.dark .related-item:hover {
+            background: transparent;
         }
     </style>
 </head>
@@ -572,14 +506,14 @@
                 </div>
             </div>
 
-            <!-- ARTIKEL TERKAIT + TOMBOL KEMBALI -->
+            <!-- ARTIKEL TERKAIT - STYLE LIST VERTICAL -->
             <div class="related-section" id="relatedSection" style="display:none;">
                 <h3 class="related-title">
                     <i class="fas fa-book-open"></i> Artikel Lainnya
                 </h3>
-                <div class="related-grid" id="relatedGrid"></div>
+                <div class="related-list" id="relatedList"></div>
                 <div class="article-bottom">
-                    <a href="blog.html" class="back-button" style="background: var(--c1); color: white;">
+                    <a href="blog.html" class="back-button">
                         <i class="fas fa-arrow-left"></i> Kembali ke Blog
                     </a>
                 </div>
@@ -632,6 +566,15 @@
             return colors[kategori] || '#10b981';
         }
 
+        // Buat excerpt dari konten (ambil teks polos, potong 100 karakter)
+        function getExcerpt(htmlContent, maxLength = 100) {
+            if (!htmlContent) return '';
+            // Hilangkan tag HTML
+            const plainText = htmlContent.replace(/<[^>]*>/g, '');
+            if (plainText.length <= maxLength) return plainText;
+            return plainText.substring(0, maxLength) + '...';
+        }
+
         // ===== UPDATE VIEWS =====
         async function updateViews(id) {
             try {
@@ -673,67 +616,53 @@
             }
         }
 
-        // ===== RENDER ARTIKEL TERKAIT =====
-        async function renderRelatedArticles(currentId, currentKategori) {
+        // ===== RENDER ARTIKEL TERKAIT (STYLE LIST VERTICAL) =====
+        async function renderRelatedArticles(currentId, currentKategori, currentJudul, currentKonten) {
             const section = document.getElementById('relatedSection');
-            const grid = document.getElementById('relatedGrid');
-            if (!section || !grid) return;
+            const listContainer = document.getElementById('relatedList');
+            if (!section || !listContainer) return;
 
             const allArticles = await loadAllArticles();
 
             // Buang artikel yang sedang dibaca
-            const others = allArticles.filter(a => a.id != currentId);
+            let others = allArticles.filter(a => a.id != currentId);
 
-            // Selalu tampilkan tombol kembali meski tidak ada artikel lain
+            // Selalu tampilkan section (tapi bisa kosong)
             section.style.display = 'block';
 
             if (others.length === 0) {
-                grid.style.display = 'none';
-                document.querySelector('.related-title').style.display = 'none';
+                listContainer.innerHTML = '<p style="color: var(--text3); text-align: center; padding: 20px;">Belum ada artikel lainnya.</p>';
                 return;
             }
 
-            // Prioritaskan kategori yang sama (maksimal 3), lalu tambah dari kategori lain jika kurang
+            // Prioritaskan kategori yang sama (tampilkan semua yang sama kategori, lalu tambah dari lain)
             const sameCategory = others.filter(a => a.kategori === currentKategori);
             const diffCategory = others.filter(a => a.kategori !== currentKategori);
-            let related = [...sameCategory];
 
-            if (related.length < 3) {
-                const need = 3 - related.length;
-                related = [...related, ...diffCategory.slice(0, need)];
-            } else {
-                related = related.slice(0, 3);
-            }
+            // Tampilkan semua artikel, tapi urutkan: kategori sama di atas, lalu kategori lain
+            // Batasi maksimal 5 artikel agar tidak terlalu panjang
+            let related = [...sameCategory, ...diffCategory].slice(0, 6);
 
-            grid.innerHTML = related.map(article => {
+            listContainer.innerHTML = related.map(article => {
                 const label = getCategoryLabel(article.kategori);
                 const color = getCategoryColor(article.kategori);
-                const imageHtml = article.gambar && article.gambar.trim() !== ''
-                    ? `<img src="${article.gambar}" alt="${escapeHtml(article.judul)}" onerror="this.style.display='none'">`
-                    : '<div style="width:100%;height:100%;background:linear-gradient(135deg, var(--c1) 0%, var(--c2) 100%);display:flex;align-items:center;justify-content:center;"><i class="fas fa-newspaper" style="color:white;opacity:0.7;font-size:2rem;"></i></div>';
+                const excerpt = getExcerpt(article.isi || '', 100);
+
+                // Tampilkan views (jika ada)
+                const views = article.views || 0;
 
                 return `
-                    <a href="post.html?id=${article.id}" class="related-card">
-                        <div class="related-image">
-                            ${imageHtml}
-                            <span class="related-cat-badge" style="background: ${color}">${label}</span>
-                        </div>
-                        <div class="related-body">
-                            <h4>${escapeHtml(article.judul)}</h4>
-                            <p><i class="fas fa-calendar-alt"></i> ${formatDate(article.timestamp)}</p>
+                    <a href="post.html?id=${article.id}" class="related-item">
+                        <span class="related-item-badge" style="background: ${color}">${label}</span>
+                        <h4 class="related-item-title">${escapeHtml(article.judul)}</h4>
+                        <p class="related-item-excerpt">${escapeHtml(excerpt)}</p>
+                        <div class="related-item-meta">
+                            <span><i class="fas fa-calendar-alt"></i> ${formatDate(article.timestamp)}</span>
+                            <span><i class="fas fa-eye"></i> ${views} views</span>
                         </div>
                     </a>
                 `;
             }).join('');
-
-            // Tampilkan grid jika ada artikel
-            if (related.length > 0) {
-                grid.style.display = 'grid';
-                document.querySelector('.related-title').style.display = 'flex';
-            } else {
-                grid.style.display = 'none';
-                document.querySelector('.related-title').style.display = 'none';
-            }
         }
 
         // ===== RENDER ARTIKEL UTAMA =====
@@ -769,21 +698,22 @@
                 return;
             }
 
-            // Update views hanya jika belum pernah dibuka dari browser ini
+            // Update views
             const storageKey = `viewed_${id}`;
             const alreadyViewed = localStorage.getItem(storageKey);
             if (!alreadyViewed) {
                 await updateViews(id);
                 localStorage.setItem(storageKey, 'true');
             }
-            // Tampilkan views yang sudah termasuk update jika belum pernah dilihat
             const displayViews = alreadyViewed ? (article.views || 0) : (article.views || 0) + 1;
 
             const categoryLabel = getCategoryLabel(article.kategori);
             const categoryColor = getCategoryColor(article.kategori);
 
-            // Proses konten HTML agar aman
             let articleContent = article.isi || '<p>Konten tidak tersedia.</p>';
+
+            // Proses konten: pastikan gambar responsif
+            // Biarkan HTML asli dari database (sudah safe karena dari CMS)
 
             container.innerHTML = `
                 <div class="article-header">
@@ -819,8 +749,8 @@
             // Update judul tab browser
             document.title = `${article.judul} | SMP Persiapan Negeri Pulau Tiga`;
 
-            // Render artikel terkait + tombol kembali setelah artikel utama selesai
-            await renderRelatedArticles(id, article.kategori);
+            // Render artikel terkait dengan style list vertikal
+            await renderRelatedArticles(id, article.kategori, article.judul, article.isi);
         }
 
         // ===== INIT =====
