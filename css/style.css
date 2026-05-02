@@ -423,7 +423,7 @@ button {
 
 .nav-links a:hover {
   color: var(--text);
-  background: var(--bg3);
+  background-color: var(--bg3);
 }
 
 .nav-links a.active {
