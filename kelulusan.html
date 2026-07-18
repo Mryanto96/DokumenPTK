@@ -1,0 +1,1392 @@
+<!DOCTYPE html>
+<html lang="id" data-theme="light">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Kelulusan | SMP Persiapan Negeri Pulau Tiga</title>
+    <meta name="description"
+        content="Data kelulusan siswa kelas 9A SMP Persiapan Negeri Pulau Tiga tahun ajaran 2026/2027." />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap"
+        rel="stylesheet" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" />
+    <link rel="stylesheet" href="css/style.css" />
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js">
+    </script>
+    <style>
+        /* ===== KELULUSAN STYLES ===== */
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        .page-content {
+            margin-top: 70px;
+        }
+
+        .page-header {
+            padding: 40px 0 30px;
+            position: relative;
+            background: var(--bg);
+        }
+
+        .page-header-bg {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(135deg, rgba(255, 107, 107, 0.05), rgba(78, 205, 196, 0.05), rgba(255, 230, 109, 0.05));
+            z-index: 0;
+            pointer-events: none;
+        }
+
+        .page-header .container {
+            position: relative;
+            z-index: 1;
+        }
+
+        .section-label {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 0.75rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+            color: var(--c1);
+            background: rgba(255, 107, 107, 0.1);
+            padding: 4px 14px;
+            border-radius: 99px;
+            margin-bottom: 12px;
+        }
+
+        .gradient-text {
+            background: linear-gradient(135deg, var(--c1), var(--c2), var(--c3));
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 24px;
+        }
+
+        .kelulusan-wrapper {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 30px;
+            margin-top: 30px;
+            margin-bottom: 40px;
+            min-height: 70vh;
+        }
+
+        @media (max-width: 992px) {
+            .kelulusan-wrapper {
+                grid-template-columns: 1fr;
+                gap: 25px;
+            }
+        }
+
+        /* ===== SISI KIRI - DATA SISWA ===== */
+        .kelulusan-left {
+            background: var(--card-bg);
+            border: 1px solid var(--border);
+            border-radius: 24px;
+            padding: 28px;
+            box-shadow: var(--shadow);
+            transition: all 0.3s ease;
+            display: flex;
+            flex-direction: column;
+            height: fit-content;
+            max-height: 80vh;
+        }
+
+        .kelulusan-left:hover {
+            box-shadow: var(--shadow-lg);
+            transform: translateY(-3px);
+        }
+
+        .kelulusan-left .section-title {
+            font-size: 1.1rem;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 20px;
+            padding-bottom: 15px;
+            border-bottom: 2px solid var(--border);
+            color: var(--text);
+        }
+
+        .kelulusan-left .section-title i {
+            background: linear-gradient(135deg, var(--c1), var(--c2));
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            font-size: 1.2rem;
+        }
+
+        .search-kelulusan {
+            display: flex;
+            gap: 12px;
+            margin-bottom: 18px;
+            flex-wrap: wrap;
+        }
+
+        .search-kelulusan input {
+            flex: 1;
+            min-width: 160px;
+            padding: 10px 16px;
+            border-radius: 12px;
+            border: 1.5px solid var(--border);
+            background: var(--bg);
+            color: var(--text);
+            font-family: var(--font);
+            font-size: 0.85rem;
+            outline: none;
+            transition: all 0.3s ease;
+        }
+
+        .search-kelulusan input:focus {
+            border-color: var(--c1);
+            box-shadow: 0 0 0 3px rgba(255, 107, 107, 0.15);
+        }
+
+        .search-kelulusan select {
+            padding: 10px 16px;
+            border-radius: 12px;
+            border: 1.5px solid var(--border);
+            background: var(--bg);
+            color: var(--text);
+            font-family: var(--font);
+            font-size: 0.85rem;
+            outline: none;
+            cursor: pointer;
+        }
+
+        .search-kelulusan select:focus {
+            border-color: var(--c1);
+        }
+
+        .btn-filter-kelulusan {
+            padding: 10px 20px;
+            border-radius: 12px;
+            border: none;
+            background: linear-gradient(135deg, var(--c1), var(--c2));
+            color: white;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .btn-filter-kelulusan:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 15px rgba(255, 107, 107, 0.3);
+        }
+
+        .btn-reset-kelulusan {
+            padding: 10px 18px;
+            border-radius: 12px;
+            border: 1px solid var(--border);
+            background: var(--bg3);
+            color: var(--text2);
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .btn-reset-kelulusan:hover {
+            background: var(--bg2);
+        }
+
+        .student-list-container {
+            flex: 1;
+            overflow-y: auto;
+            border-radius: 12px;
+            border: 1px solid var(--border);
+            background: var(--bg);
+            max-height: 480px;
+        }
+
+        .student-list-container::-webkit-scrollbar {
+            width: 5px;
+        }
+
+        .student-list-container::-webkit-scrollbar-track {
+            background: var(--bg2);
+            border-radius: 10px;
+        }
+
+        .student-list-container::-webkit-scrollbar-thumb {
+            background: linear-gradient(135deg, var(--c1), var(--c2));
+            border-radius: 10px;
+        }
+
+        .student-item {
+            display: grid;
+            grid-template-columns: auto 1fr auto;
+            align-items: center;
+            gap: 14px;
+            padding: 14px 18px;
+            border-bottom: 1px solid var(--border);
+            cursor: pointer;
+            transition: all 0.2s ease;
+            position: relative;
+        }
+
+        .student-item:last-child {
+            border-bottom: none;
+        }
+
+        .student-item:hover {
+            background: var(--bg3);
+        }
+
+        .student-item.active {
+            background: rgba(255, 107, 107, 0.08);
+            border-left: 4px solid var(--c1);
+        }
+
+        .student-item .avatar {
+            width: 44px;
+            height: 44px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            font-size: 1.1rem;
+            color: white;
+            flex-shrink: 0;
+        }
+
+        .avatar-male {
+            background: linear-gradient(135deg, #3b82f6, #1d4ed8);
+        }
+
+        .avatar-female {
+            background: linear-gradient(135deg, #ec4899, #be185d);
+        }
+
+        .student-item .info {
+            flex: 1;
+            min-width: 0;
+        }
+
+        .student-item .info .name {
+            font-weight: 700;
+            font-size: 0.9rem;
+            color: var(--text);
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .student-item .info .detail {
+            font-size: 0.75rem;
+            color: var(--text3);
+            display: flex;
+            gap: 12px;
+            flex-wrap: wrap;
+        }
+
+        .student-item .badge-lulus {
+            background: linear-gradient(135deg, #10b981, #059669);
+            color: white;
+            padding: 3px 12px;
+            border-radius: 99px;
+            font-size: 0.6rem;
+            font-weight: 700;
+            letter-spacing: 0.3px;
+            white-space: nowrap;
+        }
+
+        .empty-list {
+            text-align: center;
+            padding: 40px 20px;
+            color: var(--text3);
+        }
+
+        .empty-list i {
+            font-size: 2.5rem;
+            opacity: 0.4;
+            margin-bottom: 10px;
+        }
+
+        /* ===== SISI KANAN - SERTIFIKAT ===== */
+        .kelulusan-right {
+            background: var(--card-bg);
+            border: 1px solid var(--border);
+            border-radius: 24px;
+            padding: 28px;
+            box-shadow: var(--shadow);
+            transition: all 0.3s ease;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: flex-start;
+            min-height: 500px;
+            position: relative;
+        }
+
+        .kelulusan-right:hover {
+            box-shadow: var(--shadow-lg);
+            transform: translateY(-3px);
+        }
+
+        .kelulusan-right .section-title {
+            font-size: 1.1rem;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 20px;
+            padding-bottom: 15px;
+            border-bottom: 2px solid var(--border);
+            color: var(--text);
+            width: 100%;
+        }
+
+        .kelulusan-right .section-title i {
+            background: linear-gradient(135deg, var(--c1), var(--c2));
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            font-size: 1.2rem;
+        }
+
+        /* ===== SERTIFIKAT - TANPA OVERLAY ===== */
+        .sertifikat-container {
+            width: 100%;
+            max-width: 750px;
+            position: relative;
+            border-radius: 16px;
+            overflow: hidden;
+            box-shadow: 0 8px 40px rgba(0, 0, 0, 0.12);
+            transition: all 0.4s ease;
+            border: 2px solid var(--border);
+            background: var(--bg2);
+        }
+
+        .sertifikat-container img {
+            width: 100%;
+            height: auto;
+            display: block;
+            aspect-ratio: 1.414 / 1;
+            object-fit: contain;
+            background: #f5f0e8;
+        }
+
+        .empty-sertifikat {
+            text-align: center;
+            color: var(--text3);
+            padding: 60px 20px;
+            width: 100%;
+        }
+
+        .empty-sertifikat i {
+            font-size: 4rem;
+            opacity: 0.3;
+            margin-bottom: 16px;
+        }
+
+        .empty-sertifikat h4 {
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: var(--text2);
+            margin-bottom: 6px;
+        }
+
+        .empty-sertifikat p {
+            font-size: 0.85rem;
+            max-width: 280px;
+            margin: 0 auto;
+        }
+
+        @keyframes fadeSlide {
+            from {
+                opacity: 0;
+                transform: translateY(12px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .sertifikat-container {
+            animation: fadeSlide 0.4s ease forwards;
+        }
+
+        /* ===== CHART CARDS ===== */
+        .chart-card {
+            background: var(--card-bg);
+            border: 1px solid var(--border);
+            border-radius: 20px;
+            padding: 24px;
+            transition: all 0.3s ease;
+        }
+
+        .chart-card:hover {
+            transform: translateY(-4px);
+            box-shadow: var(--shadow-lg);
+        }
+
+        .chart-card .chart-title {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 16px;
+        }
+
+        .chart-card .chart-title i {
+            background: linear-gradient(135deg, var(--c1), var(--c2));
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            font-size: 1.2rem;
+        }
+
+        .chart-card .chart-title h3 {
+            font-size: 0.95rem;
+            font-weight: 700;
+            color: var(--text);
+        }
+
+        .chart-container {
+            position: relative;
+            height: 280px;
+            width: 100%;
+        }
+
+        .chart-note {
+            text-align: center;
+            font-size: 0.7rem;
+            color: var(--text3);
+            margin-top: 12px;
+        }
+
+        /* ===== TABEL NILAI ===== */
+        .table-nilai-wrapper {
+            overflow-x: auto;
+            border-radius: 16px;
+            border: 1px solid var(--border);
+            background: var(--card-bg);
+        }
+
+        .table-nilai-wrapper table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 0.75rem;
+            min-width: 1400px;
+        }
+
+        .table-nilai-wrapper table thead th {
+            padding: 10px 8px;
+            text-align: center;
+            border: 1px solid #2a2a4e;
+            white-space: nowrap;
+            font-weight: 700;
+        }
+
+        .table-nilai-wrapper table thead th.header-main {
+            background: linear-gradient(135deg, #1a1a2e, #16213e);
+            color: white;
+        }
+
+        .table-nilai-wrapper table thead th.header-sub {
+            background: #1a1a2e;
+            color: #a8a8b8;
+            font-weight: 600;
+            font-size: 0.65rem;
+            padding: 6px 8px;
+        }
+
+        .table-nilai-wrapper table thead th.header-total {
+            background: linear-gradient(135deg, #0f3460, #1a1a2e);
+            color: white;
+        }
+
+        .table-nilai-wrapper table thead th.header-akhir {
+            background: linear-gradient(135deg, #e94560, #0f3460);
+            color: white;
+        }
+
+        .table-nilai-wrapper table tbody td {
+            padding: 8px 8px;
+            text-align: center;
+            border: 1px solid var(--border);
+            color: var(--text2);
+        }
+
+        .table-nilai-wrapper table tbody tr:hover td {
+            background: var(--bg3);
+        }
+
+        .table-nilai-wrapper table tbody td.nama-cell {
+            text-align: left;
+            font-weight: 600;
+            color: var(--text);
+        }
+
+        .table-nilai-wrapper table tbody td.jk-cell {
+            font-weight: 600;
+        }
+
+        .table-nilai-wrapper table tbody td.jk-L {
+            color: #3b82f6;
+        }
+
+        .table-nilai-wrapper table tbody td.jk-P {
+            color: #ec4899;
+        }
+
+        .table-nilai-wrapper table tbody td.nilai-akhir {
+            font-weight: 700;
+            font-size: 0.85rem;
+            background: linear-gradient(135deg, rgba(233, 69, 96, 0.1), rgba(15, 52, 96, 0.1));
+            color: #e94560;
+        }
+
+        .table-nilai-wrapper table tfoot td {
+            padding: 12px 16px;
+            border-top: 2px solid var(--border);
+            font-weight: 600;
+            color: var(--text2);
+        }
+
+        /* ===== TANDA TANGAN ===== */
+        .ttd-wrapper {
+            display: flex;
+            justify-content: flex-end;
+            margin-top: 40px;
+            padding: 20px 30px;
+            background: var(--card-bg);
+            border: 1px solid var(--border);
+            border-radius: 16px;
+        }
+
+        .ttd-wrapper .ttd-box {
+            text-align: center;
+        }
+
+        .ttd-wrapper .ttd-box .garis-ttd {
+            width: 180px;
+            height: 2px;
+            background: var(--border);
+            margin: 0 auto 8px;
+        }
+
+        /* ===== RESPONSIVE ===== */
+        @media (max-width: 768px) {
+            .chart-container {
+                height: 200px;
+            }
+
+            .table-nilai-wrapper table {
+                font-size: 0.65rem;
+                min-width: 1000px;
+            }
+
+            .table-nilai-wrapper table thead th {
+                padding: 6px 4px;
+                font-size: 0.6rem;
+            }
+
+            .table-nilai-wrapper table tbody td {
+                padding: 4px 4px;
+            }
+
+            .ttd-wrapper {
+                justify-content: center;
+            }
+        }
+
+        @media (max-width: 600px) {
+            .kelulusan-left {
+                padding: 16px;
+                max-height: none;
+            }
+
+            .kelulusan-right {
+                padding: 16px;
+                min-height: 350px;
+            }
+
+            .search-kelulusan {
+                flex-direction: column;
+            }
+
+            .search-kelulusan input,
+            .search-kelulusan select {
+                width: 100%;
+            }
+
+            .student-item {
+                padding: 10px 12px;
+                gap: 10px;
+            }
+
+            .student-item .avatar {
+                width: 36px;
+                height: 36px;
+                font-size: 0.9rem;
+            }
+
+            .chart-container {
+                height: 180px;
+            }
+        }
+
+        /* ===== DARK MODE ===== */
+        [data-theme="dark"] .sertifikat-container {
+            border-color: #3a322a;
+        }
+
+        [data-theme="dark"] .sertifikat-container img {
+            background: #2a241e;
+        }
+
+        [data-theme="dark"] .table-nilai-wrapper table thead th.header-main {
+            background: linear-gradient(135deg, #0a0a1a, #0f0f2a);
+        }
+
+        [data-theme="dark"] .table-nilai-wrapper table thead th.header-sub {
+            background: #0a0a1a;
+            color: #6a6a8a;
+        }
+
+        [data-theme="dark"] .table-nilai-wrapper table thead th.header-total {
+            background: linear-gradient(135deg, #0a1a3a, #0a0a1a);
+        }
+
+        [data-theme="dark"] .table-nilai-wrapper table thead th.header-akhir {
+            background: linear-gradient(135deg, #a03040, #0a1a3a);
+        }
+
+        /* ===== PRINT ===== */
+        @media print {
+            .kelulusan-left {
+                display: none !important;
+            }
+
+            .kelulusan-right {
+                border: none !important;
+                box-shadow: none !important;
+                padding: 10px !important;
+            }
+
+            .sertifikat-container {
+                box-shadow: none !important;
+                border: 2px solid #333 !important;
+                max-width: 100% !important;
+            }
+
+            .kelulusan-wrapper {
+                display: block !important;
+            }
+
+            .page-header,
+            .navbar,
+            .dark-toggle,
+            footer,
+            .hamburger,
+            .mobile-menu {
+                display: none !important;
+            }
+
+            .page-content {
+                margin-top: 0 !important;
+            }
+
+            .chart-card {
+                break-inside: avoid;
+            }
+
+            .table-nilai-wrapper {
+                overflow: visible !important;
+            }
+
+            .table-nilai-wrapper table {
+                min-width: 100% !important;
+                font-size: 0.6rem !important;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- ===== NAVBAR ===== -->
+    <nav class="navbar">
+        <div class="container">
+            <div class="nav-inner">
+                <a href="index.html" class="logo">
+                    <div class="logo-icon">SMP</div>
+                    <div class="logo-text">
+                        <span class="logo-title">Persiapan Negeri</span>
+                        <span class="logo-sub">Pulau Tiga • Nakai</span>
+                    </div>
+                </a>
+                <ul class="nav-links">
+                    <li><a href="index.html">Home</a></li>
+                    <li><a href="documents.html">Documents</a></li>
+                    <li><a href="gallery.html">Gallery</a></li>
+                    <li><a href="grades.html">Students Grades</a></li>
+                    <li><a href="exam.html">Ujian</a></li>
+                    <li><a href="rapor.html">Rapor</a></li>
+                    <li><a href="blog.html">Blog</a></li>
+                    <li><a href="about.html">About Me</a></li>
+                    <li><a href="https://mryanto96.github.io/ATTENDANCE-SYSTEM/" target="_blank">Absensi</a></li>
+                    <li><a href="contact.html">Contact Me</a></li>
+                </ul>
+                <div class="nav-right">
+                    <button class="dark-toggle" aria-label="Toggle dark mode" id="darkToggleBtn">
+                        <div class="dark-toggle-ball">☀️</div>
+                    </button>
+                    <button class="hamburger" aria-label="Menu">
+                        <span></span><span></span><span></span>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- ===== MOBILE MENU ===== -->
+    <div class="mobile-menu" id="mobileMenu">
+        <a href="index.html">Home</a>
+        <a href="documents.html">Documents</a>
+        <a href="gallery.html">Gallery</a>
+        <a href="grades.html">Students Grades</a>
+        <a href="exam.html">Ujian</a>
+        <a href="rapor.html">Rapor</a>
+        <a href="blog.html">Blog</a>
+        <a href="about.html">About Me</a>
+        <a href="https://mryanto96.github.io/ATTENDANCE-SYSTEM/" target="_blank">Absensi</a>
+        <a href="contact.html">Contact Me</a>
+    </div>
+
+    <!-- ===== PAGE CONTENT ===== -->
+    <div class="page-content">
+        <!-- ===== HEADER ===== -->
+        <div class="page-header">
+            <div class="page-header-bg"></div>
+            <div class="container">
+                <div class="fade-up">
+                    <p class="section-label"><i class="fas fa-graduation-cap"></i> Kelulusan 2025/2026</p>
+                    <h1
+                        style="font-size: clamp(1.8rem,4vw,2.6rem);font-weight:800;letter-spacing:-1px;margin-bottom:10px;">
+                        Data <span class="gradient-text">Kelulusan Siswa</span>
+                    </h1>
+                    <p style="color:var(--text2);font-size:0.95rem;max-width:600px;line-height:1.7;">
+                        Berikut adalah data siswa kelas 9A yang telah dinyatakan <strong>LULUS</strong> dari SMP
+                        Persiapan Negeri Pulau Tiga.
+                        Pilih nama siswa di sebelah kiri untuk melihat sertifikat kelulusan.
+                    </p>
+                </div>
+            </div>
+        </div>
+        <!-- ===== REKAPITULASI NILAI AKHIR SISWA ===== -->
+        <section
+            style="margin-top: 60px; padding: 50px 0; background: var(--bg2); border-radius: 24px; border: 1px solid var(--border);">
+            <div style="padding: 0 30px;">
+                <div class="fade-up" style="text-align: center; margin-bottom: 40px;">
+                    <p class="section-label" style="display: inline-flex;"><i class="fas fa-chart-bar"></i> Rekap
+                        Nilai</p>
+                    <h4
+                        style="font-size: clamp(0.5rem, 2vw, 1.5rem); font-weight: 800; letter-spacing: -0.5px; color: var(--text); margin-bottom: 2px;">
+                        Rekapitulasi Nilai Akhir Siswa
+                    </h4>
+                    <p style="color: var(--text2); font-size: 0.8rem; font-weight: 500;">
+                        SMP Persiapan Negeri Pulau Tiga • Tahun Ajaran 2025/2026
+                    </p>
+                </div>
+
+                <!-- ===== GRAFIK ===== -->
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 30px; margin-bottom: 40px;">
+                    <div class="chart-card fade-up">
+                        <div class="chart-title">
+                            <i class="fas fa-chart-line"></i>
+                            <h3>Perbandingan Nilai Akhir Siswa</h3>
+                        </div>
+                        <div class="chart-container">
+                            <canvas id="nilaiChart"></canvas>
+                        </div>
+                        <p class="chart-note">
+                            <i class="fas fa-chart-simple"></i> Grafik nilai akhir ijazah siswa kelas 9A
+                        </p>
+                    </div>
+
+                    <div class="chart-card fade-up">
+                        <div class="chart-title">
+                            <i class="fas fa-chart-pie"></i>
+                            <h3>Distribusi Rentang Nilai</h3>
+                        </div>
+                        <div class="chart-container">
+                            <canvas id="distribusiChart"></canvas>
+                        </div>
+                        <p class="chart-note">
+                            <i class="fas fa-chart-pie"></i> Sebaran nilai akhir siswa
+                        </p>
+                    </div>
+                </div>
+
+                <!-- ===== TABEL NILAI ===== -->
+                <div class="table-nilai-wrapper fade-up">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th rowspan="2" class="header-main" style="min-width:40px;">No.</th>
+                                <th rowspan="2" class="header-main" style="min-width:50px;">NIS</th>
+                                <th rowspan="2" class="header-main"
+                                    style="min-width:160px; text-align:left; padding-left:12px;">Nama Siswa</th>
+                                <th rowspan="2" class="header-main" style="min-width:50px;">Kelas</th>
+                                <th rowspan="2" class="header-main" style="min-width:80px;">Jenis Kelamin</th>
+                                <th colspan="10" class="header-main">Nilai Akhir Ijazah</th>
+                                <th rowspan="2" class="header-total" style="min-width:60px;">TOTAL</th>
+                                <th rowspan="2" class="header-total" style="min-width:60px;">RATA-RATA</th>
+                                <th rowspan="2" class="header-akhir" style="min-width:80px;">NILAI AKHIR</th>
+                            </tr>
+                            <tr>
+                                <th class="header-sub">Agama</th>
+                                <th class="header-sub">PPKN</th>
+                                <th class="header-sub">B.Indo</th>
+                                <th class="header-sub">Matematika</th>
+                                <th class="header-sub">IPA</th>
+                                <th class="header-sub">IPS</th>
+                                <th class="header-sub">B.Inggris</th>
+                                <th class="header-sub">Seni Bud</th>
+                                <th class="header-sub">PJOK</th>
+                                <th class="header-sub">Prakarya</th>
+                            </tr>
+                        </thead>
+                        <tbody id="nilaiTableBody">
+                            <!-- Data akan dirender oleh JS -->
+                        </tbody>
+                        <tfoot>
+                            <tr>
+                                <td colspan="15"
+                                    style="text-align: right; padding: 12px 16px; font-weight: 600; color: var(--text2);">
+                                    <i class="fas fa-users"></i> Jumlah Siswa: <span id="totalSiswaNilai">0</span>
+                                </td>
+                                <td colspan="3"
+                                    style="text-align: center; padding: 12px 16px; font-weight: 600; color: var(--text2);">
+                                    <i class="fas fa-calculator"></i> Rata-rata Kelas: <span id="rataRataKelas">0</span>
+                                </td>
+                            </tr>
+                        </tfoot>
+                    </table>
+                </div>
+
+                <!-- ===== TANDA TANGAN ===== -->
+                <div class="ttd-wrapper fade-up"
+                    style="display: flex; justify-content: flex-end; margin-top: 40px; padding: 20px 40px; background: var(--card-bg); border: 1px solid var(--border); border-radius: 16px;">
+                    <div class="ttd-box" style="text-align: right; min-width: 200px; padding-right: 20px;">
+                        <p style="font-size: 0.85rem; color: var(--text2); margin-bottom: 2px; line-height: 1.4;">Nakai,
+                            20 Mei 2026</p>
+                        <p
+                            style="font-size: 0.85rem; color: var(--text2); font-weight: 600; margin-bottom: 25px; line-height: 1.4;">
+                            Kepala Sekolah,</p><br>
+                        <p style="font-size: 0.95rem; color: var(--text); font-weight: 700; margin-bottom: 2px; line-height: 1.4;">
+                            Juni Nainggolan, S.Pd,. Gr</p>
+                        <hr>
+                        <p style="font-size: 0.95rem; color: var(--text3); line-height: 1.4;">NIP. 19910617 202011 2 001
+                        </p>
+                    </div>
+                </div>
+        </section>
+
+    </div>
+    </div>
+
+
+    <div class="container" style="padding-bottom: 60px;">
+
+        <!-- ===== TWO ASIDE ===== -->
+        <div class="kelulusan-wrapper">
+
+            <!-- ===== SISI KIRI ===== -->
+            <div class="kelulusan-left">
+                <div class="section-title">
+                    <i class="fas fa-users"></i>
+                    Daftar Siswa Lulus
+                    <span style="margin-left:auto;font-size:0.7rem;font-weight:400;color:var(--text3);"
+                        id="totalSiswaLabel">0 siswa</span>
+                </div>
+
+                <div class="search-kelulusan">
+                    <input type="text" id="searchKelulusan" placeholder="Cari nama siswa..." autocomplete="off">
+                    <select id="filterKelulusan">
+                        <option value="all">Semua</option>
+                        <option value="L">Laki-laki</option>
+                        <option value="P">Perempuan</option>
+                    </select>
+                    <button class="btn-filter-kelulusan" id="filterKelulusanBtn"><i class="fas fa-search"></i></button>
+                    <button class="btn-reset-kelulusan" id="resetKelulusanBtn"><i class="fas fa-undo-alt"></i></button>
+                </div>
+
+                <div class="student-list-container" id="studentListContainer">
+                    <!-- Daftar siswa akan dirender oleh JS -->
+                </div>
+            </div>
+
+            <!-- ===== SISI KANAN ===== -->
+            <div class="kelulusan-right" id="sertifikatContainer">
+                <div class="section-title">
+                    <i class="fas fa-certificate"></i>
+                    Sertifikat Kelulusan
+                </div>
+
+                <!-- Sertifikat akan dirender oleh JS -->
+                <div id="sertifikatRenderArea" style="width:100%;"></div>
+            </div>
+
+        </div>
+
+
+
+
+        <script src="js/main.js"></script>
+        <script src="js/navbar.js"></script>
+
+        <script>
+            // ============================================
+            // DATA SISWA LULUS - 15 SISWA KELAS 9A
+            // ============================================
+            const lulusData = [
+                { id: 1, nama: "ADAM AMSAKAT", kelas: "IX-A", jenisKelamin: "L", tahunLulus: "2026", foto: "Images/Adam.png" },
+                { id: 2, nama: "BARTOL BATIPITS", kelas: "IX-A", jenisKelamin: "L", tahunLulus: "2026", foto: "Images/Bartol.png" },
+                { id: 3, nama: "BENEDIKTUS JOM", kelas: "IX-A", jenisKelamin: "L", tahunLulus: "2026", foto: "Images/Musa.png" },
+                { id: 4, nama: "BENYAMIN BEORAMON", kelas: "IX-A", jenisKelamin: "L", tahunLulus: "2026", foto: "Images/Benyamin.png" },
+                { id: 5, nama: "GENUS AOR", kelas: "IX-A", jenisKelamin: "L", tahunLulus: "2026", foto: "Images/Genus.png" },
+                { id: 6, nama: "HABEL AUK", kelas: "IX-A", jenisKelamin: "L", tahunLulus: "2026", foto: "Images/Habel.png" },
+                { id: 7, nama: "MARIA MAGDALENA", kelas: "IX-A", jenisKelamin: "P", tahunLulus: "2026", foto: "Images/Maria.png" },
+                { id: 8, nama: "MARKUS WARAK", kelas: "IX-A", jenisKelamin: "L", tahunLulus: "2026", foto: "Images/Markus.png" },
+                { id: 9, nama: "PAULUS OSJAK", kelas: "IX-A", jenisKelamin: "L", tahunLulus: "2026", foto: "Images/Paulus.png" },
+                { id: 10, nama: "PILIPUS NAMINAN", kelas: "IX-A", jenisKelamin: "L", tahunLulus: "2026", foto: "Images/Daminan.png" },
+                { id: 11, nama: "PILIPUS TINAKAS", kelas: "IX-A", jenisKelamin: "L", tahunLulus: "2026", foto: "Images/Tinakas.png" },
+                { id: 12, nama: "PIUS OHMAT", kelas: "IX-A", jenisKelamin: "L", tahunLulus: "2026", foto: "Images/Pius.png" },
+                { id: 13, nama: "SIMSON WAKUM", kelas: "IX-A", jenisKelamin: "L", tahunLulus: "2026", foto: "Images/Simson.png" },
+                { id: 14, nama: "WAHYU FO", kelas: "IX-A", jenisKelamin: "L", tahunLulus: "2026", foto: "Images/Wahyu.png" },
+                { id: 15, nama: "YOHANES FAM", kelas: "IX-A", jenisKelamin: "L", tahunLulus: "2026", foto: "Images/Anis.png" }
+            ];
+
+            let filteredLulus = [...lulusData];
+            let selectedId = 1;
+
+            // ============================================
+            // DATA NILAI SISWA
+            // ============================================
+            const nilaiData = [
+                { no: 1, nis: "01", nama: "ADAM AMSAKAT", kelas: "9A", jk: "L", nilai: [80, 80, 79, 75, 78, 80, 79, 80, 79, 79], total: 789, rata: 78.9, akhir: 79 },
+                { no: 2, nis: "02", nama: "BARTOL BATIPITS", kelas: "9A", jk: "L", nilai: [72, 72, 71, 66, 68, 78, 69, 75, 78, 79], total: 728, rata: 72.8, akhir: 73 },
+                { no: 3, nis: "03", nama: "BENEDIKTUS JOM", kelas: "9A", jk: "L", nilai: [80, 80, 78, 75, 77, 75, 79, 80, 79, 79], total: 782, rata: 78.2, akhir: 79 },
+                { no: 4, nis: "04", nama: "BENYAMIN BEORAMON", kelas: "9A", jk: "L", nilai: [74, 73, 71, 67, 70, 80, 69, 76, 78, 79], total: 737, rata: 73.7, akhir: 74 },
+                { no: 5, nis: "05", nama: "GENUS AOR", kelas: "9A", jk: "L", nilai: [75, 70, 71, 65, 65, 68, 68, 70, 78, 79], total: 709, rata: 70.9, akhir: 71 },
+                { no: 6, nis: "06", nama: "HABEL AUK", kelas: "9A", jk: "L", nilai: [80, 80, 78, 74, 78, 78, 79, 80, 79, 79], total: 785, rata: 78.5, akhir: 79 },
+                { no: 7, nis: "07", nama: "MARIA MAGDALENA", kelas: "9A", jk: "P", nilai: [73, 74, 76, 66, 73, 72, 72, 74, 78, 77], total: 735, rata: 73.5, akhir: 74 },
+                { no: 8, nis: "08", nama: "MARKUS WARAK", kelas: "9A", jk: "L", nilai: [77, 71, 71, 65, 65, 67, 68, 71, 78, 79], total: 712, rata: 71.2, akhir: 72 },
+                { no: 9, nis: "09", nama: "PAULUS OSJAK", kelas: "9A", jk: "L", nilai: [75, 78, 76, 67, 75, 75, 72, 77, 79, 79], total: 753, rata: 75.3, akhir: 76 },
+                { no: 10, nis: "10", nama: "PILIPUS NAMINAN", kelas: "9A", jk: "L", nilai: [76, 79, 71, 68, 70, 77, 77, 78, 79, 79], total: 754, rata: 75.4, akhir: 76 },
+                { no: 11, nis: "11", nama: "PILIPUS TINAKAS", kelas: "9A", jk: "L", nilai: [74, 80, 76, 67, 70, 76, 78, 79, 79, 79], total: 758, rata: 75.8, akhir: 76 },
+                { no: 12, nis: "12", nama: "PIUS OHMAT", kelas: "9A", jk: "L", nilai: [73, 73, 75, 67, 65, 75, 70, 74, 79, 79], total: 730, rata: 73.0, akhir: 73 },
+                { no: 13, nis: "13", nama: "SIMSON WAKUM", kelas: "9A", jk: "L", nilai: [71, 71, 71, 66, 65, 70, 72, 71, 79, 79], total: 715, rata: 71.5, akhir: 72 },
+                { no: 14, nis: "14", nama: "WAHYU FO", kelas: "9A", jk: "L", nilai: [75, 76, 71, 67, 70, 75, 72, 77, 79, 79], total: 741, rata: 74.1, akhir: 75 },
+                { no: 15, nis: "15", nama: "YOHANES FAM", kelas: "9A", jk: "L", nilai: [78, 74, 78, 67, 68, 78, 74, 76, 79, 79], total: 751, rata: 75.1, akhir: 76 }
+            ];
+
+            // ============================================
+            // RENDER DAFTAR SISWA
+            // ============================================
+            function renderStudentList() {
+                const container = document.getElementById('studentListContainer');
+                const totalLabel = document.getElementById('totalSiswaLabel');
+
+                if (filteredLulus.length === 0) {
+                    container.innerHTML = `
+                    <div class="empty-list">
+                        <i class="fas fa-user-slash"></i>
+                        <p>Tidak ada siswa ditemukan</p>
+                    </div>
+                `;
+                    totalLabel.textContent = '0 siswa';
+                    return;
+                }
+
+                totalLabel.textContent = `${filteredLulus.length} siswa`;
+
+                let html = '';
+                filteredLulus.forEach((siswa) => {
+                    const isActive = siswa.id === selectedId ? 'active' : '';
+                    const avatarClass = siswa.jenisKelamin === 'L' ? 'avatar-male' : 'avatar-female';
+                    const initial = siswa.nama.charAt(0).toUpperCase();
+
+                    html += `
+                    <div class="student-item ${isActive}" data-id="${siswa.id}" onclick="selectStudent(${siswa.id})">
+                        <div class="avatar ${avatarClass}">${initial}</div>
+                        <div class="info">
+                            <div class="name">${siswa.nama}</div>
+                            <div class="detail">
+                                <span>${siswa.kelas}</span>
+                                <span>${siswa.jenisKelamin === 'L' ? 'Laki-laki' : 'Perempuan'}</span>
+                                <span>${siswa.tahunLulus}</span>
+                            </div>
+                        </div>
+                        <span class="badge-lulus"><i class="fas fa-check-circle"></i> Lulus</span>
+                    </div>
+                `;
+                });
+
+                container.innerHTML = html;
+            }
+
+            // ============================================
+            // RENDER SERTIFIKAT
+            // ============================================
+            function renderSertifikat(studentId) {
+                const area = document.getElementById('sertifikatRenderArea');
+                const siswa = lulusData.find(s => s.id === studentId);
+
+                if (!siswa) {
+                    area.innerHTML = `
+                    <div class="empty-sertifikat">
+                        <i class="fas fa-certificate"></i>
+                        <h4>Pilih Siswa</h4>
+                        <p>Silakan pilih nama siswa dari daftar di sebelah kiri untuk melihat sertifikat kelulusan.</p>
+                    </div>
+                `;
+                    return;
+                }
+
+                area.innerHTML = `
+                <div class="sertifikat-container">
+                    <img src="${siswa.foto}" alt="Sertifikat Kelulusan ${siswa.nama}">
+                </div>
+            `;
+            }
+
+            // ============================================
+            // SELECT STUDENT
+            // ============================================
+            window.selectStudent = function (id) {
+                selectedId = id;
+                renderStudentList();
+                renderSertifikat(id);
+            };
+
+            // ============================================
+            // FILTER
+            // ============================================
+            function filterLulusData() {
+                const keyword = document.getElementById('searchKelulusan').value.toLowerCase().trim();
+                const gender = document.getElementById('filterKelulusan').value;
+
+                filteredLulus = lulusData.filter(s => {
+                    const matchName = s.nama.toLowerCase().includes(keyword);
+                    const matchGender = gender === 'all' || s.jenisKelamin === gender;
+                    return matchName && matchGender;
+                });
+
+                if (filteredLulus.length > 0) {
+                    const exists = filteredLulus.some(s => s.id === selectedId);
+                    if (!exists) {
+                        selectedId = filteredLulus[0].id;
+                    }
+                } else {
+                    selectedId = null;
+                }
+
+                renderStudentList();
+                if (selectedId) {
+                    renderSertifikat(selectedId);
+                } else {
+                    document.getElementById('sertifikatRenderArea').innerHTML = `
+                    <div class="empty-sertifikat">
+                        <i class="fas fa-search"></i>
+                        <h4>Tidak Ditemukan</h4>
+                        <p>Tidak ada siswa yang sesuai dengan filter yang dipilih.</p>
+                    </div>
+                `;
+                }
+            }
+
+            function resetLulusFilter() {
+                document.getElementById('searchKelulusan').value = '';
+                document.getElementById('filterKelulusan').value = 'all';
+                filteredLulus = [...lulusData];
+                selectedId = filteredLulus.length > 0 ? filteredLulus[0].id : null;
+                renderStudentList();
+                if (selectedId) {
+                    renderSertifikat(selectedId);
+                }
+            }
+
+            // ============================================
+            // RENDER TABEL NILAI
+            // ============================================
+            function renderNilaiTable() {
+                const tbody = document.getElementById('nilaiTableBody');
+                const totalSiswa = document.getElementById('totalSiswaNilai');
+                const rataKelas = document.getElementById('rataRataKelas');
+
+                let html = '';
+                let totalSemuaNilai = 0;
+
+                nilaiData.forEach((siswa) => {
+                    const jkClass = siswa.jk === 'L' ? 'jk-L' : 'jk-P';
+                    const jkText = siswa.jk === 'L' ? 'Laki-laki' : 'Perempuan';
+
+                    html += `
+                    <tr>
+                        <td>${siswa.no}</td>
+                        <td>${siswa.nis}</td>
+                        <td class="nama-cell">${siswa.nama}</td>
+                        <td>${siswa.kelas}</td>
+                        <td class="jk-cell ${jkClass}">${jkText}</td>
+                        ${siswa.nilai.map(n => `<td>${n}</td>`).join('')}
+                        <td><strong>${siswa.total}</strong></td>
+                        <td>${siswa.rata.toFixed(1)}</td>
+                        <td class="nilai-akhir">${siswa.akhir}</td>
+                    </tr>
+                `;
+                    totalSemuaNilai += siswa.akhir;
+                });
+
+                tbody.innerHTML = html;
+                totalSiswa.textContent = nilaiData.length;
+                const rataKelasValue = (totalSemuaNilai / nilaiData.length).toFixed(1);
+                rataKelas.textContent = rataKelasValue;
+            }
+
+            // ============================================
+            // RENDER GRAFIK
+            // ============================================
+            let nilaiChartInstance = null;
+            let distribusiChartInstance = null;
+
+            function renderCharts() {
+                const labels = nilaiData.map(s => s.nama.split(' ')[0]);
+                const nilaiAkhir = nilaiData.map(s => s.akhir);
+
+                // Chart 1: Bar Chart
+                const ctx1 = document.getElementById('nilaiChart').getContext('2d');
+                if (nilaiChartInstance) nilaiChartInstance.destroy();
+
+                const gradient1 = ctx1.createLinearGradient(0, 0, 0, 280);
+                gradient1.addColorStop(0, 'rgba(255, 107, 107, 0.8)');
+                gradient1.addColorStop(0.5, 'rgba(78, 205, 196, 0.6)');
+                gradient1.addColorStop(1, 'rgba(255, 230, 109, 0.4)');
+
+                nilaiChartInstance = new Chart(ctx1, {
+                    type: 'bar',
+                    data: {
+                        labels: labels,
+                        datasets: [{
+                            label: 'Nilai Akhir',
+                            data: nilaiAkhir,
+                            backgroundColor: [
+                                '#FF6B6B', '#4ECDC4', '#FFE66D', '#FF6B6B',
+                                '#4ECDC4', '#FFE66D', '#FF6B6B', '#4ECDC4',
+                                '#FFE66D', '#FF6B6B', '#4ECDC4', '#FFE66D',
+                                '#FF6B6B', '#4ECDC4', '#FFE66D'
+                            ],
+                            borderColor: 'rgba(255,255,255,0.2)',
+                            borderWidth: 1,
+                            borderRadius: 6,
+                            barPercentage: 0.65
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        plugins: {
+                            legend: { display: false },
+                            tooltip: {
+                                callbacks: {
+                                    label: (ctx) => `Nilai Akhir: ${ctx.raw}`
+                                }
+                            }
+                        },
+                        scales: {
+                            y: {
+                                beginAtZero: true,
+                                max: 100,
+                                ticks: { stepSize: 10, precision: 0 }
+                            },
+                            x: {
+                                grid: { display: false }
+                            }
+                        }
+                    }
+                });
+
+                // Chart 2: Pie Chart - Distribusi Rentang Nilai
+                const ranges = {
+                    '70-73': 0,
+                    '74-76': 0,
+                    '77-79': 0,
+                    '80+': 0
+                };
+
+                nilaiData.forEach(s => {
+                    if (s.akhir >= 80) ranges['80+']++;
+                    else if (s.akhir >= 77) ranges['77-79']++;
+                    else if (s.akhir >= 74) ranges['74-76']++;
+                    else if (s.akhir >= 70) ranges['70-73']++;
+                });
+
+                const ctx2 = document.getElementById('distribusiChart').getContext('2d');
+                if (distribusiChartInstance) distribusiChartInstance.destroy();
+
+                const pieColors = [
+                    'rgba(255, 107, 107, 0.8)',
+                    'rgba(255, 230, 109, 0.8)',
+                    'rgba(78, 205, 196, 0.8)',
+                    'rgba(16, 185, 129, 0.8)'
+                ];
+
+                distribusiChartInstance = new Chart(ctx2, {
+                    type: 'doughnut',
+                    data: {
+                        labels: Object.keys(ranges),
+                        datasets: [{
+                            data: Object.values(ranges),
+                            backgroundColor: pieColors,
+                            borderWidth: 2,
+                            borderColor: 'var(--card-bg)',
+                            hoverOffset: 15
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        plugins: {
+                            legend: {
+                                position: 'bottom',
+                                labels: {
+                                    font: { size: 11, weight: '600' },
+                                    color: 'var(--text2)',
+                                    usePointStyle: true,
+                                    padding: 12
+                                }
+                            },
+                            tooltip: {
+                                callbacks: {
+                                    label: (ctx) => {
+                                        const total = Object.values(ranges).reduce((a, b) => a + b, 0);
+                                        const percent = total > 0 ? ((ctx.raw / total) * 100).toFixed(1) : 0;
+                                        return `${ctx.label}: ${ctx.raw} siswa (${percent}%)`;
+                                    }
+                                }
+                            }
+                        },
+                        cutout: '55%'
+                    }
+                });
+            }
+
+            // ============================================
+            // DARK MODE
+            // ============================================
+            function toggleDarkMode() {
+                const html = document.documentElement;
+                const currentTheme = html.getAttribute('data-theme');
+                const newTheme = currentTheme === 'light' ? 'dark' : 'light';
+                html.setAttribute('data-theme', newTheme);
+                localStorage.setItem('theme', newTheme);
+
+                const ball = document.querySelector('.dark-toggle-ball');
+                if (ball) {
+                    ball.textContent = newTheme === 'light' ? '☀️' : '🌙';
+                }
+
+                // Re-render charts dengan warna baru
+                setTimeout(renderCharts, 100);
+            }
+
+            // ============================================
+            // MOBILE MENU
+            // ============================================
+            function toggleMobileMenu() {
+                const menu = document.getElementById('mobileMenu');
+                menu.classList.toggle('open');
+            }
+
+            // ============================================
+            // EVENT LISTENERS
+            // ============================================
+            document.getElementById('filterKelulusanBtn').addEventListener('click', filterLulusData);
+            document.getElementById('resetKelulusanBtn').addEventListener('click', resetLulusFilter);
+            document.getElementById('searchKelulusan').addEventListener('keypress', (e) => {
+                if (e.key === 'Enter') filterLulusData();
+            });
+            document.getElementById('filterKelulusan').addEventListener('change', filterLulusData);
+
+            const darkToggleBtn = document.getElementById('darkToggleBtn');
+            if (darkToggleBtn) {
+                darkToggleBtn.addEventListener('click', toggleDarkMode);
+            }
+
+            const hamburgerBtn = document.querySelector('.hamburger');
+            if (hamburgerBtn) {
+                hamburgerBtn.addEventListener('click', toggleMobileMenu);
+            }
+
+            document.querySelectorAll('.mobile-menu a').forEach(link => {
+                link.addEventListener('click', () => {
+                    document.getElementById('mobileMenu').classList.remove('open');
+                });
+            });
+
+            // ============================================
+            // LOAD THEME
+            // ============================================
+            const savedTheme = localStorage.getItem('theme') || 'light';
+            document.documentElement.setAttribute('data-theme', savedTheme);
+            const ball = document.querySelector('.dark-toggle-ball');
+            if (ball) {
+                ball.textContent = savedTheme === 'light' ? '☀️' : '🌙';
+            }
+
+            // ============================================
+            // INIT
+            // ============================================
+            (function init() {
+                filteredLulus = [...lulusData];
+                selectedId = filteredLulus.length > 0 ? filteredLulus[0].id : null;
+                renderStudentList();
+                if (selectedId) {
+                    renderSertifikat(selectedId);
+                }
+                renderNilaiTable();
+                setTimeout(renderCharts, 300);
+            })();
+
+            // ============================================
+            // WINDOW RESIZE - Re-render charts
+            // ============================================
+            let resizeTimer;
+            window.addEventListener('resize', () => {
+                clearTimeout(resizeTimer);
+                resizeTimer = setTimeout(() => {
+                    renderCharts();
+                }, 500);
+            });
+        </script>
+
+</body>
+
+</html>

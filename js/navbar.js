@@ -21,6 +21,7 @@ const MENU_STRUCTURE = [
       { name: 'Blog', url: 'blog.html' }
     ]
   },
+  { name: 'Kelulusan', url: 'kelulusan.html' },
   { name: 'PPDB', url: 'pendaftaran.html' },
   { name: 'About Me', url: 'about.html' },
   { name: 'Contact Me', url: 'contact.html' }
