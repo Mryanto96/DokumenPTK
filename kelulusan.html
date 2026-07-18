@@ -1386,6 +1386,284 @@
                     renderCharts();
                 }, 500);
             });
+
+            // ============================================
+            // PROTECTION - CEKALAH KONTEN DARI COPY & SCREENSHOT
+            // ============================================
+
+            // 1. CEKALAH RIGHT CLICK (KLIK KANAN)
+            document.addEventListener('contextmenu', function (e) {
+                e.preventDefault();
+                // showProtectionToast('⚠️ Fungsi klik kanan dinonaktifkan untuk melindungi konten.');
+                return false;
+            });
+
+            // 2. CEKALAH KEYBOARD SHORTCUTS
+            document.addEventListener('keydown', function (e) {
+                // Cek Ctrl+C, Ctrl+V, Ctrl+X
+                if (e.ctrlKey && (e.key === 'c' || e.key === 'C' || e.key === 'v' || e.key === 'V' || e.key === 'x' || e.key === 'X')) {
+                    e.preventDefault();
+                    showProtectionToast('⚠️ Fungsi copy/paste dinonaktifkan untuk melindungi konten.');
+                    return false;
+                }
+
+                // Cek Ctrl+Shift+I (Developer Tools)
+                if (e.ctrlKey && e.shiftKey && (e.key === 'I' || e.key === 'i')) {
+                    e.preventDefault();
+                    showProtectionToast('⚠️ Developer Tools dinonaktifkan.');
+                    return false;
+                }
+
+                // Cek Ctrl+U (View Source)
+                if (e.ctrlKey && (e.key === 'u' || e.key === 'U')) {
+                    e.preventDefault();
+                    showProtectionToast('⚠️ View Source dinonaktifkan.');
+                    return false;
+                }
+
+                // Cek F12 (Developer Tools)
+                if (e.key === 'F12') {
+                    e.preventDefault();
+                    showProtectionToast('⚠️ Developer Tools dinonaktifkan.');
+                    return false;
+                }
+
+                // Cek Print Screen (PrtSc) - tidak bisa sepenuhnya dicegah, tapi kita kasih peringatan
+                if (e.key === 'PrintScreen') {
+                    showProtectionToast('⚠️ Screenshot terdeteksi! Harap tidak mengambil screenshot dokumen.');
+                }
+            });
+
+            // 3. CEKALAH SELECTION (TEXT SELECTION)
+            document.addEventListener('selectstart', function (e) {
+                e.preventDefault();
+                return false;
+            });
+
+            // 4. CEKALAH DRAG DAN DROP
+            document.addEventListener('dragstart', function (e) {
+                e.preventDefault();
+                return false;
+            });
+
+            // 5. CEKALAH GAMBAR DARI DIKLIK KANAN - SAVE AS
+            document.querySelectorAll('img').forEach(img => {
+                img.addEventListener('contextmenu', function (e) {
+                    e.preventDefault();
+                    showProtectionToast('⚠️ Menyimpan gambar tidak diizinkan.');
+                    return false;
+                });
+
+                // Cegah drag gambar
+                img.addEventListener('dragstart', function (e) {
+                    e.preventDefault();
+                    return false;
+                });
+            });
+
+            // 6. PROTECTION UNTUK SERTIFIKAT (GAMBAR)
+            function protectImages() {
+                document.querySelectorAll('.sertifikat-container img, .sertifikat-container').forEach(el => {
+                    // Cegah klik kanan pada container sertifikat
+                    el.addEventListener('contextmenu', function (e) {
+                        e.preventDefault();
+                        showProtectionToast('⚠️ Menyimpan sertifikat tidak diizinkan.');
+                        return false;
+                    });
+
+                    // Cegah drag
+                    el.addEventListener('dragstart', function (e) {
+                        e.preventDefault();
+                        return false;
+                    });
+
+                    // Cegah touch events pada mobile
+                    el.addEventListener('touchstart', function (e) {
+                        // Jika touch lebih dari 1 jari (bisa jadi screenshot gesture)
+                        if (e.touches.length > 1) {
+                            showProtectionToast('⚠️ Screenshot terdeteksi! Harap tidak mengambil screenshot dokumen.');
+                        }
+                    });
+                });
+            }
+
+            // 7. WATERMARK OVERLAY UNTUK SERTIFIKAT (OPSIONAL)
+            function addWatermark() {
+                const containers = document.querySelectorAll('.sertifikat-container');
+                containers.forEach(container => {
+                    // Cek apakah sudah ada watermark
+                    if (!container.querySelector('.watermark-overlay')) {
+                        const watermark = document.createElement('div');
+                        watermark.className = 'watermark-overlay';
+                        watermark.style.cssText = `
+                position: absolute;
+                top: 0;
+                left: 0;
+                right: 0;
+                bottom: 0;
+                pointer-events: none;
+                z-index: 10;
+                background: repeating-linear-gradient(
+                    45deg,
+                    transparent,
+                    transparent 30px,
+                    rgba(255, 255, 255, 0.03) 30px,
+                    rgba(255, 255, 255, 0.03) 60px
+                );
+            `;
+                        container.style.position = 'relative';
+                        container.appendChild(watermark);
+                    }
+                });
+            }
+
+            // 8. TOAST NOTIFICATION UNTUK PERINGATAN
+            function showProtectionToast(message) {
+                // Hapus toast yang sudah ada
+                const existingToast = document.querySelector('.protection-toast');
+                if (existingToast) existingToast.remove();
+
+                const toast = document.createElement('div');
+                toast.className = 'protection-toast';
+                toast.style.cssText = `
+        position: fixed;
+        bottom: 30px;
+        left: 50%;
+        transform: translateX(-50%);
+        background: rgba(220, 38, 38, 0.95);
+        color: white;
+        padding: 12px 24px;
+        border-radius: 12px;
+        font-weight: 600;
+        font-size: 0.85rem;
+        z-index: 99999;
+        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+        animation: slideUp 0.3s ease;
+        max-width: 90%;
+        text-align: center;
+        border: 1px solid rgba(255,255,255,0.1);
+    `;
+                toast.textContent = message;
+                document.body.appendChild(toast);
+
+                // Auto hide setelah 3 detik
+                setTimeout(() => {
+                    if (toast) {
+                        toast.style.opacity = '0';
+                        toast.style.transition = 'opacity 0.3s ease';
+                        setTimeout(() => toast.remove(), 300);
+                    }
+                }, 3000);
+            }
+
+            // ============================================
+            // INISIALISASI PROTECTION
+            // ============================================
+            (function initProtection() {
+                // Cegah right click global
+                document.addEventListener('contextmenu', function (e) {
+                    e.preventDefault();
+                    // showProtectionToast('⚠️ Fungsi klik kanan dinonaktifkan untuk melindungi konten.');
+                    return false;
+                });
+
+                // Cegah keyboard shortcuts
+                document.addEventListener('keydown', function (e) {
+                    // Ctrl+C, Ctrl+V, Ctrl+X
+                    if (e.ctrlKey && (e.key === 'c' || e.key === 'C' || e.key === 'v' || e.key === 'V' || e.key === 'x' || e.key === 'X')) {
+                        e.preventDefault();
+                        showProtectionToast('⚠️ Fungsi copy/paste dinonaktifkan.');
+                        return false;
+                    }
+
+                    // Ctrl+Shift+I, Ctrl+U, F12
+                    if ((e.ctrlKey && e.shiftKey && (e.key === 'I' || e.key === 'i')) ||
+                        (e.ctrlKey && (e.key === 'u' || e.key === 'U')) ||
+                        e.key === 'F12') {
+                        e.preventDefault();
+                        showProtectionToast('⚠️ Developer Tools dinonaktifkan.');
+                        return false;
+                    }
+
+                    // Print Screen
+                    if (e.key === 'PrintScreen') {
+                        showProtectionToast('⚠️ Screenshot terdeteksi! Harap tidak mengambil screenshot dokumen.');
+                    }
+                });
+
+                // Cegah text selection
+                document.addEventListener('selectstart', function (e) {
+                    e.preventDefault();
+                    return false;
+                });
+
+                // Cegah drag
+                document.addEventListener('dragstart', function (e) {
+                    e.preventDefault();
+                    return false;
+                });
+
+                // Proteksi gambar
+                protectImages();
+
+                // Tambahkan watermark
+                setTimeout(addWatermark, 500);
+
+                // Observer untuk gambar yang baru ditambahkan
+                const observer = new MutationObserver(function (mutations) {
+                    mutations.forEach(function (mutation) {
+                        if (mutation.addedNodes.length) {
+                            setTimeout(protectImages, 100);
+                            setTimeout(addWatermark, 200);
+                        }
+                    });
+                });
+
+                const sertifikatArea = document.getElementById('sertifikatRenderArea');
+                if (sertifikatArea) {
+                    observer.observe(sertifikatArea, { childList: true, subtree: true });
+                }
+            })();
+
+            // ============================================
+            // CSS UNTUK ANIMASI TOAST
+            // ============================================
+            const styleProtection = document.createElement('style');
+            styleProtection.textContent = `
+    @keyframes slideUp {
+        from {
+            opacity: 0;
+            transform: translateX(-50%) translateY(30px);
+        }
+        to {
+            opacity: 1;
+            transform: translateX(-50%) translateY(0);
+        }
+    }
+    
+    /* Cegah user select pada seluruh halaman */
+    body {
+        -webkit-user-select: none;
+        -moz-user-select: none;
+        -ms-user-select: none;
+        user-select: none;
+    }
+    
+    /* Cegah gambar di-drag */
+    img {
+        -webkit-user-drag: none;
+        -moz-user-drag: none;
+        -ms-user-drag: none;
+        user-drag: none;
+        pointer-events: auto;
+    }
+    
+    /* Sembunyikan overlay watermark dari inspect element */
+    .watermark-overlay {
+        pointer-events: none !important;
+    }
+`;
+            document.head.appendChild(styleProtection);
         </script>
 
 </body>
