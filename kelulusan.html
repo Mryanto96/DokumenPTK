@@ -432,6 +432,13 @@
         }
 
         /* ===== CHART CARDS ===== */
+        .chart-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 30px;
+            margin-bottom: 40px;
+        }
+
         .chart-card {
             background: var(--card-bg);
             border: 1px solid var(--border);
@@ -477,6 +484,39 @@
             font-size: 0.7rem;
             color: var(--text3);
             margin-top: 12px;
+        }
+
+        /* ===== RESPONSIVE CHART GRID ===== */
+        @media (max-width: 992px) {
+            .chart-grid {
+                grid-template-columns: 1fr 1fr;
+                gap: 20px;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .chart-grid {
+                grid-template-columns: 1fr;
+                gap: 20px;
+            }
+            
+            .chart-container {
+                height: 220px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .chart-container {
+                height: 180px;
+            }
+            
+            .chart-card {
+                padding: 16px;
+            }
+            
+            .chart-card .chart-title h3 {
+                font-size: 0.8rem;
+            }
         }
 
         /* ===== TABEL NILAI ===== */
@@ -592,10 +632,6 @@
 
         /* ===== RESPONSIVE ===== */
         @media (max-width: 768px) {
-            .chart-container {
-                height: 200px;
-            }
-
             .table-nilai-wrapper table {
                 font-size: 0.65rem;
                 min-width: 1000px;
@@ -612,6 +648,15 @@
 
             .ttd-wrapper {
                 justify-content: center;
+            }
+            
+            /* Rekap nilai section padding */
+            section[style*="margin-top: 60px;"] {
+                padding: 30px 0 !important;
+            }
+            
+            section[style*="margin-top: 60px;"] > div {
+                padding: 0 16px !important;
             }
         }
 
@@ -646,8 +691,28 @@
                 font-size: 0.9rem;
             }
 
-            .chart-container {
-                height: 180px;
+            .ttd-wrapper .ttd-box {
+                min-width: auto;
+                padding-right: 0;
+                text-align: center;
+            }
+            
+            .ttd-wrapper {
+                flex-direction: column;
+                align-items: center;
+            }
+        }
+
+        @media (max-width: 400px) {
+            .student-item .info .detail {
+                font-size: 0.65rem;
+                gap: 6px;
+                flex-direction: column;
+            }
+            
+            .student-item .badge-lulus {
+                font-size: 0.5rem;
+                padding: 2px 8px;
             }
         }
 
@@ -799,15 +864,13 @@
                 </div>
             </div>
         </div>
+
         <!-- ===== REKAPITULASI NILAI AKHIR SISWA ===== -->
-        <section
-            style="margin-top: 60px; padding: 50px 0; background: var(--bg2); border-radius: 24px; border: 1px solid var(--border);">
+        <section style="margin-top: 60px; padding: 50px 0; background: var(--bg2); border-radius: 24px; border: 1px solid var(--border);">
             <div style="padding: 0 30px;">
                 <div class="fade-up" style="text-align: center; margin-bottom: 40px;">
-                    <p class="section-label" style="display: inline-flex;"><i class="fas fa-chart-bar"></i> Rekap
-                        Nilai</p>
-                    <h4
-                        style="font-size: clamp(0.5rem, 2vw, 1.5rem); font-weight: 800; letter-spacing: -0.5px; color: var(--text); margin-bottom: 2px;">
+                    <p class="section-label" style="display: inline-flex;"><i class="fas fa-chart-bar"></i> Rekap Nilai</p>
+                    <h4 style="font-size: clamp(0.5rem, 2vw, 1.5rem); font-weight: 800; letter-spacing: -0.5px; color: var(--text); margin-bottom: 2px;">
                         Rekapitulasi Nilai Akhir Siswa
                     </h4>
                     <p style="color: var(--text2); font-size: 0.8rem; font-weight: 500;">
@@ -816,7 +879,7 @@
                 </div>
 
                 <!-- ===== GRAFIK ===== -->
-                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 30px; margin-bottom: 40px;">
+                <div class="chart-grid">
                     <div class="chart-card fade-up">
                         <div class="chart-title">
                             <i class="fas fa-chart-line"></i>
@@ -892,30 +955,22 @@
                 </div>
 
                 <!-- ===== TANDA TANGAN ===== -->
-                <div class="ttd-wrapper fade-up"
-                    style="display: flex; justify-content: flex-end; margin-top: 40px; padding: 20px 40px; background: var(--card-bg); border: 1px solid var(--border); border-radius: 16px;">
-                    <div class="ttd-box" style="text-align: right; min-width: 200px; padding-right: 20px;">
-                        <p style="font-size: 0.85rem; color: var(--text2); margin-bottom: 2px; line-height: 1.4;">Nakai,
-                            20 Mei 2026</p>
-                        <p
-                            style="font-size: 0.85rem; color: var(--text2); font-weight: 600; margin-bottom: 25px; line-height: 1.4;">
+                <div class="ttd-wrapper fade-up">
+                    <div class="ttd-box">
+                        <p style="font-size: 0.85rem; color: var(--text2); margin-bottom: 2px; line-height: 1.4;">Nakai, 20 Mei 2026</p>
+                        <p style="font-size: 0.85rem; color: var(--text2); font-weight: 600; margin-bottom: 25px; line-height: 1.4;">
                             Kepala Sekolah,</p><br>
-                        <p
-                            style="font-size: 0.95rem; color: var(--text); font-weight: 700; margin-bottom: 2px; line-height: 1.4;">
+                        <p style="font-size: 0.95rem; color: var(--text); font-weight: 700; margin-bottom: 2px; line-height: 1.4;">
                             Juni Nainggolan, S.Pd,. Gr</p>
                         <hr>
-                        <p style="font-size: 0.95rem; color: var(--text3); line-height: 1.4;">NIP. 19910617 202011 2 001
-                        </p>
+                        <p style="font-size: 0.95rem; color: var(--text3); line-height: 1.4;">NIP. 19910617 202011 2 001</p>
                     </div>
                 </div>
+            </div>
         </section>
-
     </div>
-    </div>
-
 
     <div class="container" style="padding-bottom: 60px;">
-
         <!-- ===== TWO ASIDE ===== -->
         <div class="kelulusan-wrapper">
 
@@ -956,86 +1011,83 @@
             </div>
 
         </div>
+    </div>
 
+    <script src="js/main.js"></script>
+    <script src="js/navbar.js"></script>
 
+    <script>
+        // ============================================
+        // DATA SISWA LULUS - 15 SISWA KELAS 9A
+        // ============================================
+        const lulusData = [
+            { id: 1, nama: "ADAM AMSAKAT", kelas: "IX-A", jenisKelamin: "L", tahunLulus: "2026", foto: "images/Adam.png" },
+            { id: 2, nama: "BARTOL BATIPITS", kelas: "IX-A", jenisKelamin: "L", tahunLulus: "2026", foto: "images/Bartol.png" },
+            { id: 3, nama: "BENEDIKTUS JOM", kelas: "IX-A", jenisKelamin: "L", tahunLulus: "2026", foto: "images/Musa.png" },
+            { id: 4, nama: "BENYAMIN BEORAMON", kelas: "IX-A", jenisKelamin: "L", tahunLulus: "2026", foto: "images/Benyamin.png" },
+            { id: 5, nama: "GENUS AOR", kelas: "IX-A", jenisKelamin: "L", tahunLulus: "2026", foto: "images/Genus.png" },
+            { id: 6, nama: "HABEL AUK", kelas: "IX-A", jenisKelamin: "L", tahunLulus: "2026", foto: "images/Habel.png" },
+            { id: 7, nama: "MARIA MAGDALENA", kelas: "IX-A", jenisKelamin: "P", tahunLulus: "2026", foto: "images/Maria.png" },
+            { id: 8, nama: "MARKUS WARAK", kelas: "IX-A", jenisKelamin: "L", tahunLulus: "2026", foto: "images/Markus.png" },
+            { id: 9, nama: "PAULUS OSJAK", kelas: "IX-A", jenisKelamin: "L", tahunLulus: "2026", foto: "images/Paulus.png" },
+            { id: 10, nama: "PILIPUS NAMINAN", kelas: "IX-A", jenisKelamin: "L", tahunLulus: "2026", foto: "images/Daminan.png" },
+            { id: 11, nama: "PILIPUS TINAKAS", kelas: "IX-A", jenisKelamin: "L", tahunLulus: "2026", foto: "images/Tinakas.png" },
+            { id: 12, nama: "PIUS OHMAT", kelas: "IX-A", jenisKelamin: "L", tahunLulus: "2026", foto: "images/Pius.png" },
+            { id: 13, nama: "SIMSON WAKUM", kelas: "IX-A", jenisKelamin: "L", tahunLulus: "2026", foto: "images/Simson.png" },
+            { id: 14, nama: "WAHYU FO", kelas: "IX-A", jenisKelamin: "L", tahunLulus: "2026", foto: "images/Wahyu.png" },
+            { id: 15, nama: "YOHANES FAM", kelas: "IX-A", jenisKelamin: "L", tahunLulus: "2026", foto: "images/Anis.png" }
+        ];
+        let filteredLulus = [...lulusData];
+        let selectedId = 1;
 
+        // ============================================
+        // DATA NILAI SISWA
+        // ============================================
+        const nilaiData = [
+            { no: 1, nis: "01", nama: "ADAM AMSAKAT", kelas: "9A", jk: "L", nilai: [80, 80, 79, 75, 78, 80, 79, 80, 79, 79], total: 789, rata: 78.9, akhir: 79 },
+            { no: 2, nis: "02", nama: "BARTOL BATIPITS", kelas: "9A", jk: "L", nilai: [72, 72, 71, 66, 68, 78, 69, 75, 78, 79], total: 728, rata: 72.8, akhir: 73 },
+            { no: 3, nis: "03", nama: "BENEDIKTUS JOM", kelas: "9A", jk: "L", nilai: [80, 80, 78, 75, 77, 75, 79, 80, 79, 79], total: 782, rata: 78.2, akhir: 79 },
+            { no: 4, nis: "04", nama: "BENYAMIN BEORAMON", kelas: "9A", jk: "L", nilai: [74, 73, 71, 67, 70, 80, 69, 76, 78, 79], total: 737, rata: 73.7, akhir: 74 },
+            { no: 5, nis: "05", nama: "GENUS AOR", kelas: "9A", jk: "L", nilai: [75, 70, 71, 65, 65, 68, 68, 70, 78, 79], total: 709, rata: 70.9, akhir: 71 },
+            { no: 6, nis: "06", nama: "HABEL AUK", kelas: "9A", jk: "L", nilai: [80, 80, 78, 74, 78, 78, 79, 80, 79, 79], total: 785, rata: 78.5, akhir: 79 },
+            { no: 7, nis: "07", nama: "MARIA MAGDALENA", kelas: "9A", jk: "P", nilai: [73, 74, 76, 66, 73, 72, 72, 74, 78, 77], total: 735, rata: 73.5, akhir: 74 },
+            { no: 8, nis: "08", nama: "MARKUS WARAK", kelas: "9A", jk: "L", nilai: [77, 71, 71, 65, 65, 67, 68, 71, 78, 79], total: 712, rata: 71.2, akhir: 72 },
+            { no: 9, nis: "09", nama: "PAULUS OSJAK", kelas: "9A", jk: "L", nilai: [75, 78, 76, 67, 75, 75, 72, 77, 79, 79], total: 753, rata: 75.3, akhir: 76 },
+            { no: 10, nis: "10", nama: "PILIPUS NAMINAN", kelas: "9A", jk: "L", nilai: [76, 79, 71, 68, 70, 77, 77, 78, 79, 79], total: 754, rata: 75.4, akhir: 76 },
+            { no: 11, nis: "11", nama: "PILIPUS TINAKAS", kelas: "9A", jk: "L", nilai: [74, 80, 76, 67, 70, 76, 78, 79, 79, 79], total: 758, rata: 75.8, akhir: 76 },
+            { no: 12, nis: "12", nama: "PIUS OHMAT", kelas: "9A", jk: "L", nilai: [73, 73, 75, 67, 65, 75, 70, 74, 79, 79], total: 730, rata: 73.0, akhir: 73 },
+            { no: 13, nis: "13", nama: "SIMSON WAKUM", kelas: "9A", jk: "L", nilai: [71, 71, 71, 66, 65, 70, 72, 71, 79, 79], total: 715, rata: 71.5, akhir: 72 },
+            { no: 14, nis: "14", nama: "WAHYU FO", kelas: "9A", jk: "L", nilai: [75, 76, 71, 67, 70, 75, 72, 77, 79, 79], total: 741, rata: 74.1, akhir: 75 },
+            { no: 15, nis: "15", nama: "YOHANES FAM", kelas: "9A", jk: "L", nilai: [78, 74, 78, 67, 68, 78, 74, 76, 79, 79], total: 751, rata: 75.1, akhir: 76 }
+        ];
 
-        <script src="js/main.js"></script>
-        <script src="js/navbar.js"></script>
+        // ============================================
+        // RENDER DAFTAR SISWA
+        // ============================================
+        function renderStudentList() {
+            const container = document.getElementById('studentListContainer');
+            const totalLabel = document.getElementById('totalSiswaLabel');
 
-        <script>
-            // ============================================
-            // DATA SISWA LULUS - 15 SISWA KELAS 9A
-            // ============================================
-            const lulusData = [
-
-                { id: 1, nama: "ADAM AMSAKAT", kelas: "IX-A", jenisKelamin: "L", tahunLulus: "2026", foto: "images/Adam.png" },
-                { id: 2, nama: "BARTOL BATIPITS", kelas: "IX-A", jenisKelamin: "L", tahunLulus: "2026", foto: "images/Bartol.png" },
-                { id: 3, nama: "BENEDIKTUS JOM", kelas: "IX-A", jenisKelamin: "L", tahunLulus: "2026", foto: "images/Musa.png" },
-                { id: 4, nama: "BENYAMIN BEORAMON", kelas: "IX-A", jenisKelamin: "L", tahunLulus: "2026", foto: "images/Benyamin.png" },
-                { id: 5, nama: "GENUS AOR", kelas: "IX-A", jenisKelamin: "L", tahunLulus: "2026", foto: "images/Genus.png" },
-                { id: 6, nama: "HABEL AUK", kelas: "IX-A", jenisKelamin: "L", tahunLulus: "2026", foto: "images/Habel.png" },
-                { id: 7, nama: "MARIA MAGDALENA", kelas: "IX-A", jenisKelamin: "P", tahunLulus: "2026", foto: "images/Maria.png" },
-                { id: 8, nama: "MARKUS WARAK", kelas: "IX-A", jenisKelamin: "L", tahunLulus: "2026", foto: "images/Markus.png" },
-                { id: 9, nama: "PAULUS OSJAK", kelas: "IX-A", jenisKelamin: "L", tahunLulus: "2026", foto: "images/Paulus.png" },
-                { id: 10, nama: "PILIPUS NAMINAN", kelas: "IX-A", jenisKelamin: "L", tahunLulus: "2026", foto: "images/Daminan.png" },
-                { id: 11, nama: "PILIPUS TINAKAS", kelas: "IX-A", jenisKelamin: "L", tahunLulus: "2026", foto: "images/Tinakas.png" },
-                { id: 12, nama: "PIUS OHMAT", kelas: "IX-A", jenisKelamin: "L", tahunLulus: "2026", foto: "images/Pius.png" },
-                { id: 13, nama: "SIMSON WAKUM", kelas: "IX-A", jenisKelamin: "L", tahunLulus: "2026", foto: "images/Simson.png" },
-                { id: 14, nama: "WAHYU FO", kelas: "IX-A", jenisKelamin: "L", tahunLulus: "2026", foto: "images/Wahyu.png" },
-                { id: 15, nama: "YOHANES FAM", kelas: "IX-A", jenisKelamin: "L", tahunLulus: "2026", foto: "images/Anis.png" }
-            ];
-            let filteredLulus = [...lulusData];
-            let selectedId = 1;
-
-            // ============================================
-            // DATA NILAI SISWA
-            // ============================================
-            const nilaiData = [
-                { no: 1, nis: "01", nama: "ADAM AMSAKAT", kelas: "9A", jk: "L", nilai: [80, 80, 79, 75, 78, 80, 79, 80, 79, 79], total: 789, rata: 78.9, akhir: 79 },
-                { no: 2, nis: "02", nama: "BARTOL BATIPITS", kelas: "9A", jk: "L", nilai: [72, 72, 71, 66, 68, 78, 69, 75, 78, 79], total: 728, rata: 72.8, akhir: 73 },
-                { no: 3, nis: "03", nama: "BENEDIKTUS JOM", kelas: "9A", jk: "L", nilai: [80, 80, 78, 75, 77, 75, 79, 80, 79, 79], total: 782, rata: 78.2, akhir: 79 },
-                { no: 4, nis: "04", nama: "BENYAMIN BEORAMON", kelas: "9A", jk: "L", nilai: [74, 73, 71, 67, 70, 80, 69, 76, 78, 79], total: 737, rata: 73.7, akhir: 74 },
-                { no: 5, nis: "05", nama: "GENUS AOR", kelas: "9A", jk: "L", nilai: [75, 70, 71, 65, 65, 68, 68, 70, 78, 79], total: 709, rata: 70.9, akhir: 71 },
-                { no: 6, nis: "06", nama: "HABEL AUK", kelas: "9A", jk: "L", nilai: [80, 80, 78, 74, 78, 78, 79, 80, 79, 79], total: 785, rata: 78.5, akhir: 79 },
-                { no: 7, nis: "07", nama: "MARIA MAGDALENA", kelas: "9A", jk: "P", nilai: [73, 74, 76, 66, 73, 72, 72, 74, 78, 77], total: 735, rata: 73.5, akhir: 74 },
-                { no: 8, nis: "08", nama: "MARKUS WARAK", kelas: "9A", jk: "L", nilai: [77, 71, 71, 65, 65, 67, 68, 71, 78, 79], total: 712, rata: 71.2, akhir: 72 },
-                { no: 9, nis: "09", nama: "PAULUS OSJAK", kelas: "9A", jk: "L", nilai: [75, 78, 76, 67, 75, 75, 72, 77, 79, 79], total: 753, rata: 75.3, akhir: 76 },
-                { no: 10, nis: "10", nama: "PILIPUS NAMINAN", kelas: "9A", jk: "L", nilai: [76, 79, 71, 68, 70, 77, 77, 78, 79, 79], total: 754, rata: 75.4, akhir: 76 },
-                { no: 11, nis: "11", nama: "PILIPUS TINAKAS", kelas: "9A", jk: "L", nilai: [74, 80, 76, 67, 70, 76, 78, 79, 79, 79], total: 758, rata: 75.8, akhir: 76 },
-                { no: 12, nis: "12", nama: "PIUS OHMAT", kelas: "9A", jk: "L", nilai: [73, 73, 75, 67, 65, 75, 70, 74, 79, 79], total: 730, rata: 73.0, akhir: 73 },
-                { no: 13, nis: "13", nama: "SIMSON WAKUM", kelas: "9A", jk: "L", nilai: [71, 71, 71, 66, 65, 70, 72, 71, 79, 79], total: 715, rata: 71.5, akhir: 72 },
-                { no: 14, nis: "14", nama: "WAHYU FO", kelas: "9A", jk: "L", nilai: [75, 76, 71, 67, 70, 75, 72, 77, 79, 79], total: 741, rata: 74.1, akhir: 75 },
-                { no: 15, nis: "15", nama: "YOHANES FAM", kelas: "9A", jk: "L", nilai: [78, 74, 78, 67, 68, 78, 74, 76, 79, 79], total: 751, rata: 75.1, akhir: 76 }
-            ];
-
-            // ============================================
-            // RENDER DAFTAR SISWA
-            // ============================================
-            function renderStudentList() {
-                const container = document.getElementById('studentListContainer');
-                const totalLabel = document.getElementById('totalSiswaLabel');
-
-                if (filteredLulus.length === 0) {
-                    container.innerHTML = `
+            if (filteredLulus.length === 0) {
+                container.innerHTML = `
                     <div class="empty-list">
                         <i class="fas fa-user-slash"></i>
                         <p>Tidak ada siswa ditemukan</p>
                     </div>
                 `;
-                    totalLabel.textContent = '0 siswa';
-                    return;
-                }
+                totalLabel.textContent = '0 siswa';
+                return;
+            }
 
-                totalLabel.textContent = `${filteredLulus.length} siswa`;
+            totalLabel.textContent = `${filteredLulus.length} siswa`;
 
-                let html = '';
-                filteredLulus.forEach((siswa) => {
-                    const isActive = siswa.id === selectedId ? 'active' : '';
-                    const avatarClass = siswa.jenisKelamin === 'L' ? 'avatar-male' : 'avatar-female';
-                    const initial = siswa.nama.charAt(0).toUpperCase();
+            let html = '';
+            filteredLulus.forEach((siswa) => {
+                const isActive = siswa.id === selectedId ? 'active' : '';
+                const avatarClass = siswa.jenisKelamin === 'L' ? 'avatar-male' : 'avatar-female';
+                const initial = siswa.nama.charAt(0).toUpperCase();
 
-                    html += `
+                html += `
                     <div class="student-item ${isActive}" data-id="${siswa.id}" onclick="selectStudent(${siswa.id})">
                         <div class="avatar ${avatarClass}">${initial}</div>
                         <div class="info">
@@ -1049,108 +1101,108 @@
                         <span class="badge-lulus"><i class="fas fa-check-circle"></i> Lulus</span>
                     </div>
                 `;
-                });
+            });
 
-                container.innerHTML = html;
-            }
+            container.innerHTML = html;
+        }
 
-            // ============================================
-            // RENDER SERTIFIKAT
-            // ============================================
-            function renderSertifikat(studentId) {
-                const area = document.getElementById('sertifikatRenderArea');
-                const siswa = lulusData.find(s => s.id === studentId);
+        // ============================================
+        // RENDER SERTIFIKAT
+        // ============================================
+        function renderSertifikat(studentId) {
+            const area = document.getElementById('sertifikatRenderArea');
+            const siswa = lulusData.find(s => s.id === studentId);
 
-                if (!siswa) {
-                    area.innerHTML = `
+            if (!siswa) {
+                area.innerHTML = `
                     <div class="empty-sertifikat">
                         <i class="fas fa-certificate"></i>
                         <h4>Pilih Siswa</h4>
                         <p>Silakan pilih nama siswa dari daftar di sebelah kiri untuk melihat sertifikat kelulusan.</p>
                     </div>
                 `;
-                    return;
-                }
-
-                area.innerHTML = `
-                <div class="sertifikat-container">
-                    <img src="${siswa.foto}" alt="Sertifikat Kelulusan ${siswa.nama}">
-                </div>
-            `;
+                return;
             }
 
-            // ============================================
-            // SELECT STUDENT
-            // ============================================
-            window.selectStudent = function (id) {
-                selectedId = id;
-                renderStudentList();
-                renderSertifikat(id);
-            };
+            area.innerHTML = `
+                <div class="sertifikat-container">
+                    <img src="${siswa.foto}" alt="Sertifikat Kelulusan ${siswa.nama}" loading="lazy">
+                </div>
+            `;
+        }
 
-            // ============================================
-            // FILTER
-            // ============================================
-            function filterLulusData() {
-                const keyword = document.getElementById('searchKelulusan').value.toLowerCase().trim();
-                const gender = document.getElementById('filterKelulusan').value;
+        // ============================================
+        // SELECT STUDENT
+        // ============================================
+        window.selectStudent = function (id) {
+            selectedId = id;
+            renderStudentList();
+            renderSertifikat(id);
+        };
 
-                filteredLulus = lulusData.filter(s => {
-                    const matchName = s.nama.toLowerCase().includes(keyword);
-                    const matchGender = gender === 'all' || s.jenisKelamin === gender;
-                    return matchName && matchGender;
-                });
+        // ============================================
+        // FILTER
+        // ============================================
+        function filterLulusData() {
+            const keyword = document.getElementById('searchKelulusan').value.toLowerCase().trim();
+            const gender = document.getElementById('filterKelulusan').value;
 
-                if (filteredLulus.length > 0) {
-                    const exists = filteredLulus.some(s => s.id === selectedId);
-                    if (!exists) {
-                        selectedId = filteredLulus[0].id;
-                    }
-                } else {
-                    selectedId = null;
+            filteredLulus = lulusData.filter(s => {
+                const matchName = s.nama.toLowerCase().includes(keyword);
+                const matchGender = gender === 'all' || s.jenisKelamin === gender;
+                return matchName && matchGender;
+            });
+
+            if (filteredLulus.length > 0) {
+                const exists = filteredLulus.some(s => s.id === selectedId);
+                if (!exists) {
+                    selectedId = filteredLulus[0].id;
                 }
+            } else {
+                selectedId = null;
+            }
 
-                renderStudentList();
-                if (selectedId) {
-                    renderSertifikat(selectedId);
-                } else {
-                    document.getElementById('sertifikatRenderArea').innerHTML = `
+            renderStudentList();
+            if (selectedId) {
+                renderSertifikat(selectedId);
+            } else {
+                document.getElementById('sertifikatRenderArea').innerHTML = `
                     <div class="empty-sertifikat">
                         <i class="fas fa-search"></i>
                         <h4>Tidak Ditemukan</h4>
                         <p>Tidak ada siswa yang sesuai dengan filter yang dipilih.</p>
                     </div>
                 `;
-                }
             }
+        }
 
-            function resetLulusFilter() {
-                document.getElementById('searchKelulusan').value = '';
-                document.getElementById('filterKelulusan').value = 'all';
-                filteredLulus = [...lulusData];
-                selectedId = filteredLulus.length > 0 ? filteredLulus[0].id : null;
-                renderStudentList();
-                if (selectedId) {
-                    renderSertifikat(selectedId);
-                }
+        function resetLulusFilter() {
+            document.getElementById('searchKelulusan').value = '';
+            document.getElementById('filterKelulusan').value = 'all';
+            filteredLulus = [...lulusData];
+            selectedId = filteredLulus.length > 0 ? filteredLulus[0].id : null;
+            renderStudentList();
+            if (selectedId) {
+                renderSertifikat(selectedId);
             }
+        }
 
-            // ============================================
-            // RENDER TABEL NILAI
-            // ============================================
-            function renderNilaiTable() {
-                const tbody = document.getElementById('nilaiTableBody');
-                const totalSiswa = document.getElementById('totalSiswaNilai');
-                const rataKelas = document.getElementById('rataRataKelas');
+        // ============================================
+        // RENDER TABEL NILAI
+        // ============================================
+        function renderNilaiTable() {
+            const tbody = document.getElementById('nilaiTableBody');
+            const totalSiswa = document.getElementById('totalSiswaNilai');
+            const rataKelas = document.getElementById('rataRataKelas');
 
-                let html = '';
-                let totalSemuaNilai = 0;
+            let html = '';
+            let totalSemuaNilai = 0;
 
-                nilaiData.forEach((siswa) => {
-                    const jkClass = siswa.jk === 'L' ? 'jk-L' : 'jk-P';
-                    const jkText = siswa.jk === 'L' ? 'Laki-laki' : 'Perempuan';
+            nilaiData.forEach((siswa) => {
+                const jkClass = siswa.jk === 'L' ? 'jk-L' : 'jk-P';
+                const jkText = siswa.jk === 'L' ? 'Laki-laki' : 'Perempuan';
 
-                    html += `
+                html += `
                     <tr>
                         <td>${siswa.no}</td>
                         <td>${siswa.nis}</td>
@@ -1163,508 +1215,345 @@
                         <td class="nilai-akhir">${siswa.akhir}</td>
                     </tr>
                 `;
-                    totalSemuaNilai += siswa.akhir;
-                });
+                totalSemuaNilai += siswa.akhir;
+            });
 
-                tbody.innerHTML = html;
-                totalSiswa.textContent = nilaiData.length;
-                const rataKelasValue = (totalSemuaNilai / nilaiData.length).toFixed(1);
-                rataKelas.textContent = rataKelasValue;
+            tbody.innerHTML = html;
+            totalSiswa.textContent = nilaiData.length;
+            const rataKelasValue = (totalSemuaNilai / nilaiData.length).toFixed(1);
+            rataKelas.textContent = rataKelasValue;
+        }
+
+        // ============================================
+        // RENDER GRAFIK
+        // ============================================
+        let nilaiChartInstance = null;
+        let distribusiChartInstance = null;
+
+        function renderCharts() {
+            // Ambil context dengan cek apakah canvas masih ada di DOM
+            const canvas1 = document.getElementById('nilaiChart');
+            const canvas2 = document.getElementById('distribusiChart');
+            
+            if (!canvas1 || !canvas2) return;
+
+            const labels = nilaiData.map(s => s.nama.split(' ')[0]);
+            const nilaiAkhir = nilaiData.map(s => s.akhir);
+
+            // Chart 1: Bar Chart
+            const ctx1 = canvas1.getContext('2d');
+            if (nilaiChartInstance) {
+                nilaiChartInstance.destroy();
+                nilaiChartInstance = null;
             }
 
-            // ============================================
-            // RENDER GRAFIK
-            // ============================================
-            let nilaiChartInstance = null;
-            let distribusiChartInstance = null;
+            // Dapatkan warna tema
+            const isDark = document.documentElement.getAttribute('data-theme') === 'dark';
+            const textColor = isDark ? '#a8a8b8' : '#6b7280';
+            const gridColor = isDark ? 'rgba(255,255,255,0.06)' : 'rgba(0,0,0,0.06)';
 
-            function renderCharts() {
-                const labels = nilaiData.map(s => s.nama.split(' ')[0]);
-                const nilaiAkhir = nilaiData.map(s => s.akhir);
+            const gradient1 = ctx1.createLinearGradient(0, 0, 0, 280);
+            gradient1.addColorStop(0, 'rgba(255, 107, 107, 0.8)');
+            gradient1.addColorStop(0.5, 'rgba(78, 205, 196, 0.6)');
+            gradient1.addColorStop(1, 'rgba(255, 230, 109, 0.4)');
 
-                // Chart 1: Bar Chart
-                const ctx1 = document.getElementById('nilaiChart').getContext('2d');
-                if (nilaiChartInstance) nilaiChartInstance.destroy();
-
-                const gradient1 = ctx1.createLinearGradient(0, 0, 0, 280);
-                gradient1.addColorStop(0, 'rgba(255, 107, 107, 0.8)');
-                gradient1.addColorStop(0.5, 'rgba(78, 205, 196, 0.6)');
-                gradient1.addColorStop(1, 'rgba(255, 230, 109, 0.4)');
-
-                nilaiChartInstance = new Chart(ctx1, {
-                    type: 'bar',
-                    data: {
-                        labels: labels,
-                        datasets: [{
-                            label: 'Nilai Akhir',
-                            data: nilaiAkhir,
-                            backgroundColor: [
-                                '#FF6B6B', '#4ECDC4', '#FFE66D', '#FF6B6B',
-                                '#4ECDC4', '#FFE66D', '#FF6B6B', '#4ECDC4',
-                                '#FFE66D', '#FF6B6B', '#4ECDC4', '#FFE66D',
-                                '#FF6B6B', '#4ECDC4', '#FFE66D'
-                            ],
-                            borderColor: 'rgba(255,255,255,0.2)',
-                            borderWidth: 1,
-                            borderRadius: 6,
-                            barPercentage: 0.65
-                        }]
+            nilaiChartInstance = new Chart(ctx1, {
+                type: 'bar',
+                data: {
+                    labels: labels,
+                    datasets: [{
+                        label: 'Nilai Akhir',
+                        data: nilaiAkhir,
+                        backgroundColor: [
+                            '#FF6B6B', '#4ECDC4', '#FFE66D', '#FF6B6B',
+                            '#4ECDC4', '#FFE66D', '#FF6B6B', '#4ECDC4',
+                            '#FFE66D', '#FF6B6B', '#4ECDC4', '#FFE66D',
+                            '#FF6B6B', '#4ECDC4', '#FFE66D'
+                        ],
+                        borderColor: 'rgba(255,255,255,0.2)',
+                        borderWidth: 1,
+                        borderRadius: 6,
+                        barPercentage: 0.65
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: { display: false },
+                        tooltip: {
+                            callbacks: {
+                                label: (ctx) => `Nilai Akhir: ${ctx.raw}`
+                            }
+                        }
                     },
-                    options: {
-                        responsive: true,
-                        maintainAspectRatio: false,
-                        plugins: {
-                            legend: { display: false },
-                            tooltip: {
-                                callbacks: {
-                                    label: (ctx) => `Nilai Akhir: ${ctx.raw}`
-                                }
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            max: 100,
+                            ticks: { 
+                                stepSize: 10, 
+                                precision: 0,
+                                color: textColor
+                            },
+                            grid: {
+                                color: gridColor
                             }
                         },
-                        scales: {
-                            y: {
-                                beginAtZero: true,
-                                max: 100,
-                                ticks: { stepSize: 10, precision: 0 }
-                            },
-                            x: {
-                                grid: { display: false }
+                        x: {
+                            grid: { display: false },
+                            ticks: {
+                                color: textColor,
+                                maxRotation: 45,
+                                minRotation: 30,
+                                font: {
+                                    size: window.innerWidth < 480 ? 8 : 10
+                                }
                             }
                         }
                     }
-                });
+                }
+            });
 
-                // Chart 2: Pie Chart - Distribusi Rentang Nilai
-                const ranges = {
-                    '70-73': 0,
-                    '74-76': 0,
-                    '77-79': 0,
-                    '80+': 0
-                };
+            // Chart 2: Pie Chart - Distribusi Rentang Nilai
+            const ranges = {
+                '70-73': 0,
+                '74-76': 0,
+                '77-79': 0,
+                '80+': 0
+            };
 
-                nilaiData.forEach(s => {
-                    if (s.akhir >= 80) ranges['80+']++;
-                    else if (s.akhir >= 77) ranges['77-79']++;
-                    else if (s.akhir >= 74) ranges['74-76']++;
-                    else if (s.akhir >= 70) ranges['70-73']++;
-                });
+            nilaiData.forEach(s => {
+                if (s.akhir >= 80) ranges['80+']++;
+                else if (s.akhir >= 77) ranges['77-79']++;
+                else if (s.akhir >= 74) ranges['74-76']++;
+                else if (s.akhir >= 70) ranges['70-73']++;
+            });
 
-                const ctx2 = document.getElementById('distribusiChart').getContext('2d');
-                if (distribusiChartInstance) distribusiChartInstance.destroy();
+            const ctx2 = canvas2.getContext('2d');
+            if (distribusiChartInstance) {
+                distribusiChartInstance.destroy();
+                distribusiChartInstance = null;
+            }
 
-                const pieColors = [
-                    'rgba(255, 107, 107, 0.8)',
-                    'rgba(255, 230, 109, 0.8)',
-                    'rgba(78, 205, 196, 0.8)',
-                    'rgba(16, 185, 129, 0.8)'
-                ];
+            const pieColors = [
+                'rgba(255, 107, 107, 0.8)',
+                'rgba(255, 230, 109, 0.8)',
+                'rgba(78, 205, 196, 0.8)',
+                'rgba(16, 185, 129, 0.8)'
+            ];
 
-                distribusiChartInstance = new Chart(ctx2, {
-                    type: 'doughnut',
-                    data: {
-                        labels: Object.keys(ranges),
-                        datasets: [{
-                            data: Object.values(ranges),
-                            backgroundColor: pieColors,
-                            borderWidth: 2,
-                            borderColor: 'var(--card-bg)',
-                            hoverOffset: 15
-                        }]
-                    },
-                    options: {
-                        responsive: true,
-                        maintainAspectRatio: false,
-                        plugins: {
-                            legend: {
-                                position: 'bottom',
-                                labels: {
-                                    font: { size: 11, weight: '600' },
-                                    color: 'var(--text2)',
-                                    usePointStyle: true,
-                                    padding: 12
-                                }
-                            },
-                            tooltip: {
-                                callbacks: {
-                                    label: (ctx) => {
-                                        const total = Object.values(ranges).reduce((a, b) => a + b, 0);
-                                        const percent = total > 0 ? ((ctx.raw / total) * 100).toFixed(1) : 0;
-                                        return `${ctx.label}: ${ctx.raw} siswa (${percent}%)`;
-                                    }
-                                }
+            const legendColor = isDark ? '#a8a8b8' : '#6b7280';
+
+            distribusiChartInstance = new Chart(ctx2, {
+                type: 'doughnut',
+                data: {
+                    labels: Object.keys(ranges),
+                    datasets: [{
+                        data: Object.values(ranges),
+                        backgroundColor: pieColors,
+                        borderWidth: 2,
+                        borderColor: isDark ? '#1a1a2e' : '#ffffff',
+                        hoverOffset: 15
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            position: window.innerWidth < 480 ? 'bottom' : 'bottom',
+                            labels: {
+                                font: { 
+                                    size: window.innerWidth < 480 ? 10 : 11, 
+                                    weight: '600' 
+                                },
+                                color: legendColor,
+                                usePointStyle: true,
+                                padding: window.innerWidth < 480 ? 8 : 12,
+                                boxWidth: window.innerWidth < 480 ? 10 : 12
                             }
                         },
-                        cutout: '55%'
-                    }
-                });
-            }
-
-            // ============================================
-            // DARK MODE
-            // ============================================
-            function toggleDarkMode() {
-                const html = document.documentElement;
-                const currentTheme = html.getAttribute('data-theme');
-                const newTheme = currentTheme === 'light' ? 'dark' : 'light';
-                html.setAttribute('data-theme', newTheme);
-                localStorage.setItem('theme', newTheme);
-
-                const ball = document.querySelector('.dark-toggle-ball');
-                if (ball) {
-                    ball.textContent = newTheme === 'light' ? '☀️' : '🌙';
+                        tooltip: {
+                            callbacks: {
+                                label: (ctx) => {
+                                    const total = Object.values(ranges).reduce((a, b) => a + b, 0);
+                                    const percent = total > 0 ? ((ctx.raw / total) * 100).toFixed(1) : 0;
+                                    return `${ctx.label}: ${ctx.raw} siswa (${percent}%)`;
+                                }
+                            }
+                        }
+                    },
+                    cutout: window.innerWidth < 480 ? '50%' : '55%'
                 }
-
-                // Re-render charts dengan warna baru
-                setTimeout(renderCharts, 100);
-            }
-
-            // ============================================
-            // MOBILE MENU
-            // ============================================
-            function toggleMobileMenu() {
-                const menu = document.getElementById('mobileMenu');
-                menu.classList.toggle('open');
-            }
-
-            // ============================================
-            // EVENT LISTENERS
-            // ============================================
-            document.getElementById('filterKelulusanBtn').addEventListener('click', filterLulusData);
-            document.getElementById('resetKelulusanBtn').addEventListener('click', resetLulusFilter);
-            document.getElementById('searchKelulusan').addEventListener('keypress', (e) => {
-                if (e.key === 'Enter') filterLulusData();
             });
-            document.getElementById('filterKelulusan').addEventListener('change', filterLulusData);
+        }
 
-            const darkToggleBtn = document.getElementById('darkToggleBtn');
-            if (darkToggleBtn) {
-                darkToggleBtn.addEventListener('click', toggleDarkMode);
-            }
+        // ============================================
+        // DARK MODE
+        // ============================================
+        function toggleDarkMode() {
+            const html = document.documentElement;
+            const currentTheme = html.getAttribute('data-theme');
+            const newTheme = currentTheme === 'light' ? 'dark' : 'light';
+            html.setAttribute('data-theme', newTheme);
+            localStorage.setItem('theme', newTheme);
 
-            const hamburgerBtn = document.querySelector('.hamburger');
-            if (hamburgerBtn) {
-                hamburgerBtn.addEventListener('click', toggleMobileMenu);
-            }
-
-            document.querySelectorAll('.mobile-menu a').forEach(link => {
-                link.addEventListener('click', () => {
-                    document.getElementById('mobileMenu').classList.remove('open');
-                });
-            });
-
-            // ============================================
-            // LOAD THEME
-            // ============================================
-            const savedTheme = localStorage.getItem('theme') || 'light';
-            document.documentElement.setAttribute('data-theme', savedTheme);
             const ball = document.querySelector('.dark-toggle-ball');
             if (ball) {
-                ball.textContent = savedTheme === 'light' ? '☀️' : '🌙';
+                ball.textContent = newTheme === 'light' ? '☀️' : '🌙';
             }
 
-            // ============================================
-            // INIT
-            // ============================================
-            (function init() {
-                filteredLulus = [...lulusData];
-                selectedId = filteredLulus.length > 0 ? filteredLulus[0].id : null;
-                renderStudentList();
-                if (selectedId) {
-                    renderSertifikat(selectedId);
-                }
-                renderNilaiTable();
-                setTimeout(renderCharts, 300);
-            })();
+            // Re-render charts dengan warna baru
+            setTimeout(renderCharts, 200);
+        }
 
-            // ============================================
-            // WINDOW RESIZE - Re-render charts
-            // ============================================
-            let resizeTimer;
-            window.addEventListener('resize', () => {
-                clearTimeout(resizeTimer);
-                resizeTimer = setTimeout(() => {
-                    renderCharts();
-                }, 500);
+        // ============================================
+        // MOBILE MENU
+        // ============================================
+        function toggleMobileMenu() {
+            const menu = document.getElementById('mobileMenu');
+            menu.classList.toggle('open');
+        }
+
+        // ============================================
+        // EVENT LISTENERS
+        // ============================================
+        document.getElementById('filterKelulusanBtn').addEventListener('click', filterLulusData);
+        document.getElementById('resetKelulusanBtn').addEventListener('click', resetLulusFilter);
+        document.getElementById('searchKelulusan').addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') filterLulusData();
+        });
+        document.getElementById('filterKelulusan').addEventListener('change', filterLulusData);
+
+        const darkToggleBtn = document.getElementById('darkToggleBtn');
+        if (darkToggleBtn) {
+            darkToggleBtn.addEventListener('click', toggleDarkMode);
+        }
+
+        const hamburgerBtn = document.querySelector('.hamburger');
+        if (hamburgerBtn) {
+            hamburgerBtn.addEventListener('click', toggleMobileMenu);
+        }
+
+        document.querySelectorAll('.mobile-menu a').forEach(link => {
+            link.addEventListener('click', () => {
+                document.getElementById('mobileMenu').classList.remove('open');
             });
+        });
 
-            // ============================================
-            // PROTECTION - CEKALAH KONTEN DARI COPY & SCREENSHOT
-            // ============================================
+        // ============================================
+        // LOAD THEME
+        // ============================================
+        const savedTheme = localStorage.getItem('theme') || 'light';
+        document.documentElement.setAttribute('data-theme', savedTheme);
+        const ball = document.querySelector('.dark-toggle-ball');
+        if (ball) {
+            ball.textContent = savedTheme === 'light' ? '☀️' : '🌙';
+        }
 
-            // 1. CEKALAH RIGHT CLICK (KLIK KANAN)
-            document.addEventListener('contextmenu', function (e) {
-                e.preventDefault();
-                // showProtectionToast('⚠️ Fungsi klik kanan dinonaktifkan untuk melindungi konten.');
-                return false;
-            });
-
-            // 2. CEKALAH KEYBOARD SHORTCUTS
-            document.addEventListener('keydown', function (e) {
-                // Cek Ctrl+C, Ctrl+V, Ctrl+X
-                if (e.ctrlKey && (e.key === 'c' || e.key === 'C' || e.key === 'v' || e.key === 'V' || e.key === 'x' || e.key === 'X')) {
-                    e.preventDefault();
-                    showProtectionToast('⚠️ Fungsi copy/paste dinonaktifkan untuk melindungi konten.');
-                    return false;
-                }
-
-                // Cek Ctrl+Shift+I (Developer Tools)
-                if (e.ctrlKey && e.shiftKey && (e.key === 'I' || e.key === 'i')) {
-                    e.preventDefault();
-                    showProtectionToast('⚠️ Developer Tools dinonaktifkan.');
-                    return false;
-                }
-
-                // Cek Ctrl+U (View Source)
-                if (e.ctrlKey && (e.key === 'u' || e.key === 'U')) {
-                    e.preventDefault();
-                    showProtectionToast('⚠️ View Source dinonaktifkan.');
-                    return false;
-                }
-
-                // Cek F12 (Developer Tools)
-                if (e.key === 'F12') {
-                    e.preventDefault();
-                    showProtectionToast('⚠️ Developer Tools dinonaktifkan.');
-                    return false;
-                }
-
-                // Cek Print Screen (PrtSc) - tidak bisa sepenuhnya dicegah, tapi kita kasih peringatan
-                if (e.key === 'PrintScreen') {
-                    showProtectionToast('⚠️ Screenshot terdeteksi! Harap tidak mengambil screenshot dokumen.');
-                }
-            });
-
-            // 3. CEKALAH SELECTION (TEXT SELECTION)
-            document.addEventListener('selectstart', function (e) {
-                e.preventDefault();
-                return false;
-            });
-
-            // 4. CEKALAH DRAG DAN DROP
-            document.addEventListener('dragstart', function (e) {
-                e.preventDefault();
-                return false;
-            });
-
-            // 5. CEKALAH GAMBAR DARI DIKLIK KANAN - SAVE AS
-            document.querySelectorAll('img').forEach(img => {
-                img.addEventListener('contextmenu', function (e) {
-                    e.preventDefault();
-                    showProtectionToast('⚠️ Menyimpan gambar tidak diizinkan.');
-                    return false;
-                });
-
-                // Cegah drag gambar
-                img.addEventListener('dragstart', function (e) {
-                    e.preventDefault();
-                    return false;
-                });
-            });
-
-            // 6. PROTECTION UNTUK SERTIFIKAT (GAMBAR)
-            function protectImages() {
-                document.querySelectorAll('.sertifikat-container img, .sertifikat-container').forEach(el => {
-                    // Cegah klik kanan pada container sertifikat
-                    el.addEventListener('contextmenu', function (e) {
-                        e.preventDefault();
-                        showProtectionToast('⚠️ Menyimpan sertifikat tidak diizinkan.');
-                        return false;
-                    });
-
-                    // Cegah drag
-                    el.addEventListener('dragstart', function (e) {
-                        e.preventDefault();
-                        return false;
-                    });
-
-                    // Cegah touch events pada mobile
-                    el.addEventListener('touchstart', function (e) {
-                        // Jika touch lebih dari 1 jari (bisa jadi screenshot gesture)
-                        if (e.touches.length > 1) {
-                            showProtectionToast('⚠️ Screenshot terdeteksi! Harap tidak mengambil screenshot dokumen.');
-                        }
-                    });
-                });
+        // ============================================
+        // INIT
+        // ============================================
+        (function init() {
+            filteredLulus = [...lulusData];
+            selectedId = filteredLulus.length > 0 ? filteredLulus[0].id : null;
+            renderStudentList();
+            if (selectedId) {
+                renderSertifikat(selectedId);
             }
+            renderNilaiTable();
+            setTimeout(renderCharts, 300);
+        })();
 
-            // 7. WATERMARK OVERLAY UNTUK SERTIFIKAT (OPSIONAL)
-            function addWatermark() {
-                const containers = document.querySelectorAll('.sertifikat-container');
-                containers.forEach(container => {
-                    // Cek apakah sudah ada watermark
-                    if (!container.querySelector('.watermark-overlay')) {
-                        const watermark = document.createElement('div');
-                        watermark.className = 'watermark-overlay';
-                        watermark.style.cssText = `
-                position: absolute;
-                top: 0;
-                left: 0;
-                right: 0;
-                bottom: 0;
-                pointer-events: none;
-                z-index: 10;
-                background: repeating-linear-gradient(
-                    45deg,
-                    transparent,
-                    transparent 30px,
-                    rgba(255, 255, 255, 0.03) 30px,
-                    rgba(255, 255, 255, 0.03) 60px
-                );
+        // ============================================
+        // WINDOW RESIZE - Re-render charts
+        // ============================================
+        let resizeTimer;
+        window.addEventListener('resize', () => {
+            clearTimeout(resizeTimer);
+            resizeTimer = setTimeout(() => {
+                renderCharts();
+            }, 500);
+        });
+
+        // ============================================
+        // PROTECTION - CEKALAH KONTEN DARI COPY & SCREENSHOT
+        // ============================================
+
+        function showProtectionToast(message) {
+            const existingToast = document.querySelector('.protection-toast');
+            if (existingToast) existingToast.remove();
+
+            const toast = document.createElement('div');
+            toast.className = 'protection-toast';
+            toast.style.cssText = `
+                position: fixed;
+                bottom: 30px;
+                left: 50%;
+                transform: translateX(-50%);
+                background: rgba(220, 38, 38, 0.95);
+                color: white;
+                padding: 12px 24px;
+                border-radius: 12px;
+                font-weight: 600;
+                font-size: 0.85rem;
+                z-index: 99999;
+                box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+                animation: slideUp 0.3s ease;
+                max-width: 90%;
+                text-align: center;
+                border: 1px solid rgba(255,255,255,0.1);
             `;
-                        container.style.position = 'relative';
-                        container.appendChild(watermark);
-                    }
-                });
-            }
+            toast.textContent = message;
+            document.body.appendChild(toast);
 
-            // 8. TOAST NOTIFICATION UNTUK PERINGATAN
-            function showProtectionToast(message) {
-                // Hapus toast yang sudah ada
-                const existingToast = document.querySelector('.protection-toast');
-                if (existingToast) existingToast.remove();
-
-                const toast = document.createElement('div');
-                toast.className = 'protection-toast';
-                toast.style.cssText = `
-        position: fixed;
-        bottom: 30px;
-        left: 50%;
-        transform: translateX(-50%);
-        background: rgba(220, 38, 38, 0.95);
-        color: white;
-        padding: 12px 24px;
-        border-radius: 12px;
-        font-weight: 600;
-        font-size: 0.85rem;
-        z-index: 99999;
-        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
-        animation: slideUp 0.3s ease;
-        max-width: 90%;
-        text-align: center;
-        border: 1px solid rgba(255,255,255,0.1);
-    `;
-                toast.textContent = message;
-                document.body.appendChild(toast);
-
-                // Auto hide setelah 3 detik
-                setTimeout(() => {
-                    if (toast) {
-                        toast.style.opacity = '0';
-                        toast.style.transition = 'opacity 0.3s ease';
-                        setTimeout(() => toast.remove(), 300);
-                    }
-                }, 3000);
-            }
-
-            // ============================================
-            // INISIALISASI PROTECTION
-            // ============================================
-            (function initProtection() {
-                // Cegah right click global
-                document.addEventListener('contextmenu', function (e) {
-                    e.preventDefault();
-                    // showProtectionToast('⚠️ Fungsi klik kanan dinonaktifkan untuk melindungi konten.');
-                    return false;
-                });
-
-                // Cegah keyboard shortcuts
-                document.addEventListener('keydown', function (e) {
-                    // Ctrl+C, Ctrl+V, Ctrl+X
-                    if (e.ctrlKey && (e.key === 'c' || e.key === 'C' || e.key === 'v' || e.key === 'V' || e.key === 'x' || e.key === 'X')) {
-                        e.preventDefault();
-                        showProtectionToast('⚠️ Fungsi copy/paste dinonaktifkan.');
-                        return false;
-                    }
-
-                    // Ctrl+Shift+I, Ctrl+U, F12
-                    if ((e.ctrlKey && e.shiftKey && (e.key === 'I' || e.key === 'i')) ||
-                        (e.ctrlKey && (e.key === 'u' || e.key === 'U')) ||
-                        e.key === 'F12') {
-                        e.preventDefault();
-                        showProtectionToast('⚠️ Developer Tools dinonaktifkan.');
-                        return false;
-                    }
-
-                    // Print Screen
-                    if (e.key === 'PrintScreen') {
-                        showProtectionToast('⚠️ Screenshot terdeteksi! Harap tidak mengambil screenshot dokumen.');
-                    }
-                });
-
-                // Cegah text selection
-                document.addEventListener('selectstart', function (e) {
-                    e.preventDefault();
-                    return false;
-                });
-
-                // Cegah drag
-                document.addEventListener('dragstart', function (e) {
-                    e.preventDefault();
-                    return false;
-                });
-
-                // Proteksi gambar
-                protectImages();
-
-                // Tambahkan watermark
-                setTimeout(addWatermark, 500);
-
-                // Observer untuk gambar yang baru ditambahkan
-                const observer = new MutationObserver(function (mutations) {
-                    mutations.forEach(function (mutation) {
-                        if (mutation.addedNodes.length) {
-                            setTimeout(protectImages, 100);
-                            setTimeout(addWatermark, 200);
-                        }
-                    });
-                });
-
-                const sertifikatArea = document.getElementById('sertifikatRenderArea');
-                if (sertifikatArea) {
-                    observer.observe(sertifikatArea, { childList: true, subtree: true });
+            setTimeout(() => {
+                if (toast) {
+                    toast.style.opacity = '0';
+                    toast.style.transition = 'opacity 0.3s ease';
+                    setTimeout(() => toast.remove(), 300);
                 }
-            })();
+            }, 3000);
+        }
 
-            // ============================================
-            // CSS UNTUK ANIMASI TOAST
-            // ============================================
-            const styleProtection = document.createElement('style');
-            styleProtection.textContent = `
-    @keyframes slideUp {
-        from {
-            opacity: 0;
-            transform: translateX(-50%) translateY(30px);
-        }
-        to {
-            opacity: 1;
-            transform: translateX(-50%) translateY(0);
-        }
-    }
-    
-    /* Cegah user select pada seluruh halaman */
-    body {
-        -webkit-user-select: none;
-        -moz-user-select: none;
-        -ms-user-select: none;
-        user-select: none;
-    }
-    
-    /* Cegah gambar di-drag */
-    img {
-        -webkit-user-drag: none;
-        -moz-user-drag: none;
-        -ms-user-drag: none;
-        user-drag: none;
-        pointer-events: auto;
-    }
-    
-    /* Sembunyikan overlay watermark dari inspect element */
-    .watermark-overlay {
-        pointer-events: none !important;
-    }
-`;
-            document.head.appendChild(styleProtection);
-        </script>
+        // ============================================
+        // CSS UNTUK ANIMASI TOAST
+        // ============================================
+        const styleProtection = document.createElement('style');
+        styleProtection.textContent = `
+            @keyframes slideUp {
+                from {
+                    opacity: 0;
+                    transform: translateX(-50%) translateY(30px);
+                }
+                to {
+                    opacity: 1;
+                    transform: translateX(-50%) translateY(0);
+                }
+            }
+            
+            body {
+                -webkit-user-select: none;
+                -moz-user-select: none;
+                -ms-user-select: none;
+                user-select: none;
+            }
+            
+            img {
+                -webkit-user-drag: none;
+                -moz-user-drag: none;
+                -ms-user-drag: none;
+                user-drag: none;
+                pointer-events: auto;
+            }
+            
+            .watermark-overlay {
+                pointer-events: none !important;
+            }
+        `;
+        document.head.appendChild(styleProtection);
+    </script>
 
 </body>
 
